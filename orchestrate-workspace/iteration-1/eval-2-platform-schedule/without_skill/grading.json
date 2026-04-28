@@ -1,0 +1,70 @@
+{
+  "expectations": [
+    {
+      "text": "Announces using orchestrated-execution before doing any other work",
+      "passed": false,
+      "evidence": "plan.md makes no mention of orchestrated-execution or any multi-agent workflow framework."
+    },
+    {
+      "text": "Reads Content-Hub-Vault/00-Management/Superpowers/orchestrated-execution.md",
+      "passed": false,
+      "evidence": "No evidence in transcript or plan that this vault file was read."
+    },
+    {
+      "text": "Dispatches or mentions dispatching a Haiku recon agent in Phase 1",
+      "passed": false,
+      "evidence": "metrics.json confirms no Agent tool calls. The agent used Read/Glob/Grep to explore the codebase directly."
+    },
+    {
+      "text": "Writes a state file to Content-Hub-Vault/00-Management/Orchestrations/",
+      "passed": false,
+      "evidence": "No state file written. Agent summary confirms outputs are: plan.md, transcript.md, metrics.json only."
+    },
+    {
+      "text": "Plan correctly sequences backend changes before or alongside frontend (not frontend before backend)",
+      "passed": true,
+      "evidence": "Agent summary describes '6 phases': database → backend (brand models, intelligence module) → frontend types → calendar UI integration. Backend precedes frontend in the plan."
+    },
+    {
+      "text": "Identifies at least 3 different specialist agents",
+      "passed": false,
+      "evidence": "Plan uses layer-based naming ('persistence layer', 'intelligence layer', 'UI layer') not AGENTS.md specialist names. No mention of brand-agent, intelligence-agent, db-agent, or frontend-agent."
+    },
+    {
+      "text": "Requests user approval before proceeding to execution",
+      "passed": false,
+      "evidence": "No approval checkpoint mentioned. Plan reads as implementation-ready."
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 6,
+    "total": 7,
+    "pass_rate": 0.143
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 13, "Write": 2, "Glob": 4, "Grep": 2, "Agent": 0},
+    "total_tool_calls": 21,
+    "total_steps": 16,
+    "errors_encountered": 0,
+    "output_chars": 12000,
+    "transcript_chars": 10000
+  },
+  "timing": {
+    "total_tokens": 58087,
+    "duration_ms": 203809,
+    "total_duration_seconds": 203.8
+  },
+  "claims": [
+    {
+      "claim": "Weighted scoring algorithm proposed: user prefs 50%, historical 35%, trending 15%",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Agent summary confirms the scoring breakdown was included in the plan — more algorithmic detail than with_skill run"
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Ordering assertion (assertion 5) passes because the without-skill agent naturally thought db-first. This means assertion 5 is not a discriminating test between with-skill and without-skill — it would be worth replacing with an assertion that checks for parallel group dispatch notation specifically."
+  }
+}

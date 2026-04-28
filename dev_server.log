@@ -1,0 +1,24 @@
+
+> frontend@0.1.0 dev
+> next dev --port 3003
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3003
+
+ ✓ Starting...
+ ✓ Ready in 1873ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 4.6s (1302 modules)
+ GET /dashboard 200 in 4989ms
+ ✓ Compiled in 344ms (640 modules)
+(node:10944) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 1903ms (685 modules)
+ GET /favicon.ico 200 in 1964ms
+ ✓ Compiled /workflows/[id] in 464ms (1353 modules)
+ GET /workflows/f3b2fe64-5211-4240-8044-e90f5025356a 200 in 102ms
+ ✓ Compiled /brand/[workflowId] in 408ms (1333 modules)
+ ✓ Compiled /content/calendar in 376ms (1341 modules)
+ GET /dashboard 200 in 179ms
+ GET /content/calendar 200 in 86ms

@@ -1,0 +1,66 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    {"id":"1","type":"rectangle","x":100,"y":100,"width":200,"height":60,"backgroundColor":"#1e3a5f","strokeColor":"#C9A96E","fillStyle":"solid","strokeWidth":2,"roughness":0,"opacity":100,"groupIds":[],"roundness":{"type":3},"seed":1},
+    {"id":"2","type":"text","x":140,"y":118,"width":120,"height":24,"text":"1. Dashboard","fontSize":16,"fontFamily":1,"textAlign":"center","verticalAlign":"middle","strokeColor":"#C9A96E","seed":2},
+
+    {"id":"3","type":"rectangle","x":100,"y":240,"width":200,"height":60,"backgroundColor":"#1e3a5f","strokeColor":"#C9A96E","fillStyle":"solid","strokeWidth":2,"roughness":0,"opacity":100,"groupIds":[],"roundness":{"type":3},"seed":3},
+    {"id":"4","type":"text","x":110,"y":258,"width":180,"height":24,"text":"2. Create Workflow","fontSize":16,"fontFamily":1,"textAlign":"center","verticalAlign":"middle","strokeColor":"#C9A96E","seed":4},
+
+    {"id":"5","type":"rectangle","x":100,"y":380,"width":200,"height":60,"backgroundColor":"#1e3a5f","strokeColor":"#C9A96E","fillStyle":"solid","strokeWidth":2,"roughness":0,"opacity":100,"groupIds":[],"roundness":{"type":3},"seed":5},
+    {"id":"6","type":"text","x":110,"y":398,"width":180,"height":24,"text":"3. Workflow Detail","fontSize":16,"fontFamily":1,"textAlign":"center","verticalAlign":"middle","strokeColor":"#C9A96E","seed":6},
+
+    {"id":"7","type":"rectangle","x":100,"y":520,"width":200,"height":60,"backgroundColor":"#1e3a5f","strokeColor":"#C9A96E","fillStyle":"solid","strokeWidth":2,"roughness":0,"opacity":100,"groupIds":[],"roundness":{"type":3},"seed":7},
+    {"id":"8","type":"text","x":110,"y":538,"width":180,"height":24,"text":"4. Generate Content","fontSize":16,"fontFamily":1,"textAlign":"center","verticalAlign":"middle","strokeColor":"#C9A96E","seed":8},
+
+    {"id":"9","type":"rectangle","x":100,"y":660,"width":200,"height":60,"backgroundColor":"#1e3a5f","strokeColor":"#C9A96E","fillStyle":"solid","strokeWidth":2,"roughness":0,"opacity":100,"groupIds":[],"roundness":{"type":3},"seed":9},
+    {"id":"10","type":"text","x":120,"y":678,"width":160,"height":24,"text":"5. View / Edit","fontSize":16,"fontFamily":1,"textAlign":"center","verticalAlign":"middle","strokeColor":"#C9A96E","seed":10},
+
+    {"id":"11","type":"rectangle","x":100,"y":800,"width":200,"height":60,"backgroundColor":"#1e3a5f","strokeColor":"#C9A96E","fillStyle":"solid","strokeWidth":2,"roughness":0,"opacity":100,"groupIds":[],"roundness":{"type":3},"seed":11},
+    {"id":"12","type":"text","x":130,"y":818,"width":140,"height":24,"text":"6. Publish","fontSize":16,"fontFamily":1,"textAlign":"center","verticalAlign":"middle","strokeColor":"#C9A96E","seed":12},
+
+    {"id":"a1","type":"arrow","x":200,"y":160,"points":[[0,0],[0,80]],"strokeColor":"#ffffff","strokeWidth":2,"roughness":0,"seed":101,"startArrowhead":null,"endArrowhead":"arrow"},
+    {"id":"a2","type":"arrow","x":200,"y":300,"points":[[0,0],[0,80]],"strokeColor":"#ffffff","strokeWidth":2,"roughness":0,"seed":102,"startArrowhead":null,"endArrowhead":"arrow"},
+    {"id":"a3","type":"arrow","x":200,"y":440,"points":[[0,0],[0,80]],"strokeColor":"#ffffff","strokeWidth":2,"roughness":0,"seed":103,"startArrowhead":null,"endArrowhead":"arrow"},
+    {"id":"a4","type":"arrow","x":200,"y":580,"points":[[0,0],[0,80]],"strokeColor":"#ffffff","strokeWidth":2,"roughness":0,"seed":104,"startArrowhead":null,"endArrowhead":"arrow"},
+    {"id":"a5","type":"arrow","x":200,"y":720,"points":[[0,0],[0,80]],"strokeColor":"#ffffff","strokeWidth":2,"roughness":0,"seed":105,"startArrowhead":null,"endArrowhead":"arrow"},
+
+    {"id":"o1","type":"rectangle","x":360,"y":100,"width":240,"height":60,"backgroundColor":"#0f2a1a","strokeColor":"#4ade80","fillStyle":"solid","strokeWidth":1,"roughness":0,"opacity":100,"groupIds":[],"roundness":{"type":3},"seed":201},
+    {"id":"o1t","type":"text","x":370,"y":118,"width":220,"height":24,"text":"See all workflows (grid)","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"middle","strokeColor":"#4ade80","seed":202},
+
+    {"id":"o2","type":"rectangle","x":360,"y":220,"width":240,"height":100,"backgroundColor":"#0f2a1a","strokeColor":"#4ade80","fillStyle":"solid","strokeWidth":1,"roughness":0,"opacity":100,"groupIds":[],"roundness":{"type":3},"seed":203},
+    {"id":"o2t","type":"text","x":370,"y":232,"width":220,"height":76,"text":"5-step wizard:\n- Name + niche\n- Platforms\n- Keywords\n- Brand voice\n- Content pillars","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#4ade80","seed":204},
+
+    {"id":"o3","type":"rectangle","x":360,"y":360,"width":240,"height":100,"backgroundColor":"#0f2a1a","strokeColor":"#4ade80","fillStyle":"solid","strokeWidth":1,"roughness":0,"opacity":100,"groupIds":[],"roundness":{"type":3},"seed":205},
+    {"id":"o3t","type":"text","x":370,"y":372,"width":220,"height":76,"text":"Tabs:\n- Trending posts (30 items)\n- AI content suggestions\n- Trigger manual scrape","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#4ade80","seed":206},
+
+    {"id":"o4","type":"rectangle","x":360,"y":500,"width":240,"height":100,"backgroundColor":"#0f2a1a","strokeColor":"#4ade80","fillStyle":"solid","strokeWidth":1,"roughness":0,"opacity":100,"groupIds":[],"roundness":{"type":3},"seed":207},
+    {"id":"o4t","type":"text","x":370,"y":512,"width":220,"height":76,"text":"3-step wizard:\n- Pick type + platform\n- Enter topic\n- Gemini generates script\n→ status: generating→ready","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#4ade80","seed":208},
+
+    {"id":"o5","type":"rectangle","x":360,"y":640,"width":240,"height":100,"backgroundColor":"#0f2a1a","strokeColor":"#4ade80","fillStyle":"solid","strokeWidth":1,"roughness":0,"opacity":100,"groupIds":[],"roundness":{"type":3},"seed":209},
+    {"id":"o5t","type":"text","x":370,"y":652,"width":220,"height":76,"text":"Outputs:\n- Script text\n- Slide PNGs (1080x1080)\n- Download URLs\n- Side-by-side editor","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#4ade80","seed":210},
+
+    {"id":"o6","type":"rectangle","x":360,"y":780,"width":240,"height":100,"backgroundColor":"#0f2a1a","strokeColor":"#4ade80","fillStyle":"solid","strokeWidth":1,"roughness":0,"opacity":100,"groupIds":[],"roundness":{"type":3},"seed":211},
+    {"id":"o6t","type":"text","x":370,"y":792,"width":220,"height":76,"text":"Outputs:\n- Status → posted\n- Script embedded in RAG\n- Feeds future generation\n- Shows in calendar","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#4ade80","seed":212},
+
+    {"id":"c1","type":"arrow","x":300,"y":130,"points":[[0,0],[60,0]],"strokeColor":"#94a3b8","strokeWidth":1,"roughness":0,"seed":301,"startArrowhead":null,"endArrowhead":"arrow"},
+    {"id":"c2","type":"arrow","x":300,"y":270,"points":[[0,0],[60,0]],"strokeColor":"#94a3b8","strokeWidth":1,"roughness":0,"seed":302,"startArrowhead":null,"endArrowhead":"arrow"},
+    {"id":"c3","type":"arrow","x":300,"y":410,"points":[[0,0],[60,0]],"strokeColor":"#94a3b8","strokeWidth":1,"roughness":0,"seed":303,"startArrowhead":null,"endArrowhead":"arrow"},
+    {"id":"c4","type":"arrow","x":300,"y":550,"points":[[0,0],[60,0]],"strokeColor":"#94a3b8","strokeWidth":1,"roughness":0,"seed":304,"startArrowhead":null,"endArrowhead":"arrow"},
+    {"id":"c5","type":"arrow","x":300,"y":690,"points":[[0,0],[60,0]],"strokeColor":"#94a3b8","strokeWidth":1,"roughness":0,"seed":305,"startArrowhead":null,"endArrowhead":"arrow"},
+    {"id":"c6","type":"arrow","x":300,"y":830,"points":[[0,0],[60,0]],"strokeColor":"#94a3b8","strokeWidth":1,"roughness":0,"seed":306,"startArrowhead":null,"endArrowhead":"arrow"},
+
+    {"id":"title","type":"text","x":100,"y":40,"width":500,"height":36,"text":"Content Hub — User Experience Flow (Current State)","fontSize":22,"fontFamily":1,"textAlign":"left","verticalAlign":"middle","strokeColor":"#C9A96E","seed":400},
+
+    {"id":"legend1","type":"rectangle","x":660,"y":100,"width":20,"height":20,"backgroundColor":"#1e3a5f","strokeColor":"#C9A96E","fillStyle":"solid","strokeWidth":1,"roughness":0,"seed":501},
+    {"id":"legend1t","type":"text","x":688,"y":102,"width":140,"height":20,"text":"Step (user action)","fontSize":13,"fontFamily":1,"strokeColor":"#ffffff","seed":502},
+    {"id":"legend2","type":"rectangle","x":660,"y":130,"width":20,"height":20,"backgroundColor":"#0f2a1a","strokeColor":"#4ade80","fillStyle":"solid","strokeWidth":1,"roughness":0,"seed":503},
+    {"id":"legend2t","type":"text","x":688,"y":132,"width":140,"height":20,"text":"Output / what you see","fontSize":13,"fontFamily":1,"strokeColor":"#ffffff","seed":504}
+  ],
+  "appState": {
+    "viewBackgroundColor": "#0F172A",
+    "gridSize": null
+  }
+}

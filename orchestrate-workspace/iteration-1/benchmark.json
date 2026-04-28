@@ -1,0 +1,383 @@
+{
+  "metadata": {
+    "skill_name": "orchestrate",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-04-22T07:50:19Z",
+    "evals_run": [
+      1,
+      2,
+      3
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.857,
+        "passed": 6,
+        "failed": 1,
+        "total": 7,
+        "time_seconds": 141.1,
+        "tokens": 4127,
+        "tool_calls": 13,
+        "errors": 1
+      },
+      "expectations": [
+        {
+          "text": "Announces using orchestrated-execution before doing any other work",
+          "passed": true,
+          "evidence": "Transcript Phase 1 line 6: \"Announced: 'I'm using orchestrated-execution to decompose and dispatch this task.'\" \u00e2\u20ac\u201d this was the first logged action before any file reads."
+        },
+        {
+          "text": "Reads Content-Hub-Vault/00-Management/Superpowers/orchestrated-execution.md",
+          "passed": true,
+          "evidence": "Transcript line 9: \"Read orchestrated-execution.md: authoritative 6-phase workflow definition\" \u00e2\u20ac\u201d confirmed in Phase 1 Announcement and Skill Load step."
+        },
+        {
+          "text": "Dispatches or mentions dispatching a Haiku recon agent to scan relevant codebase areas",
+          "passed": false,
+          "evidence": "metrics.json shows Agent: 0 \u00e2\u20ac\u201d no subagent was dispatched. The agent performed Phase 1 recon inline using Glob and Read tools (6 Read + 3 Glob calls) instead of delegating to a Haiku Explore agent as orchestrated-execution.md Phase 1 prescribes."
+        },
+        {
+          "text": "Writes a state file to Content-Hub-Vault/00-Management/Orchestrations/",
+          "passed": true,
+          "evidence": "Transcript line 127-130: \"Tool: Write \u00e2\u20ac\u201d File: Content-Hub-Vault/00-Management/Orchestrations/2026-04-22_views-count-feature.md \u00e2\u20ac\u201d Status: Created with full orchestration state\". metrics.json confirms state_file_path."
+        },
+        {
+          "text": "Presents a plan with at least 2 distinct execution groups",
+          "passed": true,
+          "evidence": "plan.md shows 3 groups: Group 1 (schema/db), Group 2 (backend, depends on Group 1), Group 3 (frontend, depends on Group 2) \u00e2\u20ac\u201d each with labeled specialist, files, and acceptance criteria."
+        },
+        {
+          "text": "Identifies db-agent and frontend-agent as specialists involved",
+          "passed": true,
+          "evidence": "plan.md header: \"Specialists: db-agent, pipeline-agent, frontend-agent\". Both db-agent (Group 1) and frontend-agent (Group 3) are explicitly named with domain-appropriate file scopes."
+        },
+        {
+          "text": "Requests user approval before proceeding to execution",
+          "passed": true,
+          "evidence": "Transcript lines 154-167: \"Status: AWAITING USER APPROVAL\" and \"Next Phase: Phase 3 (Approve) - User reviews plan, provides feedback or approval\". Execution halted cleanly."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.857,
+        "passed": 6,
+        "failed": 1,
+        "total": 7,
+        "time_seconds": 193.4,
+        "tokens": 32847,
+        "tool_calls": 21,
+        "errors": 1
+      },
+      "expectations": [
+        {
+          "text": "Announces using orchestrated-execution before doing any other work",
+          "passed": true,
+          "evidence": "Transcript Step 1/Announce: \"'I'm using orchestrated-execution to decompose and dispatch this task.'\" \u00e2\u20ac\u201d first line of the recon section before any file reads."
+        },
+        {
+          "text": "Reads Content-Hub-Vault/00-Management/Superpowers/orchestrated-execution.md",
+          "passed": true,
+          "evidence": "Transcript Step 2: \"Read: /Superpowers/orchestrated-execution.md (authoritative 6-phase workflow)\" \u00e2\u20ac\u201d listed among the initial reads alongside SKILL.md and AGENTS.md."
+        },
+        {
+          "text": "Dispatches or mentions dispatching a Haiku recon agent in Phase 1",
+          "passed": false,
+          "evidence": "metrics.json Agent: 0 \u00e2\u20ac\u201d no Explore agent dispatched. Transcript shows Phase 1 recon performed inline using Read/Glob/Grep tools directly. The agent acknowledged knowing the Haiku recon pattern (Step 2 learning) but did not act on it."
+        },
+        {
+          "text": "Writes a state file to Content-Hub-Vault/00-Management/Orchestrations/",
+          "passed": true,
+          "evidence": "metrics.json notes.state_file_location: \"Content-Hub-Vault/00-Management/Orchestrations/2026-04-22_platform-posting-schedule.md\". state_file_copy.md exists in outputs with full content."
+        },
+        {
+          "text": "Plan correctly sequences backend changes before or alongside frontend (not frontend before backend)",
+          "passed": true,
+          "evidence": "Transcript decomposition: Group 1 = db migration, Group 2 = brand-agent + intelligence-agent (backend), Group 3 = frontend types, Group 4 = calendar UI. Backend (Group 2) precedes frontend (Groups 3-4). Correct ordering."
+        },
+        {
+          "text": "Identifies at least 3 different specialist agents",
+          "passed": true,
+          "evidence": "Transcript recon findings section: \"Brand Config: brand-agent\", \"Intelligence Computation: intelligence-agent\", \"Database Schema: db-agent\", \"Frontend UI: frontend-agent\" \u00e2\u20ac\u201d 4 agents identified from AGENTS.md."
+        },
+        {
+          "text": "Requests user approval before proceeding to execution",
+          "passed": true,
+          "evidence": "metrics.json status: \"Awaiting User Approval\". Plan.md and state file both show status: awaiting-approval. Phase 4 execution not started."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.857,
+        "passed": 6,
+        "failed": 1,
+        "total": 7,
+        "time_seconds": 175.8,
+        "tokens": 16847,
+        "tool_calls": 16,
+        "errors": 1
+      },
+      "expectations": [
+        {
+          "text": "Announces using orchestrated-execution before doing any other work",
+          "passed": true,
+          "evidence": "Transcript Step 1 (Announcement): \"Announced use of orchestrated-execution at the beginning of the session per SKILL.md requirements.\" \u00e2\u20ac\u201d explicitly first step before any file reads or planning."
+        },
+        {
+          "text": "Reads Content-Hub-Vault/00-Management/Superpowers/orchestrated-execution.md",
+          "passed": true,
+          "evidence": "Transcript Step 3 (Read Orchestrated-Execution Vault File): \"Tool: Read \u00e2\u20ac\u201d File: Content-Hub-Vault/00-Management/Superpowers/orchestrated-execution.md\" \u00e2\u20ac\u201d dedicated step with 7 key learnings listed."
+        },
+        {
+          "text": "Dispatches or mentions dispatching a Haiku recon agent to scan relevant codebase areas",
+          "passed": false,
+          "evidence": "metrics.json Agent: 0. Transcript Step 5 explicitly notes: \"Phase 1 recon done manually; Phase 4 execution not yet reached\". Despite reading the Phase 1 dispatch instruction, the agent performed recon inline with Glob/Read tools."
+        },
+        {
+          "text": "Writes a state file to Content-Hub-Vault/00-Management/Orchestrations/",
+          "passed": true,
+          "evidence": "Transcript Step 6d: \"Tool: Write \u00e2\u20ac\u201d File: Content-Hub-Vault/00-Management/Orchestrations/2026-04-22_approval-workflow.md \u00e2\u20ac\u201d Content: 195 lines\". metrics.json state_file_location and state_file_status: awaiting-approval confirmed."
+        },
+        {
+          "text": "Plan separates db migration from backend and frontend (db in its own earlier group)",
+          "passed": true,
+          "evidence": "Transcript decomposition: Group 1 = db-agent (007_approval_workflow.sql only), Group 2 = pipeline-agent (models.py + router.py), Group 3 = frontend-agent (types.ts + api.ts + detail page). DB cleanly isolated in Group 1 with no file overlap."
+        },
+        {
+          "text": "Identifies db-agent, pipeline-agent, and frontend-agent as specialists",
+          "passed": true,
+          "evidence": "Transcript decomposition and metrics.json specialist_agents_assigned: [\"db-agent\", \"pipeline-agent\", \"frontend-agent\"]. All 3 named with correct domain-scoped file assignments."
+        },
+        {
+          "text": "Requests user approval before proceeding to execution",
+          "passed": true,
+          "evidence": "Transcript evaluation checkpoint: \"The orchestration is now paused at Phase 2 completion, awaiting explicit user approval per CLAUDE.md \u00c2\u00a76 and orchestrated-execution.md Phase 3 requirements.\" Quotes the skill's own rule verbatim."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.143,
+        "passed": 1,
+        "failed": 6,
+        "total": 7,
+        "time_seconds": 127.1,
+        "tokens": 13000,
+        "tool_calls": 19,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Announces using orchestrated-execution before doing any other work",
+          "passed": false,
+          "evidence": "plan.md contains no mention of orchestrated-execution or the multi-agent workflow. The agent began directly with a project plan document."
+        },
+        {
+          "text": "Reads Content-Hub-Vault/00-Management/Superpowers/orchestrated-execution.md",
+          "passed": false,
+          "evidence": "No evidence in plan.md or transcript that this file was read. The agent explored supabase/migrations, backend/content, and frontend files but not the vault superpowers."
+        },
+        {
+          "text": "Dispatches or mentions dispatching a Haiku recon agent to scan relevant codebase areas",
+          "passed": false,
+          "evidence": "metrics.json shows no Agent tool calls. The agent explored the codebase directly using Read/Glob/Bash tools."
+        },
+        {
+          "text": "Writes a state file to Content-Hub-Vault/00-Management/Orchestrations/",
+          "passed": false,
+          "evidence": "No state file was written to Orchestrations/. Outputs directory contains only plan.md, transcript.md, and metrics.json."
+        },
+        {
+          "text": "Presents a plan with at least 2 distinct execution groups",
+          "passed": true,
+          "evidence": "plan.md has 3 distinct phases: Phase 1 (Database Schema Changes), Phase 2 (Backend API Changes), Phase 3 (Frontend Display Changes) \u00e2\u20ac\u201d each with separate headings and file lists."
+        },
+        {
+          "text": "Identifies db-agent and frontend-agent as specialists involved",
+          "passed": false,
+          "evidence": "plan.md uses layer/file naming only (database migration, backend router, frontend library page). No AGENTS.md specialist names (db-agent, pipeline-agent, frontend-agent) appear anywhere in the output."
+        },
+        {
+          "text": "Requests user approval before proceeding to execution",
+          "passed": false,
+          "evidence": "No approval gate mentioned. The plan ends with optional enhancements and a testing strategy \u00e2\u20ac\u201d it reads as ready-to-implement with no checkpoint for user sign-off."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.143,
+        "passed": 1,
+        "failed": 6,
+        "total": 7,
+        "time_seconds": 203.8,
+        "tokens": 12000,
+        "tool_calls": 21,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Announces using orchestrated-execution before doing any other work",
+          "passed": false,
+          "evidence": "plan.md makes no mention of orchestrated-execution or any multi-agent workflow framework."
+        },
+        {
+          "text": "Reads Content-Hub-Vault/00-Management/Superpowers/orchestrated-execution.md",
+          "passed": false,
+          "evidence": "No evidence in transcript or plan that this vault file was read."
+        },
+        {
+          "text": "Dispatches or mentions dispatching a Haiku recon agent in Phase 1",
+          "passed": false,
+          "evidence": "metrics.json confirms no Agent tool calls. The agent used Read/Glob/Grep to explore the codebase directly."
+        },
+        {
+          "text": "Writes a state file to Content-Hub-Vault/00-Management/Orchestrations/",
+          "passed": false,
+          "evidence": "No state file written. Agent summary confirms outputs are: plan.md, transcript.md, metrics.json only."
+        },
+        {
+          "text": "Plan correctly sequences backend changes before or alongside frontend (not frontend before backend)",
+          "passed": true,
+          "evidence": "Agent summary describes '6 phases': database \u00e2\u2020\u2019 backend (brand models, intelligence module) \u00e2\u2020\u2019 frontend types \u00e2\u2020\u2019 calendar UI integration. Backend precedes frontend in the plan."
+        },
+        {
+          "text": "Identifies at least 3 different specialist agents",
+          "passed": false,
+          "evidence": "Plan uses layer-based naming ('persistence layer', 'intelligence layer', 'UI layer') not AGENTS.md specialist names. No mention of brand-agent, intelligence-agent, db-agent, or frontend-agent."
+        },
+        {
+          "text": "Requests user approval before proceeding to execution",
+          "passed": false,
+          "evidence": "No approval checkpoint mentioned. Plan reads as implementation-ready."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.143,
+        "passed": 1,
+        "failed": 6,
+        "total": 7,
+        "time_seconds": 112.3,
+        "tokens": 10000,
+        "tool_calls": 15,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Announces using orchestrated-execution before doing any other work",
+          "passed": false,
+          "evidence": "plan.md begins directly with task planning. No mention of orchestrated-execution anywhere in the output."
+        },
+        {
+          "text": "Reads Content-Hub-Vault/00-Management/Superpowers/orchestrated-execution.md",
+          "passed": false,
+          "evidence": "No evidence in transcript or plan that this file was accessed."
+        },
+        {
+          "text": "Dispatches or mentions dispatching a Haiku recon agent to scan relevant codebase areas",
+          "passed": false,
+          "evidence": "metrics.json: no Agent tool calls. The baseline agent used Read/Glob/Grep/Bash for exploration."
+        },
+        {
+          "text": "Writes a state file to Content-Hub-Vault/00-Management/Orchestrations/",
+          "passed": false,
+          "evidence": "No state file written. Agent summary confirms outputs are plan.md, transcript.md, metrics.json only."
+        },
+        {
+          "text": "Plan separates db migration from backend and frontend (db in its own earlier group)",
+          "passed": true,
+          "evidence": "Agent summary describes architecture with 'New migration: 007_approval_workflow.sql' listed first, followed by backend models/router, then frontend types/API/UI. DB migration is identified as first step."
+        },
+        {
+          "text": "Identifies db-agent, pipeline-agent, and frontend-agent as specialists",
+          "passed": false,
+          "evidence": "Plan uses standard file/layer language (database migration, backend models, frontend UI). No AGENTS.md specialist naming."
+        },
+        {
+          "text": "Requests user approval before proceeding to execution",
+          "passed": false,
+          "evidence": "No approval gate. Plan ends with 'Total Impact: ~145 lines of changes across 7 files' \u00e2\u20ac\u201d reads as ready to implement."
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 0.857,
+        "stddev": 0.0,
+        "min": 0.857,
+        "max": 0.857
+      },
+      "time_seconds": {
+        "mean": 170.1,
+        "stddev": 26.6118,
+        "min": 141.1,
+        "max": 193.4
+      },
+      "tokens": {
+        "mean": 17940.3333,
+        "stddev": 14391.1825,
+        "min": 4127,
+        "max": 32847
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.143,
+        "stddev": 0.0,
+        "min": 0.143,
+        "max": 0.143
+      },
+      "time_seconds": {
+        "mean": 147.7333,
+        "stddev": 49.1158,
+        "min": 112.3,
+        "max": 203.8
+      },
+      "tokens": {
+        "mean": 11666.6667,
+        "stddev": 1527.5252,
+        "min": 10000,
+        "max": 13000
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.71",
+      "time_seconds": "+22.4",
+      "tokens": "+6274"
+    }
+  },
+  "notes": []
+}

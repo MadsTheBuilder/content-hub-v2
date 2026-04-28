@@ -1,0 +1,9 @@
+node_modules/
+.pytest_cache/
+.obsidian/
+__pycache__/
+*.pyc
+.git/
+.vscode/
+dist/
+build/

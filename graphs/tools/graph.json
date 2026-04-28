@@ -1,0 +1,157 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "orchestrator.py",
+      "file_type": "code",
+      "source_file": "tools\\orchestrator.py",
+      "source_location": "L1",
+      "id": "tools_orchestrator_py",
+      "community": 0,
+      "norm_label": "orchestrator.py"
+    },
+    {
+      "label": "route_task()",
+      "file_type": "code",
+      "source_file": "tools\\orchestrator.py",
+      "source_location": "L10",
+      "id": "orchestrator_route_task",
+      "community": 0,
+      "norm_label": "route_task()"
+    },
+    {
+      "label": "run_haiku_delegate()",
+      "file_type": "code",
+      "source_file": "tools\\orchestrator.py",
+      "source_location": "L20",
+      "id": "orchestrator_run_haiku_delegate",
+      "community": 1,
+      "norm_label": "run_haiku_delegate()"
+    },
+    {
+      "label": "execute_task_with_advisor()",
+      "file_type": "code",
+      "source_file": "tools\\orchestrator.py",
+      "source_location": "L30",
+      "id": "orchestrator_execute_task_with_advisor",
+      "community": 2,
+      "norm_label": "execute_task_with_advisor()"
+    },
+    {
+      "label": "Uses Haiku to classify task complexity.",
+      "file_type": "rationale",
+      "source_file": "tools\\orchestrator.py",
+      "source_location": "L11",
+      "id": "orchestrator_rationale_11",
+      "community": 0,
+      "norm_label": "uses haiku to classify task complexity."
+    },
+    {
+      "label": "Sub-agent worker function invoked by Sonnet.",
+      "file_type": "rationale",
+      "source_file": "tools\\orchestrator.py",
+      "source_location": "L21",
+      "id": "orchestrator_rationale_21",
+      "community": 1,
+      "norm_label": "sub-agent worker function invoked by sonnet."
+    },
+    {
+      "label": "Runs the main tier with the Advisor beta tool.",
+      "file_type": "rationale",
+      "source_file": "tools\\orchestrator.py",
+      "source_location": "L31",
+      "id": "orchestrator_rationale_31",
+      "community": 2,
+      "norm_label": "runs the main tier with the advisor beta tool."
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tools\\orchestrator.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_src": "tools_orchestrator_py",
+      "_tgt": "orchestrator_route_task",
+      "source": "tools_orchestrator_py",
+      "target": "orchestrator_route_task",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tools\\orchestrator.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_src": "tools_orchestrator_py",
+      "_tgt": "orchestrator_run_haiku_delegate",
+      "source": "tools_orchestrator_py",
+      "target": "orchestrator_run_haiku_delegate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tools\\orchestrator.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_src": "tools_orchestrator_py",
+      "_tgt": "orchestrator_execute_task_with_advisor",
+      "source": "tools_orchestrator_py",
+      "target": "orchestrator_execute_task_with_advisor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tools\\orchestrator.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_src": "orchestrator_rationale_11",
+      "_tgt": "orchestrator_route_task",
+      "source": "orchestrator_route_task",
+      "target": "orchestrator_rationale_11",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "tools\\orchestrator.py",
+      "source_location": "L72",
+      "weight": 1.0,
+      "_src": "orchestrator_execute_task_with_advisor",
+      "_tgt": "orchestrator_run_haiku_delegate",
+      "source": "orchestrator_run_haiku_delegate",
+      "target": "orchestrator_execute_task_with_advisor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tools\\orchestrator.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_src": "orchestrator_rationale_21",
+      "_tgt": "orchestrator_run_haiku_delegate",
+      "source": "orchestrator_run_haiku_delegate",
+      "target": "orchestrator_rationale_21",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tools\\orchestrator.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_src": "orchestrator_rationale_31",
+      "_tgt": "orchestrator_execute_task_with_advisor",
+      "source": "orchestrator_execute_task_with_advisor",
+      "target": "orchestrator_rationale_31",
+      "confidence_score": 1.0
+    }
+  ],
+  "hyperedges": []
+}

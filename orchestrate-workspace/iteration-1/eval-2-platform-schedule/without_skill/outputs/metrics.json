@@ -1,0 +1,14 @@
+{
+  "tool_calls": {
+    "Read": 13,
+    "Write": 2,
+    "Bash": 0,
+    "Glob": 4,
+    "Grep": 2
+  },
+  "total_tool_calls": 21,
+  "total_steps": 16,
+  "errors_encountered": 0,
+  "output_chars": 18542,
+  "transcript_chars": 12847
+}

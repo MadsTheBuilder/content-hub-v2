@@ -1,0 +1,53 @@
+{
+  "skill_name": "orchestrate",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Add a views_count column to content_items table to track how many times each piece of content has been viewed. The backend should increment this count when content is accessed, and the frontend library page should show the view count on each content card.\n\nNote: You may (and should) dispatch a Haiku Explore agent for Phase 1 recon — this is required by orchestrated-execution.md. Only executor agents that write files are restricted until the user approves the plan.",
+      "expected_output": "An execution plan decomposed across db-agent, pipeline-agent, and frontend-agent with proper parallel groups, a state file written to Content-Hub-Vault/00-Management/Orchestrations/, and a request for user approval before any execution.",
+      "files": [],
+      "expectations": [
+        "Announces using orchestrated-execution before doing any other work",
+        "Reads Content-Hub-Vault/00-Management/Superpowers/orchestrated-execution.md",
+        "Mentions dispatching a Haiku recon agent in Phase 1 (actual dispatch not testable in subagent eval harness — see ORCH-001; authoritative test is evals/harness.md Run A step A2)",
+        "Writes a state file to Content-Hub-Vault/00-Management/Orchestrations/",
+        "Plan output uses labeled group notation such as 'Group N (parallel)' or 'Group N (depends on Group N-1)' for at least 2 groups",
+        "Identifies db-agent and frontend-agent as specialists involved",
+        "Requests user approval before proceeding to execution",
+        "Self-reported total_steps or step count in any metrics or summary is greater than 3"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Implement platform-specific posting time recommendations. Store preferred_post_hours per platform in brand config, compute optimal hours using the intelligence layer based on historical performance data, and surface recommendations on the content calendar page.\n\nNote: You may (and should) dispatch a Haiku Explore agent for Phase 1 recon — this is required by orchestrated-execution.md. Only executor agents that write files are restricted until the user approves the plan.",
+      "expected_output": "An execution plan spanning brand-agent, intelligence-agent, and frontend-agent with schema changes first, backend second, frontend last. State file written. User approval requested.",
+      "files": [],
+      "expectations": [
+        "Announces using orchestrated-execution before doing any other work",
+        "Reads Content-Hub-Vault/00-Management/Superpowers/orchestrated-execution.md",
+        "Mentions dispatching a Haiku recon agent in Phase 1 (actual dispatch not testable in subagent eval harness — see ORCH-001; authoritative test is evals/harness.md Run A step A2)",
+        "Writes a state file to Content-Hub-Vault/00-Management/Orchestrations/",
+        "Plan output uses labeled group notation such as 'Group N (parallel)' or 'Group N (depends on Group N-1)' for at least 2 groups",
+        "Identifies at least 3 different specialist agents",
+        "Requests user approval before proceeding to execution",
+        "Self-reported total_steps or step count in any metrics or summary is greater than 3"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Add a content approval workflow. Content items need an approval_status field (draft/pending/approved/rejected). Add a backend endpoint to approve or reject content items, and add approve/reject buttons to the content detail page.\n\nNote: You may (and should) dispatch a Haiku Explore agent for Phase 1 recon — this is required by orchestrated-execution.md. Only executor agents that write files are restricted until the user approves the plan.",
+      "expected_output": "An execution plan spanning db-agent, pipeline-agent, and frontend-agent with proper ordering, a state file in Orchestrations/, and user approval gate before execution.",
+      "files": [],
+      "expectations": [
+        "Announces using orchestrated-execution before doing any other work",
+        "Reads Content-Hub-Vault/00-Management/Superpowers/orchestrated-execution.md",
+        "Mentions dispatching a Haiku recon agent in Phase 1 (actual dispatch not testable in subagent eval harness — see ORCH-001; authoritative test is evals/harness.md Run A step A2)",
+        "Writes a state file to Content-Hub-Vault/00-Management/Orchestrations/",
+        "Plan output uses labeled group notation such as 'Group N (parallel)' or 'Group N (depends on Group N-1)' for at least 2 groups",
+        "Identifies db-agent, pipeline-agent, and frontend-agent as specialists",
+        "Requests user approval before proceeding to execution",
+        "Self-reported total_steps or step count in any metrics or summary is greater than 3"
+      ]
+    }
+  ]
+}

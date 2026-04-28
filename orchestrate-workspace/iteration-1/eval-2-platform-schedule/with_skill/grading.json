@@ -1,0 +1,86 @@
+{
+  "expectations": [
+    {
+      "text": "Announces using orchestrated-execution before doing any other work",
+      "passed": true,
+      "evidence": "Transcript Step 1/Announce: \"'I'm using orchestrated-execution to decompose and dispatch this task.'\" — first line of the recon section before any file reads."
+    },
+    {
+      "text": "Reads Content-Hub-Vault/00-Management/Superpowers/orchestrated-execution.md",
+      "passed": true,
+      "evidence": "Transcript Step 2: \"Read: /Superpowers/orchestrated-execution.md (authoritative 6-phase workflow)\" — listed among the initial reads alongside SKILL.md and AGENTS.md."
+    },
+    {
+      "text": "Dispatches or mentions dispatching a Haiku recon agent in Phase 1",
+      "passed": false,
+      "evidence": "metrics.json Agent: 0 — no Explore agent dispatched. Transcript shows Phase 1 recon performed inline using Read/Glob/Grep tools directly. The agent acknowledged knowing the Haiku recon pattern (Step 2 learning) but did not act on it."
+    },
+    {
+      "text": "Writes a state file to Content-Hub-Vault/00-Management/Orchestrations/",
+      "passed": true,
+      "evidence": "metrics.json notes.state_file_location: \"Content-Hub-Vault/00-Management/Orchestrations/2026-04-22_platform-posting-schedule.md\". state_file_copy.md exists in outputs with full content."
+    },
+    {
+      "text": "Plan correctly sequences backend changes before or alongside frontend (not frontend before backend)",
+      "passed": true,
+      "evidence": "Transcript decomposition: Group 1 = db migration, Group 2 = brand-agent + intelligence-agent (backend), Group 3 = frontend types, Group 4 = calendar UI. Backend (Group 2) precedes frontend (Groups 3-4). Correct ordering."
+    },
+    {
+      "text": "Identifies at least 3 different specialist agents",
+      "passed": true,
+      "evidence": "Transcript recon findings section: \"Brand Config: brand-agent\", \"Intelligence Computation: intelligence-agent\", \"Database Schema: db-agent\", \"Frontend UI: frontend-agent\" — 4 agents identified from AGENTS.md."
+    },
+    {
+      "text": "Requests user approval before proceeding to execution",
+      "passed": true,
+      "evidence": "metrics.json status: \"Awaiting User Approval\". Plan.md and state file both show status: awaiting-approval. Phase 4 execution not started."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 1,
+    "total": 7,
+    "pass_rate": 0.857
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 10, "Write": 4, "Bash": 2, "Agent": 0, "Glob": 4, "Grep": 1},
+    "total_tool_calls": 21,
+    "total_steps": 1,
+    "errors_encountered": 1,
+    "output_chars": 32847,
+    "transcript_chars": 6432
+  },
+  "timing": {
+    "total_tokens": 66939,
+    "duration_ms": 193390,
+    "total_duration_seconds": 193.4
+  },
+  "claims": [
+    {
+      "claim": "5 tasks across 4 sequential groups decomposed",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Transcript decomposition section confirms 5 tasks (1 db + 2 backend + 1 frontend types + 1 calendar UI) across 4 groups"
+    },
+    {
+      "claim": "Graceful fallback to platform defaults when insufficient historical data",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Recon findings section: 'Fallback to platform defaults when insufficient data' identified as a design concern, and key design decisions note 'compute_optimal_posting_hours gracefully handles cold starts'"
+    },
+    {
+      "claim": "metrics.json total_steps: 1 appears incorrect",
+      "type": "factual",
+      "verified": false,
+      "evidence": "metrics.json shows total_steps: 1 but transcript and output clearly show many more steps. This appears to be a metrics recording error by the agent."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "The metrics.json total_steps: 1 is clearly wrong (many more steps were taken). No assertion currently checks metrics accuracy — worth adding one to catch corrupted self-reporting."
+      }
+    ],
+    "overall": "Strong plan with 4 well-ordered groups and correct specialist assignment. Same failure pattern as Eval 1: no Haiku recon agent dispatch."
+  }
+}

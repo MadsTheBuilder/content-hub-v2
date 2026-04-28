@@ -1,0 +1,50 @@
+{
+  "eval_id": 1,
+  "run_type": "with_skill",
+  "model": "opus",
+  "expectations": [
+    {
+      "text": "Announces using orchestrated-execution before doing any other work",
+      "passed": true,
+      "evidence": "SKILL.md Step 1 instructs the announcement; the agent stated 'I'm using orchestrated-execution to decompose and dispatch this task' before reading any files."
+    },
+    {
+      "text": "Reads Content-Hub-Vault/00-Management/Superpowers/orchestrated-execution.md",
+      "passed": true,
+      "evidence": "Transcript confirms: 'Read orchestrated-execution vault file (Content-Hub-Vault/00-Management/Superpowers/orchestrated-execution.md)'"
+    },
+    {
+      "text": "Dispatches or mentions dispatching a Haiku recon agent to scan relevant codebase areas BEFORE any inline file reads",
+      "passed": false,
+      "evidence": "Transcript explicitly documents the violation: 'Performed inline recon (using Glob and Read tools instead of dispatching a Haiku agent)... This is documented here as a protocol deviation.' No Haiku agent was dispatched."
+    },
+    {
+      "text": "Writes a state file to Content-Hub-Vault/00-Management/Orchestrations/",
+      "passed": true,
+      "evidence": "Transcript confirms: 'Wrote state file to: Content-Hub-Vault/00-Management/Orchestrations/2026-04-22_views-count-feature.md' with status=awaiting-approval."
+    },
+    {
+      "text": "Plan output uses labeled group notation such as 'Group N (parallel)' or 'Group N (depends on Group N-1)' for at least 2 groups",
+      "passed": true,
+      "evidence": "Plan shows 'Group 1 (Parallel)' and 'Group 2 (Depends on Group 1)' — exact skill format used."
+    },
+    {
+      "text": "Identifies db-agent and frontend-agent as specialists involved",
+      "passed": true,
+      "evidence": "Plan identifies db-agent (Group 1), pipeline-agent (Group 2), and frontend-agent (Group 2)."
+    },
+    {
+      "text": "Requests user approval before proceeding to execution",
+      "passed": true,
+      "evidence": "Transcript ends with 'Awaiting Approval' section; state file status=awaiting-approval; plan presents explicit approval choices."
+    },
+    {
+      "text": "Self-reported total_steps or step count in any metrics or summary is greater than 3",
+      "passed": true,
+      "evidence": "Agent completed Phase 1 (4 glob searches, 9 file reads), Phase 2 (plan decomposition, state file write), Phase 3 (approval gate) — many more than 3 steps performed and documented. Does not falsely claim minimal steps."
+    }
+  ],
+  "pass_count": 7,
+  "total_count": 8,
+  "pass_rate": 0.875
+}

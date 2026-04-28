@@ -1,0 +1,56 @@
+{
+  "eval_id": 3,
+  "run_type": "with_skill",
+  "model": "opus",
+  "expectations": [
+    {
+      "text": "Announces using orchestrated-execution before doing any other work",
+      "passed": true,
+      "evidence": "Transcript compliance notes confirm: '\u00e2\u0153\u201c Announced orchestrated-execution usage at start' as first action per SKILL.md Step 1."
+    },
+    {
+      "text": "Reads Content-Hub-Vault/00-Management/Superpowers/orchestrated-execution.md",
+      "passed": true,
+      "evidence": "Compliance notes confirm: '\u00e2\u0153\u201c Read orchestrated-execution.md vault file completely before proceeding'"
+    },
+    {
+      "text": "Dispatches or mentions dispatching a Haiku recon agent to scan relevant codebase areas BEFORE any inline file reads",
+      "passed": false,
+      "evidence": "Transcript shows Phase 1 Recon performed via inline file reads (6 files listed: models.py, router.py, migrations, page.tsx, types.ts, api.ts). No Haiku agent dispatch mentioned. Compliance notes do not list recon agent dispatch."
+    },
+    {
+      "text": "Writes a state file to Content-Hub-Vault/00-Management/Orchestrations/",
+      "passed": true,
+      "evidence": "State file written to 'Content-Hub-Vault/00-Management/Orchestrations/2026-04-22_approval-workflow.md' with status=awaiting-approval, as confirmed in files created section."
+    },
+    {
+      "text": "Plan output uses labeled group notation such as 'Group N (parallel)' or 'Group N (depends on Group N-1)' for at least 2 groups",
+      "passed": true,
+      "evidence": "Transcript decomposition shows: 'Group 1 (Parallel): Database Migration', 'Group 2 (Depends on Group 1): Backend API', 'Group 3 (Depends on Group 2): Frontend Integration' \u00e2\u20ac\u201d exact skill notation."
+    },
+    {
+      "text": "Identifies db-agent, pipeline-agent, and frontend-agent as specialists",
+      "passed": true,
+      "evidence": "Phase 2 plan assigns: db-agent to Group 1, pipeline-agent to Group 2, frontend-agent to Group 3. All three named explicitly."
+    },
+    {
+      "text": "Requests user approval before proceeding to execution",
+      "passed": true,
+      "evidence": "Transcript: 'User Action Required: Approve plan before proceeding to Phase 4 (Execute)'. Compliance notes confirm '\u00e2\u0153\u201c Stopped at Phase 3 (Approve) \u00e2\u20ac\u201d did not dispatch agents or modify files'"
+    },
+    {
+      "text": "Self-reported total_steps or step count in any metrics or summary is greater than 3",
+      "passed": true,
+      "evidence": "Summary Statistics: 8 files touched during planning, 3 execution groups, 3 tasks in plan, ~230 lines estimated. Agent clearly performed many steps; no false claim of minimal work."
+    }
+  ],
+  "pass_count": 7,
+  "total_count": 8,
+  "pass_rate": 0.875,
+  "summary": {
+    "passed": 7,
+    "failed": 1,
+    "total": 8,
+    "pass_rate": 0.875
+  }
+}

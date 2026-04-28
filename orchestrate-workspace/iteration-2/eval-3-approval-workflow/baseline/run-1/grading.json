@@ -1,0 +1,56 @@
+{
+  "eval_id": 3,
+  "run_type": "baseline",
+  "model": "haiku",
+  "expectations": [
+    {
+      "text": "Announces using orchestrated-execution before doing any other work",
+      "passed": false,
+      "evidence": "Transcript explicitly states: 'This investigation was completed WITHOUT reading orchestrated-execution.md or any skill files, as instructed.' No announcement made."
+    },
+    {
+      "text": "Reads Content-Hub-Vault/00-Management/Superpowers/orchestrated-execution.md",
+      "passed": false,
+      "evidence": "Explicitly did not read orchestrated-execution.md. Read context.md, CLAUDE.md, GRAPH_REPORT.md, AGENTS.md per CLAUDE.md \u00c2\u00a7 6 session protocol instead."
+    },
+    {
+      "text": "Dispatches or mentions dispatching a Haiku recon agent to scan relevant codebase areas BEFORE any inline file reads",
+      "passed": false,
+      "evidence": "Performed inline reads of 6 files (migrations, router, models, types, api.ts, page.tsx). No recon agent dispatch mentioned anywhere in transcript."
+    },
+    {
+      "text": "Writes a state file to Content-Hub-Vault/00-Management/Orchestrations/",
+      "passed": false,
+      "evidence": "No state file written. Outputs are plan.md and transcript_summary.md in eval workspace only. Explicitly says 'planning only' with no Orchestrations/ file created."
+    },
+    {
+      "text": "Plan output uses labeled group notation such as 'Group N (parallel)' or 'Group N (depends on Group N-1)' for at least 2 groups",
+      "passed": false,
+      "evidence": "Plan uses numbered implementation phases (1-4: DB \u00e2\u2020\u2019 Backend \u00e2\u2020\u2019 Types \u00e2\u2020\u2019 UI) without Group N parallel/depends notation. Skill-specific output format not present."
+    },
+    {
+      "text": "Identifies db-agent, pipeline-agent, and frontend-agent as specialists",
+      "passed": true,
+      "evidence": "Read AGENTS.md in session start (CLAUDE.md \u00c2\u00a7 6) and identified 'db-agent, pipeline-agent, frontend-agent' as relevant specialists in the Investigation Process section."
+    },
+    {
+      "text": "Requests user approval before proceeding to execution",
+      "passed": false,
+      "evidence": "Transcript ends at 'Stopping Point: produce a plan'. No explicit approval request. Would proceed to execution without a formal approval gate."
+    },
+    {
+      "text": "Self-reported total_steps or step count in any metrics or summary is greater than 3",
+      "passed": true,
+      "evidence": "Agent read 10 files (4 context + 6 codebase), identified 6 files for changes, documented 5 key observations. Clearly many steps; no false undercounting."
+    }
+  ],
+  "pass_count": 2,
+  "total_count": 8,
+  "pass_rate": 0.25,
+  "summary": {
+    "passed": 2,
+    "failed": 6,
+    "total": 8,
+    "pass_rate": 0.25
+  }
+}

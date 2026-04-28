@@ -1,0 +1,56 @@
+{
+  "eval_id": 2,
+  "run_type": "baseline",
+  "model": "haiku",
+  "expectations": [
+    {
+      "text": "Announces using orchestrated-execution before doing any other work",
+      "passed": false,
+      "evidence": "No announcement of orchestrated-execution. Baseline proceeded directly with research using CLAUDE.md session protocol."
+    },
+    {
+      "text": "Reads Content-Hub-Vault/00-Management/Superpowers/orchestrated-execution.md",
+      "passed": false,
+      "evidence": "Baseline was instructed not to read skill files. Read context.md, Plans/CLAUDE.md, AGENTS.md, GRAPH_REPORT.md per session protocol, not orchestrated-execution.md."
+    },
+    {
+      "text": "Dispatches or mentions dispatching a Haiku recon agent in Phase 1 BEFORE any inline file reads",
+      "passed": false,
+      "evidence": "No mention of recon agent dispatch. Baseline performed inline codebase reads (brand config, intelligence layer, calendar page, schema, types, API files)."
+    },
+    {
+      "text": "Writes a state file to Content-Hub-Vault/00-Management/Orchestrations/",
+      "passed": false,
+      "evidence": "No state file written. Only outputs were plan.md and transcript_summary.md in the eval workspace. No Orchestrations/ directory entry created."
+    },
+    {
+      "text": "Plan output uses labeled group notation such as 'Group N (parallel)' or 'Group N (depends on Group N-1)' for at least 2 groups",
+      "passed": false,
+      "evidence": "Plan used Phase 1/2/3 implementation sequence sections, not the 'Group N (parallel)/(depends on)' notation that is specific to the orchestrate skill."
+    },
+    {
+      "text": "Identifies at least 3 different specialist agents",
+      "passed": true,
+      "evidence": "Baseline read AGENTS.md as part of session start and named db-agent, brand-agent, intelligence-agent, frontend-agent in the plan under specialist coordination."
+    },
+    {
+      "text": "Requests user approval before proceeding to execution",
+      "passed": false,
+      "evidence": "Plan described implementation phases ready for execution. No explicit approval gate requested before proceeding."
+    },
+    {
+      "text": "Self-reported total_steps or step count in any metrics or summary is greater than 3",
+      "passed": true,
+      "evidence": "Agent scanned 5 codebase areas, read multiple files, produced a 887-line plan across 3 phases with 7 file changes identified. Clearly many steps; no false undercounting."
+    }
+  ],
+  "pass_count": 2,
+  "total_count": 8,
+  "pass_rate": 0.25,
+  "summary": {
+    "passed": 2,
+    "failed": 6,
+    "total": 8,
+    "pass_rate": 0.25
+  }
+}

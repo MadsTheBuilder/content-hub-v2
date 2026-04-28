@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(cat)",
+      "Bash(tail -n +5 \"C:/Users/madhu/.agent/skills/graphify/SKILL.md\")",
+      "Bash(graphify --update tmp_marketingskills)",
+      "Bash(python -m scripts.aggregate_benchmark \"C:/Users/madhu/Claude cowork/Content Hub/orchestrate-workspace/iteration-1\" --skill-name orchestrate)",
+      "Bash(mkdir -p __TRACKED_VAR__/__TRACKED_VAR__/run-1)",
+      "Bash(cp __TRACKED_VAR__/__TRACKED_VAR__/grading.json __TRACKED_VAR__/__TRACKED_VAR__/run-1/)",
+      "Bash(cp __TRACKED_VAR__/__TRACKED_VAR__/timing.json __TRACKED_VAR__/__TRACKED_VAR__/run-1/)",
+      "Bash(python -m scripts.aggregate_benchmark . --skill-name orchestrate)",
+      "Bash(python C:/Users/madhu/.claude/plugins/cache/claude-plugins-official/skill-creator/b10b583de281/skills/skill-creator/scripts/aggregate_benchmark.py . --skill-name orchestrate)",
+      "Bash(python -c ' *)",
+      "Bash(pip show *)",
+      "Bash(python -m uvicorn backend.main:app --port 8000 --log-level info)",
+      "Bash(curl -s http://localhost:8000/api/v1/health)",
+      "Bash(python -m pytest backend/tests/test_general_trending.py -q)",
+      "Bash(python -c \"import notebooklm; help\\(notebooklm\\)\")",
+      "Bash(python -c \"from notebooklm.types import SourceType, VideoFormat; print\\('SourceTypes:', list\\(SourceType\\)\\); print\\('VideoFormats:', list\\(VideoFormat\\)\\)\")",
+      "Bash(python -m notebooklm auth --help)",
+      "Bash(python -m notebooklm --help)",
+      "Bash(python -m notebooklm auth check)",
+      "Bash(python extract_video_knowledge.py)",
+      "Bash(claude -p \"say hello in 3 words\")",
+      "Bash(curl -s http://localhost:11434/api/generate -d '{\"model\":\"gemma4:e4b\",\"prompt\":\"say hi\",\"stream\":false}')",
+      "Bash(python daily.py)",
+      "Bash(PYTHONUTF8=1 python daily.py)"
+    ]
+  }
+}

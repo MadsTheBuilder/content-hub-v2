@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(frontend/node_modules/**)",
+      "Read(frontend/.next/**)",
+      "Read(frontend/dist/**)",
+      "Read(frontend/coverage/**)",
+      "Read(backend/__pycache__/**)",
+      "Read(backend/.venv/**)",
+      "Read(**/*.egg-info/**)"
+    ]
+  },
+  "enabledPlugins": {
+    "codex@openai-codex": true
+  }
+}

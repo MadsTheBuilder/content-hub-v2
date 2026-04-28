@@ -1,0 +1,15 @@
+{
+  "eval_id": 1,
+  "eval_name": "views-count",
+  "prompt": "Add a views_count column to content_items table to track how many times each piece of content has been viewed. The backend should increment this count when content is accessed, and the frontend library page should show the view count on each content card.",
+  "assertions": [
+    "Announces using orchestrated-execution before doing any other work",
+    "Reads Content-Hub-Vault/00-Management/Superpowers/orchestrated-execution.md",
+    "Dispatches or mentions dispatching a Haiku recon agent to scan relevant codebase areas BEFORE any inline file reads",
+    "Writes a state file to Content-Hub-Vault/00-Management/Orchestrations/",
+    "Plan output uses labeled group notation such as 'Group N (parallel)' or 'Group N (depends on Group N-1)' for at least 2 groups",
+    "Identifies db-agent and frontend-agent as specialists involved",
+    "Requests user approval before proceeding to execution",
+    "Self-reported total_steps or step count in any metrics or summary is greater than 3"
+  ]
+}
