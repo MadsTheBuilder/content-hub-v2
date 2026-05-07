@@ -400,3 +400,203 @@ def _mock_general_results(platform: str) -> list[dict]:
         }
         for i in range(8)
     ]
+
+
+async def scrape_twitter(keywords: list[str], accounts: list[str], max_results: int = 60) -> list[dict]:
+    """Scrape tweets from Twitter using Apify actors.
+
+    Tries quacker~twitter-scraper first, fallback to apify~twitter-scraper.
+    Returns normalized tweets with 9-field schema; [] on failure.
+    """
+    if not settings.apify_api_key:
+        logger.warning("Apify key missing; Twitter scrape returning mock data []")
+        return []
+
+    # Try actors in order
+    actors_to_try = [
+        ("quacker~twitter-scraper", _build_twitter_input_quacker),
+        ("apify~twitter-scraper", _build_twitter_input_apify),
+    ]
+
+    results = []
+    errors = []
+
+    import httpx
+    async with httpx.AsyncClient(timeout=300) as client:
+        for actor_id, input_builder in actors_to_try:
+            try:
+                actor_input = input_builder(keywords, accounts, max_results)
+
+                # POST to run endpoint
+                run_response = await client.post(
+                    f"{APIFY_BASE}/acts/{actor_id}/runs",
+                    params={"token": settings.apify_api_key},
+                    json=actor_input,
+                )
+
+                if run_response.status_code >= 400:
+                    errors.append(f"{actor_id}: HTTP {run_response.status_code}")
+                    logger.debug("Actor %s rejected input: %s", actor_id, run_response.text)
+                    continue
+
+                run_data = run_response.json()
+                if "data" not in run_data:
+                    errors.append(f"{actor_id}: no data in response")
+                    continue
+
+                run_data = run_data["data"]
+                run_id = run_data.get("id")
+                dataset_id = run_data.get("defaultDatasetId")
+
+                if not dataset_id or not run_id:
+                    errors.append(f"{actor_id}: missing dataset/run ID")
+                    continue
+
+                # Poll until completion (~5 minutes)
+                succeeded = False
+                status = "UNKNOWN"
+                for _ in range(60):
+                    await asyncio.sleep(5)
+                    status_resp = await client.get(
+                        f"{APIFY_BASE}/actor-runs/{run_id}",
+                        params={"token": settings.apify_api_key},
+                    )
+                    status = status_resp.json()["data"]["status"]
+                    logger.info("Twitter scrape run %s [%s]: %s", run_id, actor_id, status)
+
+                    if status == "SUCCEEDED":
+                        succeeded = True
+                        break
+                    if status in ("FAILED", "ABORTED", "TIMED-OUT"):
+                        errors.append(f"{actor_id}: run failed with {status}")
+                        break
+
+                if not succeeded:
+                    if status not in ("FAILED", "ABORTED", "TIMED-OUT"):
+                        errors.append(f"{actor_id}: polling timeout")
+                    continue
+
+                # Fetch results
+                items_response = await client.get(
+                    f"{APIFY_BASE}/datasets/{dataset_id}/items",
+                    params={"token": settings.apify_api_key},
+                )
+
+                if items_response.status_code >= 400:
+                    errors.append(f"{actor_id}: fetch items HTTP {items_response.status_code}")
+                    continue
+
+                raw_items = items_response.json()
+                if not raw_items:
+                    errors.append(f"{actor_id}: empty result")
+                    continue
+
+                # Normalize items
+                for item in raw_items:
+                    normalized = _normalize_twitter(item)
+                    results.append(normalized)
+
+                logger.info("Twitter scrape succeeded with %s: %d tweets", actor_id, len(results))
+                break  # Success; don't try fallback
+
+            except Exception as e:
+                errors.append(f"{actor_id}: {str(e)}")
+                logger.debug("Twitter scrape error for %s: %s", actor_id, str(e), exc_info=True)
+                continue
+
+    if not results:
+        if errors:
+            logger.error("Twitter scrape failed: %s", " | ".join(errors))
+        else:
+            logger.error("Twitter scrape failed: no results from any actor. This is an external blocker.")
+        return []
+
+    # Deduplicate by tweet_id
+    seen_ids = set()
+    deduped = []
+    for tweet in results:
+        tid = tweet.get("tweet_id", "")
+        if tid and tid not in seen_ids:
+            seen_ids.add(tid)
+            deduped.append(tweet)
+
+    # Slice to max_results
+    return deduped[:max_results]
+
+
+def _build_twitter_input_quacker(keywords: list[str], accounts: list[str], max_results: int) -> dict:
+    """Build input for quacker~twitter-scraper actor."""
+    return {
+        "searchTerms": keywords,
+        "twitterHandles": accounts,
+        "maxTweets": max_results,
+    }
+
+
+def _build_twitter_input_apify(keywords: list[str], accounts: list[str], max_results: int) -> dict:
+    """Build input for apify~twitter-scraper actor (fallback)."""
+    # Same shape as quacker for compatibility
+    return {
+        "searchTerms": keywords,
+        "twitterHandles": accounts,
+        "maxTweets": max_results,
+    }
+
+
+def _safe_int(val) -> int:
+    """Cast val to int; return 0 on None, falsy, or non-numeric strings."""
+    try:
+        return int(val) if val is not None else 0
+    except (TypeError, ValueError):
+        return 0
+
+
+def _normalize_twitter(item: dict) -> dict:
+    """Normalize raw Twitter item to 9-field schema."""
+    from datetime import datetime
+
+    # Handle tweet_id (may be int or str)
+    tweet_id = item.get("tweet_id") or item.get("id") or item.get("tweetId", "")
+    tweet_id = str(tweet_id) if tweet_id else ""
+
+    # Handle created_at (may be Unix timestamp, ISO string, or missing)
+    created_at = item.get("created_at") or item.get("createdAt") or ""
+    if created_at:
+        try:
+            # If it's a Unix timestamp (int/float)
+            if isinstance(created_at, (int, float)):
+                created_at = datetime.utcfromtimestamp(created_at).isoformat() + "Z"
+            # If it's already a string, try to parse and reformat
+            elif isinstance(created_at, str):
+                # Try ISO format first
+                if "T" not in created_at:
+                    # Might be a timestamp string, try to parse as float
+                    try:
+                        ts = float(created_at)
+                        created_at = datetime.utcfromtimestamp(ts).isoformat() + "Z"
+                    except (ValueError, TypeError):
+                        # Keep as-is if already ISO-ish
+                        if not created_at.endswith("Z") and "+" not in created_at:
+                            created_at = created_at.replace("z", "Z")
+        except Exception:
+            created_at = ""
+    else:
+        created_at = ""
+
+    # Handle author_username (strip @ if present)
+    author_username = item.get("author_username") or item.get("authorUsername") or item.get("username", "")
+    if author_username and author_username.startswith("@"):
+        author_username = author_username[1:]
+
+    # Build normalized record with safe defaults
+    return {
+        "tweet_id": tweet_id,
+        "text": item.get("text", "") or item.get("description", "") or "",
+        "author_username": author_username,
+        "author_followers": _safe_int(item.get("author_followers") or item.get("authorFollowers") or item.get("followers")),
+        "like_count": _safe_int(item.get("like_count") or item.get("likeCount") or item.get("likes")),
+        "reply_count": _safe_int(item.get("reply_count") or item.get("replyCount") or item.get("replies")),
+        "retweet_count": _safe_int(item.get("retweet_count") or item.get("retweetCount") or item.get("retweets")),
+        "created_at": created_at,
+        "url": item.get("url") or item.get("tweet_url") or item.get("tweetUrl", ""),
+    }

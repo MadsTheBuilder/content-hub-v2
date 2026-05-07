@@ -71,22 +71,23 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ## § 6. Session Start Protocol
 
-1. Read `Content-Hub-Vault/00-Management-V2/Memory/context.md` (project context).
-2. Read `Content-Hub-Vault/00-Management-V2/Plans/CLAUDE.md` (V2 rules and stack).
-3. Read `Content-Hub-Vault/00-Management-V2/Plans/Local_First_Skill_Engine_Plan.md` (full build plan).
-4. Read `Content-Hub-Vault/00-Management-V2/Tasks/Current_Sprint.md` (what to do next).
-5. **Plan before acting**: Ask 1–3 focused questions to surface ambiguities, then wait for answers before touching any file or tool.
-6. Load `.claude/skills/<name>/SKILL.md` only when acting on a matching skill task — never on session load.
+1. Read `Content-Hub-Vault-V2/00-Management-V2/Memory/context.md` (project context).
+2. Read `Content-Hub-Vault-V2/00-Management-V2/Plans/CLAUDE.md` (V2 rules and stack).
+3. **Graph Inspection**: Review `graphify-out/GRAPH_REPORT.md` to identify highly connected "God Nodes" and their related communities. Respect these core abstractions and do not alter them without extreme caution.
+4. Read `Content-Hub-Vault-V2/00-Management-V2/Plans/Local_First_Skill_Engine_Plan.md` (full build plan).
+5. Read `Content-Hub-Vault-V2/00-Management-V2/Tasks/Current_Sprint.md` (what to do next).
+6. **Plan before acting**: Ask 1–3 focused questions to surface ambiguities, then wait for answers before touching any file or tool.
+7. Load `.claude/skills/<name>/SKILL.md` only when acting on a matching skill task — never on session load.
 
 ## § 7. Vault Knowledge Graph — Memory System
 
 The vault is Claude's persistent graph brain. Every log must form an explicit, queryable node. After every significant task:
 
-1. Write a session log → `Content-Hub-Vault/00-Management-V2/Sessions/YYYY-MM-DD_Short_Description.md`.
+1. Write a session log → `Content-Hub-Vault-V2/00-Management-V2/Sessions/YYYY-MM-DD_Short_Description.md`.
    - **MANDATORY**: You must use explicit `[[WikiLinks]]` when referencing components, past sessions, or architectural features. 
    - **Edges**: Use semantic patterns to establish edges (e.g., `Implements: [[Feature Name]]`, `References: [[Issue Node]]`, `Modifies: [[Component Name]]`).
    - Include: what changed, files touched, open items.
-2. Update `Content-Hub-Vault/00-Management-V2/Tasks/Current_Sprint.md` using `[[WikiLinks]]` to connect tasks back to your session log.
+2. Update `Content-Hub-Vault-V2/00-Management-V2/Tasks/Current_Sprint.md` using `[[WikiLinks]]` to connect tasks back to your session log.
 3. Write the log **before** giving the final response to the user.
 
 ## § 8. Model Routing
@@ -103,19 +104,20 @@ The vault is Claude's persistent graph brain. Every log must form an explicit, q
   - 2+ specialist domains from AGENTS.md
   - 10+ files across subsystems
 - **Do NOT orchestrate**: Single-domain tasks, single-file fixes, exploratory/investigative work — act directly.
-- **Source of truth**: `Content-Hub-Vault/00-Management-V2/Superpowers/orchestrated-execution.md` overrides all skill files if they conflict.
-- **State files**: Active orchestration plans live in `Content-Hub-Vault/00-Management-V2/Orchestrations/`.
+- **Source of truth**: `Content-Hub-Vault-V2/00-Management-V2/Superpowers/orchestrated-execution.md` overrides all skill files if they conflict.
+- **State files**: Active orchestration plans live in `Content-Hub-Vault-V2/00-Management-V2/Orchestrations/`.
 
 ## § 10. Project Knowledge
 
 | What | Where |
 |------|-------|
-| Stack, architecture, decisions | `Content-Hub-Vault/00-Management-V2/Memory/context.md` |
-| Full build plan | `Content-Hub-Vault/00-Management-V2/Plans/Local_First_Skill_Engine_Plan.md` |
-| Active sprint | `Content-Hub-Vault/00-Management-V2/Tasks/Current_Sprint.md` |
-| V2 session history | `Content-Hub-Vault/00-Management-V2/Sessions/` |
+| Stack, architecture, decisions | `Content-Hub-Vault-V2/00-Management-V2/Memory/context.md` |
+| Knowledge graph (codebase structure) | `graphify-out/GRAPH_REPORT.md` |
+| Full build plan | `Content-Hub-Vault-V2/00-Management-V2/Plans/Local_First_Skill_Engine_Plan.md` |
+| Active sprint | `Content-Hub-Vault-V2/00-Management-V2/Tasks/Current_Sprint.md` |
+| V2 session history | `Content-Hub-Vault-V2/00-Management-V2/Sessions/` |
 | Agent roles and domains | `AGENTS.md` (project root) |
-| V1 (parked) reference | `Content-Hub-Vault/00-Management/` |
+| V1 (parked) reference | `C:\Users\madhu\Claude cowork\Content Hub\Content-Hub-Vault\00-Management\` |
 
 ---
 
