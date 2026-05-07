@@ -1,0 +1,8 @@
+{
+  "search_config": {
+    "keywords": ["AI", "SaaS", "founder", "product"],
+    "max_results": 50
+  },
+  "min_composite_score": 0.3,
+  "temperature": 1.0
+}

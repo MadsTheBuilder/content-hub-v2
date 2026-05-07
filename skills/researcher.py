@@ -1,229 +1,217 @@
-"""
-Researcher — Daily trend discovery and video idea generation.
+"""Researcher — Content gap discovery via NotebookLM.
 
-What it does:
-  1. Scrapes trending AI content from YouTube, TikTok, and optionally other platforms via Apify
-  2. Analyzes what's performing well and why
-  3. Generates 5 video ideas tailored to YOUR niche (AI tools, build-in-public, use cases)
-  4. Saves everything to output/YYYY-MM-DD/ideas.md
+Pipeline (one isolated notebook per repo):
+  1. Read trend URLs from Content-Hub-Vault-V2/04-Trends/github_trending.md
+  2. For each URL: create a notebook, add that repo as the sole source,
+     run web research, query for content gaps, collect the finding
+  3. Compile all findings into one brief →
+     Content-Hub-Vault-V2/10-Research/YYYY-MM-DD_<niche>_brief.md
 
 Usage:
-  python -m skills.researcher
-  python -m skills.researcher --platform youtube
-  python -m skills.researcher --skip-scrape  # use cached trends, just regenerate ideas
+  python -m skills.researcher --niche "AI agents"
+  python -m skills.researcher --niche "AI agents" --mode deep
+  python -m skills.researcher --niche "AI agents" --max-sources 5
 """
 
 import asyncio
 import argparse
 import logging
+import re
 import sys
-from datetime import datetime, date
+from datetime import date
 from pathlib import Path
 
-# Add project root to path
 PROJECT_ROOT = Path(__file__).parent.parent
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
+NOTEBOOKLM_SRC = PROJECT_ROOT / "notebooklm-py" / "src"
+if str(NOTEBOOKLM_SRC) not in sys.path:
+    sys.path.insert(0, str(NOTEBOOKLM_SRC))
 
-from skills.utils.ai import generate
-from skills.utils.vault import get_niche_context, read_skill
+from notebooklm import NotebookLMClient
 
 logger = logging.getLogger(__name__)
 
-OUTPUT_DIR = PROJECT_ROOT / "output"
-TRENDS_FILE = PROJECT_ROOT / "Content-Hub-Vault" / "Exoskeleton" / "trends.md"
+TRENDS_FILE = PROJECT_ROOT / "Content-Hub-Vault-V2" / "04-Trends" / "github_trending.md"
+RESEARCH_DIR = PROJECT_ROOT / "Content-Hub-Vault-V2" / "10-Research"
+PROMPT_FILE = PROJECT_ROOT / "prompts" / "researcher.md"
 
 
-# ---------------------------------------------------------------------------
-# Trend scraping (reuses Apify client from backend)
-# ---------------------------------------------------------------------------
+def extract_urls(trends_text: str) -> list[str]:
+    """Extract GitHub repo URLs from the trending markdown file."""
+    raw_urls = re.findall(r'\(https?://[^)]+\)', trends_text)
+    seen: set[str] = set()
+    result = []
+    for raw in raw_urls:
+        url = raw[1:-1]
+        if url in seen:
+            continue
+        seen.add(url)
+        # Only top-level GitHub repo URLs (github.com/owner/repo — exactly 4 slashes)
+        if url.startswith("https://github.com/") and url.count("/") == 4:
+            result.append(url)
+    return result
 
-async def scrape_trends(platforms: list[str] | None = None) -> list[dict]:
-    """Scrape trending content using the existing Apify client.
-    
-    Returns a list of normalized, scored posts.
+
+def repo_slug(url: str) -> str:
+    """github.com/owner/repo → owner-repo"""
+    parts = url.rstrip("/").split("/")
+    return f"{parts[-2]}-{parts[-1]}"
+
+
+async def research_one(client: "NotebookLMClient", url: str, prompt_text: str, mode: str) -> dict:
+    """Run a fully isolated research pipeline for a single repo URL.
+
+    Returns a dict with keys: url, notebook_id, finding (str), sources_found (list).
     """
-    from backend.research.apify_client import scrape_general_trending
-    
-    platforms = platforms or ["youtube"]
-    all_results = []
-    
-    for platform in platforms:
-        try:
-            logger.info("Scraping trending content from %s...", platform)
-            results = await scrape_general_trending(platform)
-            all_results.extend(results)
-            logger.info("Got %d trending posts from %s", len(results), platform)
-        except Exception as e:
-            logger.warning("Failed to scrape %s: %s", platform, e)
-    
-    # Sort by organic score
-    all_results.sort(key=lambda x: x.get("organic_score", 0), reverse=True)
-    return all_results
+    slug = repo_slug(url)
+    title = f"Research: {slug} — {date.today().isoformat()}"
+
+    print(f"\n[{slug}] Creating notebook...")
+    nb = await client.notebooks.create(title)
+    logger.info("[%s] Notebook: %s", slug, nb.id)
+
+    await client.sources.add_url(nb.id, url, wait=True)
+    print(f"[{slug}] Source indexed. Starting web research ({mode} mode)...")
+
+    repo_name = url.rstrip("/").split("/")[-1].replace("-", " ")
+    research = await client.research.start(nb.id, repo_name, source="web", mode=mode)
+    task_id = research.get("task_id") if research else None
+
+    max_polls = 24 if mode == "deep" else 12
+    poll_interval = 15 if mode == "deep" else 10
+    sources_found: list = []
+
+    for i in range(max_polls):
+        await asyncio.sleep(poll_interval)
+        status = await client.research.poll(nb.id)
+        state = status.get("status", "unknown")
+        print(f"[{slug}] Research [{i + 1}/{max_polls}]: {state}")
+        if state == "completed":
+            sources_found = status.get("sources", [])
+            print(f"[{slug}] Discovered {len(sources_found)} related sources")
+            break
+
+    if sources_found and task_id:
+        import_count = min(len(sources_found), 10)
+        await client.research.import_sources(nb.id, task_id, sources_found[:import_count])
+        print(f"[{slug}] Imported {import_count} sources")
+
+    await asyncio.sleep(75)
+
+    print(f"[{slug}] Querying for content gaps...")
+    result = await client.chat.ask(nb.id, prompt_text)
+
+    return {
+        "url": url,
+        "notebook_id": nb.id,
+        "finding": result.answer,
+        "sources_found": sources_found,
+    }
 
 
-def save_trends_to_vault(trends: list[dict]) -> Path:
-    """Save scraped trends to Content-Hub-Vault/Exoskeleton/trends.md for reference."""
-    lines = [
-        f"# Trending Content — {date.today().isoformat()}\n",
-        f"Scraped at {datetime.now().strftime('%H:%M')}\n",
-    ]
-    
-    for i, t in enumerate(trends[:30], 1):
-        platform = t.get("platform", "?").upper()
-        title = t.get("title", "No title")[:120]
-        views = t.get("view_count", 0)
-        score = t.get("organic_score", 0)
-        author = t.get("author_username", "unknown")
-        url = t.get("post_url", "")
-        
-        lines.append(f"\n## {i}. [{platform}] {title}")
-        lines.append(f"- **Author**: @{author}")
-        lines.append(f"- **Views**: {views:,} | **Score**: {score:.0f}")
-        if url:
-            lines.append(f"- **URL**: {url}")
-    
-    TRENDS_FILE.write_text("\n".join(lines), encoding="utf-8")
-    logger.info("Saved %d trends to %s", len(trends), TRENDS_FILE)
-    return TRENDS_FILE
+async def run(niche: str, mode: str = "deep", max_sources: int = 8, repos: list[str] | None = None) -> Path:
+    """Run isolated research per repo. Returns path to the compiled brief."""
 
+    if not TRENDS_FILE.exists():
+        raise FileNotFoundError(f"Trends file not found: {TRENDS_FILE}")
 
-def load_cached_trends() -> str:
-    """Load previously scraped trends from Content-Hub-Vault/Exoskeleton/trends.md."""
-    if TRENDS_FILE.exists():
-        return TRENDS_FILE.read_text(encoding="utf-8")
-    return ""
+    trends_text = TRENDS_FILE.read_text(encoding="utf-8")
+    urls = extract_urls(trends_text)
 
+    if repos:
+        # Normalise slugs: accept "owner/repo" or full URL
+        def to_slug(r: str) -> str:
+            r = r.strip().rstrip("/")
+            if r.startswith("https://"):
+                parts = r.split("/")
+                return f"{parts[-2]}/{parts[-1]}"
+            return r
 
-# ---------------------------------------------------------------------------
-# Idea generation
-# ---------------------------------------------------------------------------
-
-IDEA_PROMPT_TEMPLATE = """\
-You are a content strategist for a YouTube creator in the AI tools and build-in-public niche.
-
-## Creator's Niche & Brand
-{niche_context}
-
-## Today's Trending Content
-{trends}
-
-## Content Strategy Knowledge
-{strategy_skill}
-
-## Your Task
-Based on the trending content above and the creator's niche, generate **5 video ideas** for today.
-
-For EACH idea, provide:
-1. **Title** — A compelling YouTube title (use proven patterns: numbers, curiosity gaps, "I tried X so you don't have to")
-2. **Hook** — The first 2 sentences that grab attention (under 15 seconds spoken)
-3. **Angle** — What makes THIS take unique vs what already exists
-4. **Format** — Estimated length (short: 30-60s, medium: 5-8min, long: 10-15min) and style (tutorial, review, commentary, vlog)
-5. **Why Now** — Why this topic is timely based on the trending data
-6. **Difficulty** — Easy (talking head + screen share), Medium (needs demos), Hard (needs multiple tools/setups)
-
-## Rules
-- At least 2 ideas should be "Easy" difficulty (filmable today with minimal prep)
-- At least 1 idea should be a "build in public" angle about the creator's own projects
-- Ideas should NOT be generic "Top 10 AI Tools" — they need a specific angle or opinion
-- Prioritize ideas where the creator's builder experience gives them credibility
-- Each title should work as a YouTube thumbnail concept too
-
-Return the 5 ideas in clean markdown format.
-"""
-
-
-async def generate_ideas(trends_text: str) -> str:
-    """Generate 5 video ideas from trending data + niche context."""
-    niche = get_niche_context()
-    strategy = read_skill("content-strategy.md")
-    
-    # Trim strategy to key sections to save tokens
-    if len(strategy) > 3000:
-        strategy = strategy[:3000] + "\n...(truncated)"
-    
-    prompt = IDEA_PROMPT_TEMPLATE.format(
-        niche_context=niche,
-        trends=trends_text[:4000],  # Cap to avoid token explosion
-        strategy_skill=strategy[:2000],
-    )
-    
-    result = await generate(prompt)
-    
-    if result["success"]:
-        return result["text"]
+        wanted = {to_slug(r) for r in repos}
+        urls = [u for u in urls if f"{u.split('/')[-2]}/{u.split('/')[-1]}" in wanted]
     else:
-        logger.error("Idea generation failed: %s", result.get("error"))
-        return "❌ Idea generation failed. Check your API keys and try again."
+        urls = urls[:max_sources]
 
+    if not urls:
+        raise ValueError(f"No matching GitHub repo URLs found in {TRENDS_FILE}")
 
-# ---------------------------------------------------------------------------
-# Output
-# ---------------------------------------------------------------------------
+    prompt_text = PROMPT_FILE.read_text(encoding="utf-8")
+    today = date.today().isoformat()
 
-def save_ideas(ideas_text: str, provider: str = "") -> Path:
-    """Save generated ideas to output/YYYY-MM-DD/ideas.md."""
-    today_dir = OUTPUT_DIR / date.today().isoformat()
-    today_dir.mkdir(parents=True, exist_ok=True)
-    
-    output_path = today_dir / "ideas.md"
-    header = (
-        f"# Video Ideas — {date.today().isoformat()}\n\n"
-        f"Generated at {datetime.now().strftime('%H:%M')} "
-        f"{'via ' + provider if provider else ''}\n\n"
+    print(f"Found {len(urls)} repos. Running isolated research on each...\n")
+
+    findings = []
+    async with await NotebookLMClient.from_storage(timeout=300) as client:
+        for url in urls:
+            try:
+                result = await research_one(client, url, prompt_text, mode)
+                findings.append(result)
+            except Exception as e:
+                logger.error("Failed for %s: %s", url, e)
+                findings.append({"url": url, "notebook_id": None, "finding": f"ERROR: {e}", "sources_found": []})
+
+    # Compile all findings into one brief
+    sections = []
+    for f in findings:
+        slug = repo_slug(f["url"])
+        nb_line = f"notebook_id: {f['notebook_id']}" if f["notebook_id"] else "notebook_id: failed"
+        sources = f["sources_found"]
+        if sources:
+            source_lines = "\n".join(
+                f"- [{s.get('title', 'Untitled')}]({s['url']})" if s.get("url")
+                else f"- {s.get('title', 'Untitled')}"
+                for s in sources
+            )
+            sources_section = f"### Discovered Sources ({len(sources)})\n{source_lines}\n"
+        else:
+            sources_section = "### Discovered Sources (0)\n"
+        sections.append(
+            f"## {slug}\n"
+            f"Source: {f['url']}  \n"
+            f"{nb_line}  \n\n"
+            f"{sources_section}\n"
+            f"{f['finding']}\n"
+        )
+
+    niche_slug = niche.lower().replace(" ", "-")
+    notebook_ids = [f["notebook_id"] for f in findings if f["notebook_id"]]
+
+    output = (
+        f"---\n"
+        f"date: {today}\n"
+        f"niche: {niche}\n"
+        f"repos_researched: {len(findings)}\n"
+        f"notebook_ids: [{', '.join(notebook_ids)}]\n"
         f"---\n\n"
+        f"# Research Brief — {niche}\n"
+        f"*{today} — {len(findings)} repos, each in its own notebook*\n\n"
+        + "\n---\n\n".join(sections)
     )
-    output_path.write_text(header + ideas_text, encoding="utf-8")
-    logger.info("Ideas saved to %s", output_path)
+
+    RESEARCH_DIR.mkdir(parents=True, exist_ok=True)
+    output_path = RESEARCH_DIR / f"{today}_{niche_slug}_brief.md"
+    output_path.write_text(output, encoding="utf-8")
+
+    print(f"\nBrief written to: {output_path}")
     return output_path
 
 
-# ---------------------------------------------------------------------------
-# CLI
-# ---------------------------------------------------------------------------
-
-async def main():
-    parser = argparse.ArgumentParser(description="Daily trend research + idea generation")
-    parser.add_argument("--platform", nargs="+", default=["youtube"],
-                        help="Platforms to scrape (default: youtube tiktok)")
-    parser.add_argument("--skip-scrape", action="store_true",
-                        help="Skip scraping, use cached trends from Content-Hub-Vault/Exoskeleton/trends.md")
-    parser.add_argument("--ideas-only", action="store_true",
-                        help="Alias for --skip-scrape")
+async def main() -> None:
+    parser = argparse.ArgumentParser(description="Content gap research via NotebookLM")
+    parser.add_argument("--niche", required=True, help='Topic to research, e.g. "AI agents"')
+    parser.add_argument("--mode", choices=["fast", "deep"], default="deep")
+    parser.add_argument("--max-sources", type=int, default=8,
+                        help="Max trend URLs to research (default: 8)")
+    parser.add_argument("--repos", nargs="+", metavar="OWNER/REPO",
+                        help='Filter to specific repos, e.g. --repos HKUDS-AI/polymarket-ai-trading MemPalace/mempalace')
     args = parser.parse_args()
-    
-    # Step 1: Get trends
-    if args.skip_scrape or args.ideas_only:
-        print("📋 Loading cached trends from Content-Hub-Vault/Exoskeleton/trends.md...")
-        trends_text = load_cached_trends()
-        if not trends_text:
-            print("❌ No cached trends found. Run without --skip-scrape first.")
-            return
-    else:
-        print(f"🔍 Scraping trending content from: {', '.join(args.platform)}...")
-        trends = await scrape_trends(args.platform)
-        if trends:
-            save_trends_to_vault(trends)
-            trends_text = load_cached_trends()
-            print(f"✅ Found {len(trends)} trending posts")
-        else:
-            print("⚠️  No trends scraped (check Apify key). Using cached if available...")
-            trends_text = load_cached_trends()
-            if not trends_text:
-                print("❌ No trends available at all. Check your APIFY_API_TOKEN in .env")
-                return
-    
-    # Step 2: Generate ideas
-    print("\n💡 Generating 5 video ideas from trends + your niche...")
-    ideas = await generate_ideas(trends_text)
-    
-    # Step 3: Save
-    output_path = save_ideas(ideas)
-    
-    print(f"\n{'='*60}")
-    print(f"📄 Ideas saved to: {output_path}")
-    print(f"{'='*60}")
-    print(f"\n{ideas}")
+
+    output_path = await run(args.niche, mode=args.mode, max_sources=args.max_sources, repos=args.repos)
+
+    print("\n" + "=" * 60)
+    brief = output_path.read_text(encoding="utf-8")
+    print(brief[:2000])
+    if len(brief) > 2000:
+        print(f"\n...({len(brief) - 2000} more chars — open {output_path})")
 
 
 if __name__ == "__main__":

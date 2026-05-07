@@ -11,6 +11,13 @@ import sys
 from pathlib import Path
 from typing import Any
 
+# Import config validation (adjust path if needed)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+try:
+    from sync_vault import validate_config
+except ImportError:
+    validate_config = None
+
 
 class QualityValidator:
     """Runs tests, linting, and type checks; reports structured results.
@@ -71,6 +78,7 @@ class QualityValidator:
                 "pytest_output": "",
                 "ruff_output": "",
                 "mypy_output": "",
+                "config_issues": {},
             },
         }
 
@@ -90,6 +98,23 @@ class QualityValidator:
         mypy_output, type_errors = self._run_mypy(logger)
         results["type_errors"] = type_errors
         results["details"]["mypy_output"] = mypy_output[:500]
+
+        # Validate configuration
+        if validate_config:
+            config_validation = validate_config()
+            if not config_validation["config_valid"]:
+                results["details"]["config_issues"] = {
+                    "missing_keys": config_validation["missing_keys"],
+                    "extra_keys": config_validation["extra_keys"],
+                    "issues": config_validation["issues"],
+                }
+                logger.warning(
+                    f"Config validation failed: {len(config_validation['issues'])} issues"
+                )
+                for issue in config_validation["issues"]:
+                    logger.warning(f"  {issue}")
+            else:
+                logger.info("Config validation passed")
 
         # Determine overall pass/fail
         results["all_passed"] = (

@@ -1,0 +1,50 @@
+Running pytest: pytest .\backend\tests --tb=short -v
+pytest not found - install pytest
+Running ruff: ruff check .\backend
+ruff not found - install ruff
+Running mypy: mypy .\backend --ignore-missing-imports
+mypy not found - install mypy
+Quality check complete: all_passed=False, tests_passed=False, lint_errors=1, type_errors=1
+Running pytest: pytest .\backend\tests --tb=short -v
+pytest not found - install pytest
+Running ruff: ruff check .\backend
+ruff not found - install ruff
+Running mypy: mypy .\backend --ignore-missing-imports
+mypy not found - install mypy
+Quality check complete: all_passed=False, tests_passed=False, lint_errors=1, type_errors=1
+Running pytest: pytest .\backend\tests --tb=short -v
+pytest not found - install pytest
+Running ruff: ruff check .\backend
+ruff not found - install ruff
+Running mypy: mypy .\backend --ignore-missing-imports
+mypy not found - install mypy
+Quality check complete: all_passed=False, tests_passed=False, lint_errors=1, type_errors=1
+Running pytest: pytest .\backend\tests --tb=short -v
+pytest not found - install pytest
+Running ruff: ruff check .\backend
+ruff not found - install ruff
+Running mypy: mypy .\backend --ignore-missing-imports
+mypy not found - install mypy
+Quality check complete: all_passed=False, tests_passed=False, lint_errors=1, type_errors=1
+Running pytest: pytest C:\Users\madhu\Claude cowork\Content Hub V2\backend\tests --tb=short -v
+pytest not found - install pytest
+Running ruff: ruff check C:\Users\madhu\Claude cowork\Content Hub V2\backend
+ruff not found - install ruff
+Running mypy: mypy C:\Users\madhu\Claude cowork\Content Hub V2\backend --ignore-missing-imports
+mypy not found - install mypy
+Config validation failed: 14 issues
+  Key in config.py but not in .env.example: SUPABASE_KEY
+  Key in config.py but not in .env.example: APIFY_API_TOKEN
+  Key in config.py but not in .env.example: SUPABASE_SERVICE_KEY
+  Key in .env.example but not in config.py: APIFY_API_KEY
+  Key in .env.example but not in config.py: SUPABASE_SERVICE_ROLE_KEY
+  Key in .env.example but not in config.py: REMOTION_URL
+  Key in .env.example but not in config.py: GOOGLE_AI_STUDIO_KEY
+  Key in .env.example but not in config.py: SUPABASE_ANON_KEY
+  Key in .env.example but not in config.py: REMOTION_SECRET
+  Key in .env.example but not in config.py: TELEGRAM_BOT_TOKEN
+  Key in .env.example but not in config.py: ANTHROPIC_API_KEY
+  Key in .env.example but not in config.py: ENVIRONMENT
+  Key in .env.example but not in config.py: SUPABASE_URL
+  Key in .env.example but not in config.py: TELEGRAM_CHAT_ID
+Quality check complete: all_passed=False, tests_passed=False, lint_errors=1, type_errors=1

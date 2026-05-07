@@ -14,11 +14,87 @@ import asyncio
 import argparse
 import logging
 import sys
+from datetime import datetime
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
+
+
+def run_auto_commit() -> dict:
+    """
+    Execute the auto-commit pipeline: vault sync + quality checks + commit.
+
+    Stages changes in Content-Hub-Vault-V2, runs quality checks, and commits
+    if all checks pass.
+
+    Returns:
+        Dictionary with keys:
+            - success (bool): True if commit was successful
+            - files_staged (int): Number of files staged
+            - commit_hash (str or None): Commit SHA if successful, None otherwise
+    """
+    from backend.git_manager import GitManager
+    from backend.quality_check import QualityValidator
+
+    result = {
+        "success": False,
+        "files_staged": 0,
+        "commit_hash": None,
+    }
+
+    try:
+        # Initialize git manager
+        git_manager = GitManager(str(PROJECT_ROOT))
+
+        # Stage vault changes
+        patterns = ["Content-Hub-Vault-V2/**/*"]
+        staged_files = git_manager.stage_files(patterns)
+        result["files_staged"] = len(staged_files)
+
+        if not staged_files:
+            logging.info("No files to stage in Content-Hub-Vault-V2")
+            result["success"] = True
+            return result
+
+        # Run quality checks
+        quality_validator = QualityValidator(str(PROJECT_ROOT))
+        check_results = quality_validator.run_checks(verbose=False)
+
+        if not check_results["all_passed"]:
+            logging.error(
+                f"Quality checks failed: "
+                f"tests_passed={check_results['tests_passed']}, "
+                f"lint_errors={check_results['lint_errors']}, "
+                f"type_errors={check_results['type_errors']}"
+            )
+            result["success"] = False
+            return result
+
+        # All checks passed, commit
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        message = f"Daily auto-commit: vault + quality [{timestamp}]"
+
+        try:
+            commit_hash = git_manager.commit(message, author="Scheduler")
+            result["success"] = True
+            result["commit_hash"] = commit_hash
+            logging.info(f"Auto-commit successful: {commit_hash}")
+        except ValueError as e:
+            # No staged changes (shouldn't happen, but handle gracefully)
+            if "No staged changes" in str(e):
+                result["success"] = True
+                result["commit_hash"] = None
+            else:
+                logging.error(f"Commit failed: {str(e)}")
+                result["success"] = False
+
+    except Exception as e:
+        logging.error(f"Auto-commit pipeline failed: {str(e)}")
+        result["success"] = False
+
+    return result
 
 
 def print_banner():
@@ -166,6 +242,8 @@ Examples:
   python daily.py --step script "Video Title"  # Generate hook + outline
   python daily.py --step script "Title" --polish  # With Claude polish
   python daily.py --step cascade transcript.txt   # Post-production
+  python daily.py --auto-commit                # Trigger auto-commit pipeline
+  python daily.py --check-only                 # Run quality checks (dry-run)
         """
     )
     parser.add_argument("--step", choices=["research", "ideas", "script", "cascade"],
@@ -179,11 +257,48 @@ Examples:
                         help="Add Claude polish pass (script step)")
     parser.add_argument("--title", default="",
                         help="Video title (for cascade step)")
-    
+    parser.add_argument("--auto-commit", action="store_true",
+                        help="Manually trigger full auto-commit pipeline (vault sync + quality checks + commit)")
+    parser.add_argument("--check-only", action="store_true",
+                        help="Run quality checks without committing (dry-run mode)")
+
     args = parser.parse_args()
-    
+
     print_banner()
-    
+
+    # Handle auto-commit flags first
+    if args.auto_commit:
+        print("\n🔄 MANUAL AUTO-COMMIT TRIGGER")
+        print("─" * 40)
+        result = run_auto_commit()
+        if result["success"]:
+            print(f"✅ Auto-commit successful")
+            if result["commit_hash"]:
+                print(f"   Commit: {result['commit_hash']}")
+                print(f"   Files staged: {result['files_staged']}")
+            else:
+                print(f"   (No changes to commit)")
+        else:
+            print(f"❌ Auto-commit failed")
+            print(f"   Files staged: {result['files_staged']}")
+        return
+
+    if args.check_only:
+        print("\n🔍 QUALITY CHECK (DRY-RUN)")
+        print("─" * 40)
+        from backend.quality_check import QualityValidator
+        quality_validator = QualityValidator(str(PROJECT_ROOT))
+        check_results = quality_validator.run_checks(verbose=True)
+
+        print(f"\n📊 Quality Check Results:")
+        print(f"   Tests passed: {check_results['tests_passed']}")
+        print(f"   Test count: {check_results['test_count']}")
+        print(f"   Lint errors: {check_results['lint_errors']}")
+        print(f"   Type errors: {check_results['type_errors']}")
+        print(f"   All passed: {check_results['all_passed']}")
+        return
+
+    # Normal workflow steps
     if args.step == "research":
         await step_research()
     elif args.step == "ideas":

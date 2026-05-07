@@ -92,15 +92,37 @@ async def _ollama_generate(prompt: str, model: str = "gemma4:e4b") -> dict:
         return {"text": "", "success": False, "provider": f"ollama/{model}", "error": str(e)}
 
 
+def _find_claude_exe() -> str:
+    """Return the claude executable name, accounting for Windows .cmd wrappers."""
+    import shutil, sys
+    if sys.platform == "win32":
+        found = shutil.which("claude.cmd") or shutil.which("claude")
+        return found or "claude.cmd"
+    return shutil.which("claude") or "claude"
+
+
 async def _claude_generate(prompt: str, model: str = "claude-sonnet-4-6") -> dict:
     """Call Claude via CLI subprocess (works with Claude Pro, no API key needed)."""
+    import sys
+    exe = _find_claude_exe()
     try:
-        proc = await asyncio.create_subprocess_exec(
-            "claude", "-p", prompt,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
-        )
-        stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=120)
+        if sys.platform == "win32":
+            # On Windows, .cmd wrappers require shell=True to resolve correctly
+            proc = await asyncio.create_subprocess_shell(
+                f'"{exe}" -p -',
+                stdin=asyncio.subprocess.PIPE,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+            )
+        else:
+            proc = await asyncio.create_subprocess_exec(
+                exe, "-p", "-",
+                stdin=asyncio.subprocess.PIPE,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+            )
+        prompt_bytes = prompt.encode("utf-8")
+        stdout, stderr = await asyncio.wait_for(proc.communicate(input=prompt_bytes), timeout=180)
         text = stdout.decode().strip()
         if proc.returncode == 0 and text:
             return {"text": text, "success": True, "provider": "claude/cli"}
@@ -108,9 +130,9 @@ async def _claude_generate(prompt: str, model: str = "claude-sonnet-4-6") -> dic
         logger.warning("Claude CLI failed: %s", err)
         return {"text": "", "success": False, "provider": "claude/cli", "error": err}
     except asyncio.TimeoutError:
-        return {"text": "", "success": False, "provider": "claude/cli", "error": "Timeout after 120s"}
+        return {"text": "", "success": False, "provider": "claude/cli", "error": "Timeout after 180s"}
     except FileNotFoundError:
-        return {"text": "", "success": False, "provider": "claude/cli", "error": "claude CLI not found in PATH"}
+        return {"text": "", "success": False, "provider": "claude/cli", "error": f"claude CLI not found: {exe}"}
     except Exception as e:
         logger.warning("Claude CLI failed: %s", e)
         return {"text": "", "success": False, "provider": "claude/cli", "error": str(e)}

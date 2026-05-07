@@ -1,0 +1,188 @@
+{
+  "name": "Agentic AI Systems",
+  "children": [
+    {
+      "name": "AI Workflows",
+      "children": [
+        {
+          "name": "Definition",
+          "children": [
+            {
+              "name": "Predefined code paths"
+            },
+            {
+              "name": "Structured operation sequences"
+            },
+            {
+              "name": "High predictability and control"
+            }
+          ]
+        },
+        {
+          "name": "Common Patterns",
+          "children": [
+            {
+              "name": "Prompt Chaining"
+            },
+            {
+              "name": "Routing"
+            },
+            {
+              "name": "Parallelization"
+            }
+          ]
+        },
+        {
+          "name": "Use Cases",
+          "children": [
+            {
+              "name": "Reliable production systems"
+            },
+            {
+              "name": "Well-defined requirements"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AI Agents",
+      "children": [
+        {
+          "name": "Definition",
+          "children": [
+            {
+              "name": "Dynamic decision-making"
+            },
+            {
+              "name": "Autonomous tool selection"
+            },
+            {
+              "name": "Self-directed execution"
+            }
+          ]
+        },
+        {
+          "name": "Core Components",
+          "children": [
+            {
+              "name": "Reasoning Engine (LLM)"
+            },
+            {
+              "name": "Memory Systems"
+            },
+            {
+              "name": "Tool Access (MCP)"
+            },
+            {
+              "name": "Planning & Reflection"
+            }
+          ]
+        },
+        {
+          "name": "Types",
+          "children": [
+            {
+              "name": "Subagents (Specialized tasks)"
+            },
+            {
+              "name": "Agent Teams (Collaborative)"
+            },
+            {
+              "name": "Sworms (Orchestrated swarms)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Claude Code",
+      "children": [
+        {
+          "name": "Key Features",
+          "children": [
+            {
+              "name": "Agentic coding environment"
+            },
+            {
+              "name": "CLAUDE.md for project rules"
+            },
+            {
+              "name": "Slash commands"
+            },
+            {
+              "name": "Agent SDK"
+            }
+          ]
+        },
+        {
+          "name": "Best Practices",
+          "children": [
+            {
+              "name": "Aggressive context management"
+            },
+            {
+              "name": "Verification criteria (tests/UI)"
+            },
+            {
+              "name": "Explore -> Plan -> Code workflow"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Model Context Protocol (MCP)",
+      "children": [
+        {
+          "name": "Standardized tool discovery"
+        },
+        {
+          "name": "JSON-RPC protocol"
+        },
+        {
+          "name": "Shared interface for LLMs"
+        },
+        {
+          "name": "Tool registry and invocation"
+        }
+      ]
+    },
+    {
+      "name": "Advanced Frameworks",
+      "children": [
+        {
+          "name": "Ruflo (RuFlow)",
+          "children": [
+            {
+              "name": "Agent orchestration platform"
+            },
+            {
+              "name": "Self-learning (SONA)"
+            },
+            {
+              "name": "3-tier model routing (cost savings)"
+            },
+            {
+              "name": "AgentDB vector memory"
+            }
+          ]
+        },
+        {
+          "name": "Agentic Neural Networks (ANN)",
+          "children": [
+            {
+              "name": "Textual backpropagation"
+            },
+            {
+              "name": "Neuro-symbolic optimization"
+            },
+            {
+              "name": "Layered multi-agent architecture"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

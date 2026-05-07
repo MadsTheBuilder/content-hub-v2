@@ -25,7 +25,22 @@
       "Bash(claude -p \"say hello in 3 words\")",
       "Bash(curl -s http://localhost:11434/api/generate -d '{\"model\":\"gemma4:e4b\",\"prompt\":\"say hi\",\"stream\":false}')",
       "Bash(python daily.py)",
-      "Bash(PYTHONUTF8=1 python daily.py)"
+      "Bash(PYTHONUTF8=1 python daily.py)",
+      "Bash(python github_trending.py)",
+      "Bash(where claude *)",
+      "Bash(where claude.exe)",
+      "WebFetch(domain:www.youtube.com)",
+      "Bash(yt-dlp --flat-playlist --print \"%\\(title\\)s | %\\(url\\)s | %\\(view_count\\)s | %\\(upload_date\\)s\" --playlist-end 50 \"https://www.youtube.com/@kallawaymarketing/videos\")",
+      "Bash(yt-dlp --version)",
+      "Bash(python -c \"import yt_dlp; print\\('ok'\\)\")",
+      "Bash(python -m skills.researcher --niche \"open-source AI developer tools\")",
+      "Bash(which uv *)",
+      "Bash(which python *)",
+      "Bash(pandoc --version)",
+      "Bash(PYTHONIOENCODING=utf-8 PYTHONUTF8=1 python -m notebooklm generate slide-deck --help)",
+      "Bash(python -m skills.hook \"The GitHub repo that gives Claude Code 100 specialized agents and cuts your API bill by 75 percent\" --platform yt-long --audience \"AI builders who use Claude Code\" --format medium)",
+      "Bash(Get-ChildItem -Force)",
+      "Bash(Select-Object -Property Name, PSIsContainer)"
     ]
   }
 }

@@ -2,6 +2,7 @@ import subprocess
 import datetime
 import os
 import sys
+from sync_vault import SyncVault
 
 def run_git_cmd(cmd):
     try:
@@ -48,10 +49,17 @@ def checkpoint():
     # 4. Commit with timestamp
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     msg = f"Safe Hands Checkpoint: {timestamp}"
-    
+
     print(f"Saving state: {msg}")
     run_git_cmd(["git", "commit", "-m", msg])
-    
+
+    # 5. Get commit hash and track vault files
+    commit_hash = run_git_cmd(["git", "rev-parse", "HEAD"])
+    if commit_hash:
+        vault_sync = SyncVault()
+        track_result = vault_sync.track_commit(commit_hash)
+        print(f"Vault tracking: {track_result['files_updated']} files marked with commit {commit_hash[:8]}")
+
     print("\n[SUCCESS] Checkpoint saved. You can now safely let the AI work.")
     print("If things go wrong, run 'python undo_changes.py' to revert.")
 

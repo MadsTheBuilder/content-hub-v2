@@ -1,0 +1,232 @@
+{
+  "main": {
+    "id": "33097ad1b76ad438",
+    "type": "split",
+    "children": [
+      {
+        "id": "9b2a39deab40eb1c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f21227bae15443af",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "add637e45acf0b77",
+    "type": "split",
+    "children": [
+      {
+        "id": "c6d934784aea7ca6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "669c8b72dbde43d7",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "byModifiedTime",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "ea22cc4dcafcc1a6",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "fd577fe9285c65bb",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 467.5
+  },
+  "right": {
+    "id": "e04bd61a44cce5d0",
+    "type": "split",
+    "children": [
+      {
+        "id": "5c9e17037de8b758",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "979c9b89b943fe8c",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "2026-04-09.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for 2026-04-09"
+            }
+          },
+          {
+            "id": "f61e2a2a1e84a38c",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "2026-04-09.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from 2026-04-09"
+            }
+          },
+          {
+            "id": "9d2b2a551b00f16e",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "f2ff7ecfa55471fa",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "4e10a4b8a5a5caf6",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "2026-04-09.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of 2026-04-09"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "f21227bae15443af",
+  "lastOpenFiles": [
+    "00-Management/Sessions/2026-05-07_Auto_Commit_System_Build.md",
+    "00-Management-V2/Sessions/2026-05-07_Vault_Tracking_Config_Validation.md",
+    "00-Management-V2/Sessions/2026-05-07_Scheduler_Activation.md",
+    "00-Management/Orchestrations/2026-05-07_source-control-auto-commit.md",
+    "Exoskeleton/trends.md",
+    "00-Management-V2/Tasks/Current_Sprint.md",
+    "00-Management-V2/Tasks/Current_Sprint.md.tmp.9692.dc8dce0bfadb",
+    "00-Management-V2/Tasks/Current_Sprint.md.tmp.9692.f3cdef0d2c02",
+    "00-Management-V2/Tasks/Current_Sprint.md.tmp.9692.432a4f4503eb",
+    "06-Outlines/2026-05-06_why-ruflo-is-a-must-use.md",
+    "07-Titles/2026-05-07_how-i-built-a-rag-pipeline-that-actually-works.md",
+    "00-Management-V2/Sessions/2026-05-07_Phase3c_Title_Skill.md",
+    "00-Management-V2/Sessions/2026-05-07_Competitor_YouTube_Scrape.md",
+    "00-Management-V2/Sessions/2026-05-07_Phase0a_Twitter_Scout.md",
+    "00-Management-V2/Sessions/2026-05-07_Phase0a_Twitter_Data_Layer.md",
+    "00-Management-V2/Orchestrations/2026-05-07_phase3c-title-skill.md",
+    "00-Management-V2/Orchestrations/2026-05-07_phase0a-twitter-scout.md",
+    "00-Management-V2/Orchestrations/2026-05-07_phase0a-twitter-data-layer.md",
+    "10-Research/2026-05-06_ruflo/slides_ruflo_focused.pdf",
+    "05-Hooks/2026-05-06_the-github-repo-that-gives-claude.md",
+    "10-Research/2026-05-06_ruflo/slides_images/Untitled.md",
+    "10-Research/2026-05-06_ruflo/infographic.png",
+    "10-Research/2026-05-06_ruflo_skills_agents_architecture.md",
+    "10-Research/2026-05-06_ruflo/report.md",
+    "10-Research/2026-05-06_ruflo/mindmap.md",
+    "01-Knowledge/marketing_brain.md",
+    "00-Management-V2/Sessions/2026-05-06_Phase3a_3b_Hook_Outline_Skills.md",
+    "00-Management-V2/Orchestrations/2026-05-06_phase3a-3b-hook-outline-skills.md",
+    "10-Research/2026-05-06_ruflo/slides.pdf",
+    "10-Research/2026-05-06_ruflo/slides_images/slide_10.png",
+    "10-Research/2026-05-06_ruflo/slides_images/slide_08.png",
+    "10-Research/2026-05-06_ruflo/slides_images/slide_09.png",
+    "10-Research/2026-05-06_ruflo/slides_images/slide_11.png",
+    "10-Research/2026-05-06_ruflo/slides_images/slide_12.png",
+    "10-Research/2026-05-06_ruflo/slides_images/slide_13.png",
+    "10-Research/2026-05-06_ruflo/slides_images/slide_14.png",
+    "00-Management-V2/Plans/CLAUDE.md",
+    "00-Management-V2/Plans/Chase_AI_System_Breakdown.md",
+    "00-Management-V2/Plans/Local_First_Skill_Engine_Plan.md",
+    "10-Research/2026-05-06_ruflo/slides_images/slide_07.png",
+    "10-Research/2026-05-06_ruflo/slides_images/slide_06.png",
+    "10-Research/2026-05-06_ruflo/slides_images",
+    "10-Research/2026-05-06_ruflo/slides_ruflo_focused.pdf.tmp",
+    "10-Research/2026-05-06_ruflo/mind_map.json",
+    "10-Research/2026-05-06_ruflo/slides.pdf.tmp",
+    "10-Research/2026-05-06_ruflo/mindmap.json",
+    "Untitled.canvas"
+  ]
+}
