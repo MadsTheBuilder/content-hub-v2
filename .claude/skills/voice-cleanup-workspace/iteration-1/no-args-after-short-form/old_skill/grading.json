@@ -1,0 +1,59 @@
+{
+  "expectations": [
+    {
+      "text": "Claude proposes a concrete likely file path from the Short-Form vault folder rather than a generic 'paste text or give me a path' prompt",
+      "passed": false,
+      "evidence": "Transcript explicitly labels its response 'Generic ask with vault hint, no specific path inference.' The actual response was: 'Paste the script here, or if it's already saved in the vault [...], give me the file path' — no specific path proposed."
+    },
+    {
+      "text": "Claude frames /voice-cleanup as the final step in the pipeline (step 7 of 7 or equivalent)",
+      "passed": false,
+      "evidence": "Old SKILL.md has no pipeline position section. Transcript has no mention of step 7 of 7 or pipeline diagram. Step 1 lists skill purpose as 'De-AI'ify text' with no pipeline context."
+    },
+    {
+      "text": "Claude does not attempt to run python -m skills.voice_cleanup without a file argument",
+      "passed": true,
+      "evidence": "Transcript Step 4 shows command is conditional: 'python -m skills.voice_cleanup <temp_file> (after writing pasted text to a temporary file)' — not run without input."
+    },
+    {
+      "text": "Claude asks a yes/no confirmation question, not an open-ended input request",
+      "passed": false,
+      "evidence": "Transcript Step 2 response ends with 'Which would you prefer?' — an open-ended two-option question (paste text OR give file path), not a yes/no."
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 3,
+    "total": 4,
+    "pass_rate": 0.25
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 1, "Write": 2},
+    "total_tool_calls": 3,
+    "total_steps": 5,
+    "errors_encountered": 0,
+    "output_chars": 2876,
+    "transcript_chars": 2876
+  },
+  "timing": {
+    "executor_duration_seconds": 29.2,
+    "total_duration_seconds": 29.2
+  },
+  "claims": [
+    {
+      "claim": "Old skill correctly avoids running python without a file argument",
+      "type": "process",
+      "verified": true,
+      "evidence": "Commands are conditional on user providing input — not run blindly."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Assertions discriminate well — assertions 1, 2, 4 all correctly fail on old skill. Assertion 3 (no blind run) passes both and is non-discriminating but still a valid safety check."
+  }
+}

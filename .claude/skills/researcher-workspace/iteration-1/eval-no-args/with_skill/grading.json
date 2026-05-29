@@ -1,0 +1,65 @@
+{
+  "expectations": [
+    {
+      "text": "Claude asks the user to provide a niche or topic before proceeding",
+      "passed": true,
+      "evidence": "Response says 'First, what niche or topic area interests you?' with examples. Clearly gates on niche before anything else."
+    },
+    {
+      "text": "Claude does NOT auto-select repos or run the pipeline without user input",
+      "passed": true,
+      "evidence": "Response stops after asking for niche. No command is run, no repos are selected. Correctly waits for user."
+    },
+    {
+      "text": "Claude explains or references the researcher skill as Step 1 of the pipeline",
+      "passed": true,
+      "evidence": "Response opens with 'let's kick off the researcher pipeline' — references the pipeline explicitly. New SKILL.md frontmatter conveys Step 1 position which shaped this framing."
+    },
+    {
+      "text": "Claude mentions /hook as the next step after the brief is reviewed",
+      "passed": false,
+      "evidence": "Response does not mention /hook at this stage. The brief has not been generated, so mention would be premature, but the assertion is strict."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 1,
+    "total": 4,
+    "pass_rate": 0.75
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 1, "Write": 2},
+    "total_tool_calls": 3,
+    "total_steps": 2,
+    "errors_encountered": 0,
+    "output_chars": 890,
+    "transcript_chars": 1050
+  },
+  "timing": {
+    "executor_duration_seconds": 21.7,
+    "grader_duration_seconds": 0.0,
+    "total_duration_seconds": 21.7
+  },
+  "claims": [
+    {
+      "claim": "Skill requires niche before repo selection",
+      "type": "process",
+      "verified": true,
+      "evidence": "Response follows SKILL.md step 1 exactly: asks for niche before listing repos"
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": ["Assertion 4 may be too strict for this early interaction stage — /hook is appropriate only after brief is complete"],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Claude mentions /hook as the next step after the brief is reviewed",
+        "reason": "At this stage (asking for niche), it's too early to mention /hook. Consider scoping this assertion to Eval 3 only, or change to 'mentions the pipeline chain (/researcher → /hook → ...)'"
+      }
+    ],
+    "overall": "Assertions 1–3 are strong discriminators. Assertion 4 fires too early in the flow."
+  }
+}

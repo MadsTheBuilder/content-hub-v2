@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Claude recognises this as a batch folder request, not a single-file request",
+      "passed": false,
+      "evidence": "Transcript Step 2: 'the voice-cleanup skill is designed for single files at a time' — old skill explicitly treats this as out-of-scope and does NOT recognize it as a batch operation."
+    },
+    {
+      "text": "Claude describes listing or globbing *.md files in the specified folder",
+      "passed": false,
+      "evidence": "Transcript Step 4: 'The old skill would NOT: automatically glob *.md or *.txt files in the folder' — no globbing attempted. Asks for clarification instead."
+    },
+    {
+      "text": "Claude asks for confirmation before processing, listing the files it found",
+      "passed": false,
+      "evidence": "Old skill never gets to the confirmation stage — it asks 3 clarification options first ('give specific file path', 'paste text', 'I can help list the folder'). No file list is shown because no listing was done."
+    },
+    {
+      "text": "Claude describes running cleanup on each file sequentially, not just one",
+      "passed": false,
+      "evidence": "Transcript Step 4: 'The old skill would NOT: Run cleanup in a loop over 5+ files' — never reaches execution stage, stuck in clarification loop."
+    },
+    {
+      "text": "Claude reports all output _cleaned.md paths, not just the first",
+      "passed": false,
+      "evidence": "No files were cleaned, no output paths were reported. Old skill's final response asks user to pick an approach rather than running any cleanup."
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 5,
+    "total": 5,
+    "pass_rate": 0.0
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 1, "Write": 2},
+    "total_tool_calls": 3,
+    "total_steps": 5,
+    "errors_encountered": 0,
+    "output_chars": 3847,
+    "transcript_chars": 3847
+  },
+  "timing": {
+    "executor_duration_seconds": 33.7,
+    "total_duration_seconds": 33.7
+  },
+  "claims": [
+    {
+      "claim": "Old skill creates significant user friction on batch requests",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Transcript explicitly states 'Ambiguity level: HIGH — Estimated user experience: Friction — multiple clarifications needed before cleaning can begin'"
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  }
+}

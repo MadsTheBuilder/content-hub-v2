@@ -1,0 +1,15 @@
+{
+  "eval_name": "youtube-url-fallback / with_skill",
+  "tool_calls": {
+    "Read": 2,
+    "Bash": 2,
+    "Glob": 1,
+    "Write": 1
+  },
+  "total_tool_calls": 6,
+  "total_steps": 3,
+  "errors_encountered": 1,
+  "command_exit_code": 1,
+  "execution_status": "failed_video_unavailable",
+  "notes": "Video is not accessible via YouTube API; skill error handling worked correctly by exiting cleanly at transcript extraction step. No output files generated because input transcript could not be obtained."
+}

@@ -8,7 +8,7 @@ type: session_summary
 
 Implements: [[GitHub Trending Script (Phase 0b — Fountainhead #2)]]
 References: [[Local_First_Skill_Engine_Plan]] | [[2026-04-29_GitHub_Trending_Script]]
-Modifies: [[github_trending.py]] | [[Current_Sprint]]
+Modifies: [[github_trending.py]] | [[Architecture_Building]]
 
 ---
 
@@ -136,4 +136,4 @@ Each new daily run appends new repo subfolders (old ones are never deleted — t
 
 ---
 
-[[context]] | [[Local_First_Skill_Engine_Plan]] | [[Current_Sprint]] | [[2026-04-29_GitHub_Trending_Script]]
+[[context]] | [[Local_First_Skill_Engine_Plan]] | [[Architecture_Building]] | [[2026-04-29_GitHub_Trending_Script]]

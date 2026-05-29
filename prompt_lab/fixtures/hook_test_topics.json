@@ -1,0 +1,60 @@
+{
+  "skill": "hook",
+  "purpose": "Frozen test inputs for /prompt-lab autoresearch loop. Hold constant across iterations so score deltas reflect prompt quality, not input variance.",
+  "topics": [
+    {
+      "topic": "How Claude's extended thinking mode changes debugging workflows",
+      "platform": "yt-long",
+      "audience": "AI builders and developers",
+      "format": "medium"
+    },
+    {
+      "topic": "The hidden costs of async/await in Rust",
+      "platform": "yt-long",
+      "audience": "systems programmers and backend engineers",
+      "format": "long"
+    },
+    {
+      "topic": "Why local-first architectures are finally winning",
+      "platform": "yt-long",
+      "audience": "indie hackers and SaaS builders",
+      "format": "medium"
+    },
+    {
+      "topic": "Context switching as the productivity killer nobody measures",
+      "platform": "yt-long",
+      "audience": "knowledge workers and team leads",
+      "format": "medium"
+    },
+    {
+      "topic": "Building AI agent orchestration without spaghetti",
+      "platform": "yt-long",
+      "audience": "AI engineers and prompt architects",
+      "format": "long"
+    },
+    {
+      "topic": "How to benchmark AI models on your actual use case",
+      "platform": "yt-shorts",
+      "audience": "AI builders evaluating Claude vs. alternatives",
+      "format": "short"
+    },
+    {
+      "topic": "The real economics of local LLM vs. renting Claude",
+      "platform": "yt-long",
+      "audience": "founders optimizing infrastructure spend",
+      "format": "medium"
+    },
+    {
+      "topic": "Fitness habit formation through optionality-based systems",
+      "platform": "yt-long",
+      "audience": "people tired of strict fitness regimens",
+      "format": "medium"
+    }
+  ],
+  "model_settings": {
+    "temperature": 0.7,
+    "max_tokens": 2000,
+    "seed": 42
+  },
+  "notes": "8 topics mixing AI/tech and fitness. Variety of platforms (1 shorts, 7 long), formats (short/medium/long per hook.py --format choices), and audience specificity tests hook generation quality across different contexts."
+}

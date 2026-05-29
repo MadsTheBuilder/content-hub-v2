@@ -1,0 +1,25 @@
+{
+  "total_tool_calls": 2,
+  "errors_encountered": 1,
+  "output_chars": 2476,
+  "execution_status": "success",
+  "concept_source": "recent_outline_context",
+  "concept": "AI agents",
+  "provider_used": "claude_cli",
+  "vault_file_path": "Content-Hub-Vault-V2/07-Titles/2026-05-15_ai-agents.md",
+  "tier_1_count": 5,
+  "tier_2_count": 5,
+  "thumbnail_suggestions_count": 10,
+  "timestamps": {
+    "execution_start": "2026-05-15T00:00:00Z",
+    "execution_end": "2026-05-15T00:02:00Z"
+  },
+  "errors": [
+    {
+      "error_type": "provider_unavailable",
+      "providers_failed": ["nim", "gemini"],
+      "failure_reason": "External API unavailability (Gemini 503, NIM timeout)",
+      "resolution": "Added Claude CLI as fallback provider"
+    }
+  ]
+}

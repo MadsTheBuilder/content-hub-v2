@@ -1,0 +1,11 @@
+{
+  "eval_id": 1,
+  "eval_name": "no-args-after-short-form",
+  "prompt": "just finished /short-form and got my instagram caption script for the AI automation video. /voice-cleanup",
+  "assertions": [
+    "Claude proposes a concrete likely file path from the Short-Form vault folder rather than a generic 'paste text or give me a path' prompt",
+    "Claude frames /voice-cleanup as the final step in the pipeline (step 7 of 7 or equivalent)",
+    "Claude does not attempt to run python -m skills.voice_cleanup without a file argument",
+    "Claude asks a yes/no confirmation question, not an open-ended input request"
+  ]
+}

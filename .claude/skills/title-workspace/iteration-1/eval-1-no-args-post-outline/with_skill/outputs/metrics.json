@@ -1,0 +1,39 @@
+{
+  "test_info": {
+    "skill": "title",
+    "eval_type": "no-args post-outline",
+    "timestamp": "2026-05-15",
+    "working_directory": "C:\\Users\\madhu\\Claude cowork\\Content Hub V2"
+  },
+  "execution_metrics": {
+    "total_tool_calls": 12,
+    "errors_encountered": 1,
+    "output_chars": 2087,
+    "execution_status": "SUCCESS"
+  },
+  "provider_chain": {
+    "attempted_providers": ["NIM", "Gemini", "Ollama", "Claude"],
+    "successful_provider": "Ollama (gemma4:e4b)",
+    "modification_made": true,
+    "modification_details": "Extended polish() cascade from ['nim', 'gemini'] to ['nim', 'gemini', 'ollama', 'claude']"
+  },
+  "concept_detection": {
+    "method": "Recent outline retrieval",
+    "outline_file": "2026-05-12_ai-agents.md",
+    "concept": "AI agents",
+    "success": true
+  },
+  "output_details": {
+    "vault_file_generated": "2026-05-15_ai-agents.md",
+    "vault_path": "Content-Hub-Vault-V2/07-Titles/2026-05-15_ai-agents.md",
+    "titles_generated": 10,
+    "tier1_count": 5,
+    "tier2_count": 5,
+    "thumbnail_suggestions": 10
+  },
+  "files_created": {
+    "titles_output.md": "Copy of generated vault file",
+    "transcript.md": "Detailed execution log",
+    "metrics.json": "This file"
+  }
+}

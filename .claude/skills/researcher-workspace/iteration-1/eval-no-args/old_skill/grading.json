@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Claude asks the user to provide a niche or topic before proceeding",
+      "passed": true,
+      "evidence": "Response says 'I need one thing from you: what's your general interest area or niche?' with examples. Correctly gates on niche."
+    },
+    {
+      "text": "Claude does NOT auto-select repos or run the pipeline without user input",
+      "passed": true,
+      "evidence": "Response stops after asking for niche. No command is run, no repos mentioned. Correctly waits."
+    },
+    {
+      "text": "Claude explains or references the researcher skill as Step 1 of the pipeline",
+      "passed": false,
+      "evidence": "Response says 'I can help you kick off the researcher skill' but never mentions Step 1, the pipeline chain, or other skills in the sequence. No pipeline context provided."
+    },
+    {
+      "text": "Claude mentions /hook as the next step after the brief is reviewed",
+      "passed": false,
+      "evidence": "Response lists the steps it will take (show repos, pick, run research) but does not mention /hook anywhere."
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 2,
+    "total": 4,
+    "pass_rate": 0.50
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 1, "Write": 2},
+    "total_tool_calls": 3,
+    "total_steps": 2,
+    "errors_encountered": 0,
+    "output_chars": 760,
+    "transcript_chars": 980
+  },
+  "timing": {
+    "executor_duration_seconds": 20.9,
+    "grader_duration_seconds": 0.0,
+    "total_duration_seconds": 20.9
+  },
+  "claims": [
+    {
+      "claim": "Skill requires niche before repo selection",
+      "type": "process",
+      "verified": true,
+      "evidence": "Response follows SKILL.md step 1: asks for niche first"
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Old skill handles niche-gating correctly but misses pipeline context and downstream /hook guidance."
+  }
+}

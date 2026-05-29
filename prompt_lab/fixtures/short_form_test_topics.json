@@ -1,0 +1,52 @@
+{
+  "skill": "short_form",
+  "purpose": "Frozen test inputs for /prompt-lab autoresearch loop. Hold constant across iterations so score deltas reflect prompt quality, not input variance.",
+  "topics": [
+    {
+      "topic": "How Claude's extended thinking mode changes debugging",
+      "research_summary": "Extended thinking enables visible reasoning traces in Claude responses, reducing debugging feedback loop. Current coverage treats it as cost/speed tradeoff. Stack Overflow analysis: 60% of debugging threads pivot on step-by-step explanation revealing the issue. Gap: workflow integration patterns, not just feature description.",
+      "outline_summary": "Hook: visible vs root cause. Why traditional debugging limits you. What extended thinking reveals. Three examples (latency, data loss, race condition). Integration into workflow. Future of AI debugging."
+    },
+    {
+      "topic": "The hidden costs of async/await in Rust",
+      "research_summary": "Tokio tutorials cover syntax, miss production gotchas. Three underdocumented pain points: hidden allocations in Future trait objects, executor starvation with CPU-bound work, panic semantics across task boundaries. GitHub issues in tokio/miri show real production breakage. Gap: systematic documentation of costs and detection patterns.",
+      "outline_summary": "Hook on invisible production failures. Where tutorials fall short. Three costs nobody mentions. Deep dive: allocations, starvation, panic semantics with code. Detection and fixes. When async is wrong."
+    },
+    {
+      "topic": "Why local-first databases are finally winning",
+      "research_summary": "VC funding to local-first startups $200M in 2024. Replicache, SQLite-WASM, CRDTs shifted from research to production. Existing content (OneGraph, Ink & Switch) covers philosophy, misses pragmatics. SMB decision confusion on migration timing and cost. Gap: practical decision tree with real tradeoff numbers.",
+      "outline_summary": "Hook on instant + offline-first. Why cloud-only fails. What changed. Architecture walk: SQLite WASM + Replicache. Migration path. Tradeoffs."
+    },
+    {
+      "topic": "Context switching as the productivity killer",
+      "research_summary": "Clifford Nass multitasking research established cognitive load. Modern content misses implementation angle. Remote work made async-first mainstream, yet teams default to synchronous tools. Recovery time research: 15-25 min per switch. Gap: audit techniques and workflow redesign patterns, not just theory.",
+      "outline_summary": "Hook on invisible cost measurement. Why time-boxing misses the point. Research: recovery per switch. Audit your day. Redesign workflows. Team orchestration."
+    },
+    {
+      "topic": "Building AI agent orchestration without spaghetti",
+      "research_summary": "Agent frameworks (LangChain, AutoGen, CrewAI) solve single-agent. Multi-agent coordination largely ad-hoc. Papers (ICML 2023) assume academic audience. Reddit/Discord: practitioners building in-house. Karpathy's autoresearch hints at composition. Gap: architecture patterns for scaling to 5+ agents without message-passing chaos.",
+      "outline_summary": "Hook on two agents easy, five agents chaos. Where frameworks break. The composition problem. Architecture: state machines, queues, supervisors. Scaling 2-10 agents. Debugging distributed systems."
+    },
+    {
+      "topic": "How to benchmark AI models on your actual use case",
+      "research_summary": "MMLU, HHRL, others measure general capability. 90% of evals are synthetic. Production teams struggle translating benchmark score to domain performance. Hugging Face leaderboards gloss over gap. Internal case studies exist (Anthropic) but not systematized. Gap: step-by-step eval design methodology for your workload.",
+      "outline_summary": "Hook on MMLU vs your reality. Why synthetic evals lie. Eval design principles. Step-by-step: test set, rubric, Claude vs alternatives. Cost analysis. Monitoring production."
+    },
+    {
+      "topic": "The economics of local LLM vs renting Claude",
+      "research_summary": "Llama 3.1 TCO lower at face value. But breakeven analysis rarely factors: latency SLA, fine-tuning, optimization time, team bandwidth opportunity cost. Cloud costs documented. Most coverage is philosophical. Gap: actual spreadsheet-level decision model with infrastructure costs.",
+      "outline_summary": "Hook on cost confusion. Hidden variables: latency, fine-tuning, ops. Spreadsheet model. Three case studies. Breakeven calculation. Future cost curves."
+    },
+    {
+      "topic": "Fitness habit formation through optionality-based systems",
+      "research_summary": "Burnout research (HBR, CultureAmp) focuses on organizational interventions. Individual agency under-covered. Mads's voice: freedom, optionality, avoiding burnout. Generic creator content mixes wellness with productivity, rarely connects. Gap: systems giving users control so optionality becomes default.",
+      "outline_summary": "Hook on why rigid schedules fail. Willpower unreliable. Optionality principle. System design: activity buffet, scaling, micro-commitments. Personal design walkthrough. Long-term sustainability."
+    }
+  ],
+  "model_settings": {
+    "temperature": 0.7,
+    "max_tokens": 2000,
+    "seed": 42
+  },
+  "notes": "8 topics with realistic research_summary (100-200 words, key findings) and outline_summary (5-8 lines, Dopamine Ladder). Mirrors what short_form.py consumes from research-file and outline-file. Tests whether short_form generates 30s/60s/90s variants that preserve hook-payoff integrity."
+}

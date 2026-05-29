@@ -1,0 +1,36 @@
+{
+  "tool_calls": {
+    "Bash": 2,
+    "PowerShell": 3,
+    "Read": 3,
+    "Write": 2,
+    "Edit": 0
+  },
+  "total_tool_calls": 10,
+  "total_steps": 6,
+  "files_created": [
+    "titles_output.md",
+    "transcript.md",
+    "metrics.json"
+  ],
+  "errors_encountered": 1,
+  "error_detail": "NIM and Gemini providers failed during cascade (503 UNAVAILABLE for Gemini), but fallback provider (Claude CLI) succeeded",
+  "output_chars": {
+    "titles_output.md": 4305,
+    "transcript.md": 3973,
+    "total_output_chars": 8278
+  },
+  "execution_summary": {
+    "skill_file_read": true,
+    "concept_extraction": "inline argument — direct usage",
+    "python_command_success": true,
+    "vault_file_generated": true,
+    "vault_path": "C:\\Users\\madhu\\Claude cowork\\Content Hub V2\\Content-Hub-Vault-V2\\07-Titles\\2026-05-15_how-i-replaced-my-entire-backend-with-claude-code-.md",
+    "titles_generated": 10,
+    "tier_1_count": 5,
+    "tier_2_count": 5,
+    "thumbnail_suggestions": 10,
+    "angle_constraint_respected": true,
+    "angle_focus": "cost savings and reduced headcount"
+  }
+}

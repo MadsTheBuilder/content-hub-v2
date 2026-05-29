@@ -1,0 +1,166 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+
+    {"id":"bar","type":"rectangle","x":50,"y":10,"width":3740,"height":55,"strokeColor":"#C9A96E","backgroundColor":"#1E293B","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"bar_t","type":"text","x":60,"y":14,"width":3720,"height":47,"text":"CONTENT PRODUCTION PIPELINE     /researcher  →  /hook  →  /outline  →  /title  →  /cascade  →  /short-form  →  /voice-cleanup","fontSize":20,"fontFamily":1,"textAlign":"center","verticalAlign":"middle","strokeColor":"#C9A96E"},
+
+    {"id":"r_hdr","type":"rectangle","x":50,"y":80,"width":500,"height":120,"strokeColor":"#C9A96E","backgroundColor":"#0F172A","fillStyle":"solid","strokeWidth":3,"roundness":{"type":3}},
+    {"id":"r_hdr_t","type":"text","x":58,"y":80,"width":484,"height":120,"text":"/researcher — Step 1 of 7\nContent Gap Research\nScrapes GitHub trending repos via NotebookLM\nOutputs a dated brief with recommended video angles","fontSize":14,"fontFamily":1,"textAlign":"center","verticalAlign":"middle","strokeColor":"#C9A96E"},
+
+    {"id":"r_reads","type":"rectangle","x":50,"y":215,"width":500,"height":195,"strokeColor":"#3B82F6","backgroundColor":"#0C1B33","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"r_reads_t","type":"text","x":58,"y":221,"width":484,"height":183,"text":"READS:\n• 04-Trends/github_trending.md\n  (source list of repos to research)\n• NotebookLM auth token\n  (~/.notebooklm/storage_state.json)\n• User picks repos from numbered list\n  (never auto-selected — always explicit)","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#93C5FD"},
+
+    {"id":"r_run","type":"rectangle","x":50,"y":425,"width":500,"height":115,"strokeColor":"#22C55E","backgroundColor":"#071A07","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"r_run_t","type":"text","x":58,"y":431,"width":484,"height":103,"text":"RUN:\npython -m skills.researcher \\\n  --niche \"[niche]\" \\\n  --repos owner/repo1 owner/repo2 \\\n  [--mode fast|deep]\n--list  →  preview repos only (no research run)","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#86EFAC"},
+
+    {"id":"r_ai","type":"rectangle","x":50,"y":555,"width":500,"height":135,"strokeColor":"#8B5CF6","backgroundColor":"#150D2E","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"r_ai_t","type":"text","x":58,"y":561,"width":484,"height":123,"text":"AI / TOOLS: NotebookLM\n• Isolated notebook per repo (no cross-contamination)\n• chat.configure() anchors to specific repo before questions\n• Source filter: GitHub URLs only — others discarded\n• Deep mode: ~8 min/repo, 11 structured questions\n• Fast mode: ~3–4 min/repo, lighter research","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#C4B5FD"},
+
+    {"id":"r_writes","type":"rectangle","x":50,"y":705,"width":500,"height":195,"strokeColor":"#EC4899","backgroundColor":"#1F0514","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"r_writes_t","type":"text","x":58,"y":711,"width":484,"height":183,"text":"WRITES → 10-Research/\nYYYY-MM-DD_<niche>_brief.md\n────────────────────────────────────\n• 5-part brief per repo: What / Who / How / When / WatchOut\n• Recommended Video Angle  ←  key input that feeds /hook\n• Raw Q&A log (collapsed for deeper inspection)\n• NotebookLM notebook IDs in frontmatter","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#F9A8D4"},
+
+    {"id":"h_hdr","type":"rectangle","x":590,"y":80,"width":500,"height":120,"strokeColor":"#C9A96E","backgroundColor":"#0F172A","fillStyle":"solid","strokeWidth":3,"roundness":{"type":3}},
+    {"id":"h_hdr_t","type":"text","x":598,"y":80,"width":484,"height":120,"text":"/hook — Step 2 of 7\nYouTube Hook Generation\n5 Kallaway-pattern hooks for the first 30 seconds\nthat stop the scroll and open a curiosity loop","fontSize":14,"fontFamily":1,"textAlign":"center","verticalAlign":"middle","strokeColor":"#C9A96E"},
+
+    {"id":"h_reads","type":"rectangle","x":590,"y":215,"width":500,"height":195,"strokeColor":"#3B82F6","backgroundColor":"#0C1B33","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"h_reads_t","type":"text","x":598,"y":221,"width":484,"height":183,"text":"READS:\n• Recommended Video Angle from researcher brief\n  (10-Research/ YYYY-MM-DD_<niche>_brief.md)\n• Kallaway 10-pattern library\n  (prompts/hook.md — edit here to change globally)\n• Platform: yt-long | Format: medium (defaults)\n• Audience: \"AI builders + creators\" (default)","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#93C5FD"},
+
+    {"id":"h_run","type":"rectangle","x":590,"y":425,"width":500,"height":115,"strokeColor":"#22C55E","backgroundColor":"#071A07","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"h_run_t","type":"text","x":598,"y":431,"width":484,"height":103,"text":"RUN:\npython -m skills.hook \"{topic}\" \\\n  --platform yt-long \\\n  --audience \"{audience}\" \\\n  --format medium\n  [--no-polish]  ←  skip Claude pass (faster/cheaper)","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#86EFAC"},
+
+    {"id":"h_ai","type":"rectangle","x":590,"y":555,"width":500,"height":135,"strokeColor":"#8B5CF6","backgroundColor":"#150D2E","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"h_ai_t","type":"text","x":598,"y":561,"width":484,"height":123,"text":"AI CASCADE:\n1. Ollama  →  draft 5 hook variations\n2. Claude  →  polish each hook\n   (--no-polish skips step 2 for speed/cost savings)\nAll 10 Kallaway patterns are embedded directly\nin prompts/hook.md — edit that file to change behaviour","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#C4B5FD"},
+
+    {"id":"h_writes","type":"rectangle","x":590,"y":705,"width":500,"height":195,"strokeColor":"#EC4899","backgroundColor":"#1F0514","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"h_writes_t","type":"text","x":598,"y":711,"width":484,"height":183,"text":"WRITES → 05-Hooks/\nYYYY-MM-DD_<slug>.md\n────────────────────────────────────\n• 5 hook variations (each uses a different Kallaway pattern)\n• Per hook: Spoken Line (3s) + Setup (10s) + Promise (15s)\n  + Visual Cue + Text Overlay + Pattern name + Why\n• ⭐ recommended hook highlighted for easy selection","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#F9A8D4"},
+
+    {"id":"ol_hdr","type":"rectangle","x":1130,"y":80,"width":500,"height":120,"strokeColor":"#C9A96E","backgroundColor":"#0F172A","fillStyle":"solid","strokeWidth":3,"roundness":{"type":3}},
+    {"id":"ol_hdr_t","type":"text","x":1138,"y":80,"width":484,"height":120,"text":"/outline — Step 3 of 7\nDopamine Ladder Outline\nFull 6-stage shooting structure with timestamps,\nvisual cues, and head fakes — ready to film from","fontSize":14,"fontFamily":1,"textAlign":"center","verticalAlign":"middle","strokeColor":"#C9A96E"},
+
+    {"id":"ol_reads","type":"rectangle","x":1130,"y":215,"width":500,"height":195,"strokeColor":"#3B82F6","backgroundColor":"#0C1B33","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"ol_reads_t","type":"text","x":1138,"y":221,"width":484,"height":183,"text":"READS:\n• Approved hook: 05-Hooks/YYYY-MM-DD_<slug>.md\n  (auto-finds most recent for topic; user can pick number)\n• Research brief: 10-Research/ YYYY-MM-DD_brief.md\n  (injected directly into Stage 4 Validation talking points)\n• Target length: 8 min | Platform: yt-long (defaults)","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#93C5FD"},
+
+    {"id":"ol_run","type":"rectangle","x":1130,"y":425,"width":500,"height":115,"strokeColor":"#22C55E","backgroundColor":"#071A07","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"ol_run_t","type":"text","x":1138,"y":431,"width":484,"height":103,"text":"RUN:\npython -m skills.outline \"{topic}\" \\\n  --hook-path \"{path}\" \\\n  --length {n} --platform yt-long\n  [--no-polish]  ←  skip Claude verification pass","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#86EFAC"},
+
+    {"id":"ol_ai","type":"rectangle","x":1130,"y":555,"width":500,"height":135,"strokeColor":"#8B5CF6","backgroundColor":"#150D2E","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"ol_ai_t","type":"text","x":1138,"y":561,"width":484,"height":123,"text":"AI CASCADE:\n1. Ollama/Gemini  →  draft outline structure\n2. Claude  →  polish + verify all structure rules:\n   ✓ All 6 Dopamine Ladder stages present\n   ✓ [B-ROLL] / [SHOW SCREEN] markers in every section\n   ✓ Head fakes appear at least 2 times\nStages: Stim → Capt → Antici → Valid → Affec → Revel","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#C4B5FD"},
+
+    {"id":"ol_writes","type":"rectangle","x":1130,"y":705,"width":500,"height":195,"strokeColor":"#EC4899","backgroundColor":"#1F0514","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"ol_writes_t","type":"text","x":1138,"y":711,"width":484,"height":183,"text":"WRITES → 06-Outlines/\nYYYY-MM-DD_<slug>.md\n────────────────────────────────────\n• 6 Dopamine Ladder sections with target durations\n• Per section: Dopamine Goal + Talking Points\n  + Visual Notes + Head Fake + Transition cue\n• CTA block (0:30–0:45) + next-video hook prompt\n• Total estimated runtime (sum of all durations)","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#F9A8D4"},
+
+    {"id":"ti_hdr","type":"rectangle","x":1670,"y":80,"width":500,"height":120,"strokeColor":"#C9A96E","backgroundColor":"#0F172A","fillStyle":"solid","strokeWidth":3,"roundness":{"type":3}},
+    {"id":"ti_hdr_t","type":"text","x":1678,"y":80,"width":484,"height":120,"text":"/title — Step 4 of 7\nYouTube Title Generation\n10 titles: 5 safe + 5 experimental\nwith thumbnail text + competitor benchmarking","fontSize":14,"fontFamily":1,"textAlign":"center","verticalAlign":"middle","strokeColor":"#C9A96E"},
+
+    {"id":"ti_reads","type":"rectangle","x":1670,"y":215,"width":500,"height":195,"strokeColor":"#3B82F6","backgroundColor":"#0C1B33","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"ti_reads_t","type":"text","x":1678,"y":221,"width":484,"height":183,"text":"READS:\n• Most recent 06-Outlines/ file\n  (reads concept: frontmatter field or first heading)\n• skills/data/competitor_titles.json\n  (top-30 competitor titles, AI/dev niche,\n   ranked by view count — auto-loaded)\n• Optional style constraint inline from user message","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#93C5FD"},
+
+    {"id":"ti_run","type":"rectangle","x":1670,"y":425,"width":500,"height":115,"strokeColor":"#22C55E","backgroundColor":"#071A07","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"ti_run_t","type":"text","x":1678,"y":431,"width":484,"height":103,"text":"RUN:\npython -m skills.title \"[concept string]\"\n\nNo confirmation step — runs immediately on /title\nStyle override: append to concept inline\n  \"[concept] — Style: [your constraint]\"","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#86EFAC"},
+
+    {"id":"ti_ai","type":"rectangle","x":1670,"y":555,"width":500,"height":135,"strokeColor":"#8B5CF6","backgroundColor":"#150D2E","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"ti_ai_t","type":"text","x":1678,"y":561,"width":484,"height":123,"text":"AI / TOOLS:\n• Benchmarks output against top-30 competitor titles\n• Tier-1: safe, algorithm-friendly, broad appeal\n• Tier-2: experimental, high curiosity gap,\n  higher variance — may outperform or underperform\n• Thumbnail text (2–4 bold words, phone-readable)\n  generated for all 10 titles automatically","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#C4B5FD"},
+
+    {"id":"ti_writes","type":"rectangle","x":1670,"y":705,"width":500,"height":195,"strokeColor":"#EC4899","backgroundColor":"#1F0514","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"ti_writes_t","type":"text","x":1678,"y":711,"width":484,"height":183,"text":"WRITES → 07-Titles/\nYYYY-MM-DD_<slug>.md\n────────────────────────────────────\n• 5 Tier-1 titles (safe bets, algorithm-friendly)\n• 5 Tier-2 titles (experimental, high curiosity gap)\n• Thumbnail text (2–4 bold words) for all 10 titles\n• Competitor pattern breakdown\n  (what patterns the top-30 are using)","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#F9A8D4"},
+
+    {"id":"ca_hdr","type":"rectangle","x":2210,"y":80,"width":500,"height":120,"strokeColor":"#C9A96E","backgroundColor":"#0F172A","fillStyle":"solid","strokeWidth":3,"roundness":{"type":3}},
+    {"id":"ca_hdr_t","type":"text","x":2218,"y":80,"width":484,"height":120,"text":"/cascade — Step 5 of 7\nDistribution Content Generation\nBlog post + Twitter/X thread + LinkedIn post\nfrom research + outline (or a YouTube URL)","fontSize":14,"fontFamily":1,"textAlign":"center","verticalAlign":"middle","strokeColor":"#C9A96E"},
+
+    {"id":"ca_reads","type":"rectangle","x":2210,"y":215,"width":500,"height":195,"strokeColor":"#3B82F6","backgroundColor":"#0C1B33","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"ca_reads_t","type":"text","x":2218,"y":221,"width":484,"height":183,"text":"READS (Mode A — default after /outline):\n• 10-Research/ brief\n• 06-Outlines/ outline file\n  (combined input capped at 6,000 chars; long files truncated)\nREADS (Mode B — YouTube URL fallback):\n• YouTube URL → transcript auto-extracted\n\nUser confirms which files before run","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#93C5FD"},
+
+    {"id":"ca_run","type":"rectangle","x":2210,"y":425,"width":500,"height":115,"strokeColor":"#22C55E","backgroundColor":"#071A07","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"ca_run_t","type":"text","x":2218,"y":431,"width":484,"height":103,"text":"RUN (Mode A — research + outline):\npython -m skills.cascade \\\n  --research-file \"...\" \\\n  --outline-file \"...\" --title \"topic\"\nRUN (Mode B — YouTube URL):\npython -m skills.cascade <youtube_url>","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#86EFAC"},
+
+    {"id":"ca_ai","type":"rectangle","x":2210,"y":555,"width":500,"height":135,"strokeColor":"#8B5CF6","backgroundColor":"#150D2E","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"ca_ai_t","type":"text","x":2218,"y":561,"width":484,"height":123,"text":"AI / TOOLS: Claude\n• Prompt source of truth: prompts/cascade.md\n• Requires ANTHROPIC_API_KEY set in .env\n• Input auto-truncated at 6,000 chars (expected)\n• Before posting: replace [VIDEO_LINK] placeholder\n  in twitter_thread.md and linkedin_post.md\n  with the actual uploaded video URL","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#C4B5FD"},
+
+    {"id":"ca_writes","type":"rectangle","x":2210,"y":705,"width":500,"height":195,"strokeColor":"#EC4899","backgroundColor":"#1F0514","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"ca_writes_t","type":"text","x":2218,"y":711,"width":484,"height":183,"text":"WRITES → 08-Distribution/\nYYYY-MM-DD_<slug>/\n────────────────────────────────────\n• blog_post.md\n• twitter_thread.md  (first tweet ≤ 280 chars)\n• linkedin_post.md\n• README.md  (metadata and run summary)\n\nNext step: /short-form or /voice-cleanup","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#F9A8D4"},
+
+    {"id":"sf_hdr","type":"rectangle","x":2750,"y":80,"width":500,"height":120,"strokeColor":"#C9A96E","backgroundColor":"#0F172A","fillStyle":"solid","strokeWidth":3,"roundness":{"type":3}},
+    {"id":"sf_hdr_t","type":"text","x":2758,"y":80,"width":484,"height":120,"text":"/short-form — Step 6 of 7\nVertical Video Scripts\n3 self-contained scripts: 30s / 60s / 90s\nfor YouTube Shorts, Instagram Reels, TikTok","fontSize":14,"fontFamily":1,"textAlign":"center","verticalAlign":"middle","strokeColor":"#C9A96E"},
+
+    {"id":"sf_reads","type":"rectangle","x":2750,"y":215,"width":500,"height":195,"strokeColor":"#3B82F6","backgroundColor":"#0C1B33","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"sf_reads_t","type":"text","x":2758,"y":221,"width":484,"height":183,"text":"READS (Mode A — default after /cascade):\n• 10-Research/ → YYYY-MM-DD_<slug>/research.md\n• 06-Outlines/ → YYYY-MM-DD_<slug>.md\n  (handles partial inputs — one file is OK)\nREADS (Mode B — YouTube URL fallback):\n• YouTube URL → transcript auto-extracted\nAuto-finds most recent files when no topic given","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#93C5FD"},
+
+    {"id":"sf_run","type":"rectangle","x":2750,"y":425,"width":500,"height":115,"strokeColor":"#22C55E","backgroundColor":"#071A07","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"sf_run_t","type":"text","x":2758,"y":431,"width":484,"height":103,"text":"RUN (Mode A):\npython -m skills.short_form \\\n  --research-file \"...\" \\\n  --outline-file \"...\" --title \"topic\"\nRUN (Mode B):\npython -m skills.short_form <youtube_url>","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#86EFAC"},
+
+    {"id":"sf_ai","type":"rectangle","x":2750,"y":555,"width":500,"height":135,"strokeColor":"#8B5CF6","backgroundColor":"#150D2E","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"sf_ai_t","type":"text","x":2758,"y":561,"width":484,"height":123,"text":"AI / TOOLS: Claude\n• Each script is fully self-contained: Hook + Body + CTA\n• 30s: ~75–90 words spoken\n• 60s: ~150–180 words spoken\n• 90s: ~225–270 words spoken\n• Input capped at 6,000 chars (research + outline)\n• Scripts are independent — record any subset or all three","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#C4B5FD"},
+
+    {"id":"sf_writes","type":"rectangle","x":2750,"y":705,"width":500,"height":195,"strokeColor":"#EC4899","backgroundColor":"#1F0514","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"sf_writes_t","type":"text","x":2758,"y":711,"width":484,"height":183,"text":"WRITES → 09-Shorts/\nYYYY-MM-DD_<slug>/\n────────────────────────────────────\n• 30s_script.md\n• 60s_script.md\n• 90s_script.md\n• README.md  (metadata + recording checklist)\n\nNext step: /voice-cleanup on any or all scripts","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#F9A8D4"},
+
+    {"id":"vc_hdr","type":"rectangle","x":3290,"y":80,"width":500,"height":120,"strokeColor":"#C9A96E","backgroundColor":"#0F172A","fillStyle":"solid","strokeWidth":3,"roundness":{"type":3}},
+    {"id":"vc_hdr_t","type":"text","x":3298,"y":80,"width":484,"height":120,"text":"/voice-cleanup — Step 7 of 7\nHuman Voice Polish — FINAL GATE\nStrips AI-isms, rewrites in creator's authentic voice\nNothing goes public without this step","fontSize":14,"fontFamily":1,"textAlign":"center","verticalAlign":"middle","strokeColor":"#C9A96E"},
+
+    {"id":"vc_reads","type":"rectangle","x":3290,"y":215,"width":500,"height":195,"strokeColor":"#3B82F6","backgroundColor":"#0C1B33","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"vc_reads_t","type":"text","x":3298,"y":221,"width":484,"height":183,"text":"READS:\n• Any output file from /cascade or /short-form\n  (08-Distribution/ or 09-Shorts/ or 07-Short-Form/)\n• prompts/voice_cleanup.md\n  (banned phrase list + positive voice markers)\n• 01-Knowledge/voice_profile.md\n  (creator voice patterns — embedded in prompt,\n   not read at runtime — edit to change voice globally)","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#93C5FD"},
+
+    {"id":"vc_run","type":"rectangle","x":3290,"y":425,"width":500,"height":115,"strokeColor":"#22C55E","backgroundColor":"#071A07","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"vc_run_t","type":"text","x":3298,"y":431,"width":484,"height":103,"text":"RUN:\npython -m skills.voice_cleanup \"<file_path>\"\n[--inplace]  ←  overwrites original (ALWAYS ASK FIRST)\n\nBatch: run per .md file sequentially\nStdin: no arg → cleans from stdin, prints to terminal","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#86EFAC"},
+
+    {"id":"vc_ai","type":"rectangle","x":3290,"y":555,"width":500,"height":135,"strokeColor":"#8B5CF6","backgroundColor":"#150D2E","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"vc_ai_t","type":"text","x":3298,"y":561,"width":484,"height":123,"text":"AI MODEL: Claude ONLY  (polish() function)\n• NEVER routes to Ollama — always premium model\n• Checks banned AI-ism phrase list\n• Verifies positive voice markers are present\n• Saves as {stem}_cleaned.md beside original\n• Final quality gate — review before any publish\n• NEVER auto-publishes under any condition","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#C4B5FD"},
+
+    {"id":"vc_writes","type":"rectangle","x":3290,"y":705,"width":500,"height":195,"strokeColor":"#EC4899","backgroundColor":"#1F0514","fillStyle":"solid","strokeWidth":2,"roundness":{"type":3}},
+    {"id":"vc_writes_t","type":"text","x":3298,"y":711,"width":484,"height":183,"text":"WRITES:\n{stem}_cleaned.md  (beside original file)\n────────────────────────────────────\nModes:\n• File (default): saves {stem}_cleaned.md\n• Inplace (--inplace): overwrites original ← ask first!\n• Stdin: prints to terminal, no file saved\n• Batch: N files in folder → N separate _cleaned.md\n\nAlways review _cleaned.md before posting","fontSize":13,"fontFamily":1,"textAlign":"left","verticalAlign":"top","strokeColor":"#F9A8D4"},
+
+    {"id":"arr_r_h","type":"arrow","x":550,"y":140,"width":40,"height":0,"points":[[0,0],[40,0]],"strokeColor":"#C9A96E","strokeWidth":2,"endArrowhead":"arrow"},
+    {"id":"arr_h_ol","type":"arrow","x":1090,"y":140,"width":40,"height":0,"points":[[0,0],[40,0]],"strokeColor":"#C9A96E","strokeWidth":2,"endArrowhead":"arrow"},
+    {"id":"arr_ol_ti","type":"arrow","x":1630,"y":140,"width":40,"height":0,"points":[[0,0],[40,0]],"strokeColor":"#C9A96E","strokeWidth":2,"endArrowhead":"arrow"},
+    {"id":"arr_ti_ca","type":"arrow","x":2170,"y":140,"width":40,"height":0,"points":[[0,0],[40,0]],"strokeColor":"#C9A96E","strokeWidth":2,"endArrowhead":"arrow"},
+    {"id":"arr_ca_sf","type":"arrow","x":2710,"y":140,"width":40,"height":0,"points":[[0,0],[40,0]],"strokeColor":"#C9A96E","strokeWidth":2,"endArrowhead":"arrow"},
+    {"id":"arr_sf_vc","type":"arrow","x":3250,"y":140,"width":40,"height":0,"points":[[0,0],[40,0]],"strokeColor":"#C9A96E","strokeWidth":2,"endArrowhead":"arrow"},
+
+    {"id":"r_v1","type":"arrow","x":300,"y":200,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+    {"id":"r_v2","type":"arrow","x":300,"y":410,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+    {"id":"r_v3","type":"arrow","x":300,"y":540,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+    {"id":"r_v4","type":"arrow","x":300,"y":690,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+
+    {"id":"h_v1","type":"arrow","x":840,"y":200,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+    {"id":"h_v2","type":"arrow","x":840,"y":410,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+    {"id":"h_v3","type":"arrow","x":840,"y":540,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+    {"id":"h_v4","type":"arrow","x":840,"y":690,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+
+    {"id":"ol_v1","type":"arrow","x":1380,"y":200,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+    {"id":"ol_v2","type":"arrow","x":1380,"y":410,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+    {"id":"ol_v3","type":"arrow","x":1380,"y":540,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+    {"id":"ol_v4","type":"arrow","x":1380,"y":690,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+
+    {"id":"ti_v1","type":"arrow","x":1920,"y":200,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+    {"id":"ti_v2","type":"arrow","x":1920,"y":410,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+    {"id":"ti_v3","type":"arrow","x":1920,"y":540,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+    {"id":"ti_v4","type":"arrow","x":1920,"y":690,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+
+    {"id":"ca_v1","type":"arrow","x":2460,"y":200,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+    {"id":"ca_v2","type":"arrow","x":2460,"y":410,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+    {"id":"ca_v3","type":"arrow","x":2460,"y":540,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+    {"id":"ca_v4","type":"arrow","x":2460,"y":690,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+
+    {"id":"sf_v1","type":"arrow","x":3000,"y":200,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+    {"id":"sf_v2","type":"arrow","x":3000,"y":410,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+    {"id":"sf_v3","type":"arrow","x":3000,"y":540,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+    {"id":"sf_v4","type":"arrow","x":3000,"y":690,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+
+    {"id":"vc_v1","type":"arrow","x":3540,"y":200,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+    {"id":"vc_v2","type":"arrow","x":3540,"y":410,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+    {"id":"vc_v3","type":"arrow","x":3540,"y":540,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+    {"id":"vc_v4","type":"arrow","x":3540,"y":690,"width":0,"height":15,"points":[[0,0],[0,15]],"strokeColor":"#475569","strokeWidth":1,"endArrowhead":"arrow"},
+
+    {"id":"legend","type":"rectangle","x":50,"y":930,"width":3740,"height":60,"strokeColor":"#475569","backgroundColor":"#0A0F1E","fillStyle":"solid","strokeWidth":1,"roundness":{"type":3}},
+    {"id":"legend_t","type":"text","x":60,"y":930,"width":3720,"height":60,"text":"LEGEND:     Blue border = READS (inputs)     Green border = RUN (Python command)     Purple border = AI / TOOLS (model routing)     Pink border = WRITES (output files)","fontSize":14,"fontFamily":1,"textAlign":"center","verticalAlign":"middle","strokeColor":"#94A3B8"}
+
+  ],
+  "appState": {
+    "viewBackgroundColor": "#0A0F1E",
+    "gridSize": null,
+    "currentItemFontFamily": 1
+  }
+}

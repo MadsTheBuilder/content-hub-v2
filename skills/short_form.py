@@ -1,6 +1,6 @@
 """Short Form — V2 Vertical Video Scripts from YouTube."""
 
-import asyncio, argparse, logging, sys, re, tempfile
+import asyncio, argparse, logging, sys, re
 from datetime import date
 from pathlib import Path
 
@@ -11,54 +11,12 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
 from skills.utils.ai import generate
+from skills.utils.transcript import extract_transcript
+from skills.brief_loader import load_brief, apply_cli_overrides
+from skills.brief_args import add_brief_args
 
 logger = logging.getLogger(__name__)
 VAULT_DIR = PROJECT_ROOT / "Content-Hub-Vault-V2" / "09-Shorts"
-
-
-def extract_transcript(youtube_url: str) -> tuple[str, str]:
-    """Extract transcript and title from YouTube via yt_dlp Python API."""
-    import yt_dlp
-    with tempfile.TemporaryDirectory() as tmpdir:
-        tmppath = Path(tmpdir)
-        opts = {
-            "writeautomaticsub": True,
-            "subtitleslangs": ["en"],
-            "subtitlesformat": "vtt",
-            "skip_download": True,
-            "outtmpl": str(tmppath / "%(title)s"),
-            "quiet": True,
-            "no_warnings": True,
-        }
-        title = "Untitled"
-        try:
-            with yt_dlp.YoutubeDL(opts) as ydl:
-                info = ydl.extract_info(youtube_url, download=True)
-                title = info.get("title", "Untitled") if info else "Untitled"
-        except Exception as e:
-            logger.error("yt_dlp failed: %s", e)
-            return "", title
-
-        vtt_files = list(tmppath.glob("*.vtt"))
-        if not vtt_files:
-            return "", title
-
-        raw = vtt_files[0].read_text(encoding="utf-8", errors="ignore")
-        lines = []
-        for line in raw.split("\n"):
-            line = line.strip()
-            if line and not line.startswith("WEBVTT") and "-->" not in line and not re.match(r"^\d+$", line):
-                line = re.sub(r"<[^>]+>", "", line).strip()
-                if line:
-                    lines.append(line)
-
-        deduped = []
-        prev = ""
-        for line in lines:
-            if line != prev:
-                deduped.append(line)
-                prev = line
-        return " ".join(deduped), title
 
 
 def load_prompts() -> tuple[str, str, str]:
@@ -84,22 +42,55 @@ def make_output_dir(title: str) -> Path:
     return out
 
 async def main():
-    parser = argparse.ArgumentParser(description="Generate short-form vertical video scripts from YouTube")
-    parser.add_argument("youtube_url", help="YouTube video URL")
-    parser.add_argument("--title", default="", help="Override video title")
+    parser = argparse.ArgumentParser(description="Generate short-form vertical video scripts from research+outline or YouTube")
+    parser.add_argument("youtube_url", nargs="?", help="YouTube video URL (optional if --research-file provided)")
+    parser.add_argument("--title", default="", help="Override content title")
+    parser.add_argument("--research-file", help="Path to research markdown file (relative to project root or absolute)")
+    parser.add_argument("--outline-file", help="Path to outline markdown file (relative to project root or absolute)")
+    add_brief_args(parser)
     args = parser.parse_args()
+    brief = load_brief()
+    brief = apply_cli_overrides(brief, args)
 
-    print(f"📹 Extracting transcript from {args.youtube_url}...")
-    transcript, extracted_title = extract_transcript(args.youtube_url)
-    if not transcript:
-        print("❌ Failed to extract transcript")
+    raw_url = args.youtube_url
+
+    if args.research_file or args.outline_file:
+        parts = []
+        title = args.title
+        if args.research_file:
+            rp = Path(args.research_file)
+            if not rp.is_absolute():
+                rp = PROJECT_ROOT / rp
+            parts.append(f"## RESEARCH NOTES\n\n{rp.read_text(encoding='utf-8')}")
+        if args.outline_file:
+            op = Path(args.outline_file)
+            if not op.is_absolute():
+                op = PROJECT_ROOT / op
+            outline_text = op.read_text(encoding="utf-8")
+            parts.append(f"## VIDEO OUTLINE\n\n{outline_text}")
+            if not title:
+                m = re.search(r"^topic:\s*(.+)$", outline_text, re.MULTILINE)
+                if m:
+                    title = m.group(1).strip()
+        title = title or "Content"
+        transcript = "\n\n".join(parts)
+        youtube_url = raw_url or "[VIDEO_LINK]"
+        print(f"📄 Loaded research+outline ({len(transcript)} chars) for '{title}'")
+    elif raw_url:
+        print(f"📹 Extracting transcript from {raw_url}...")
+        transcript, extracted_title = extract_transcript(raw_url)
+        if not transcript:
+            print("❌ Failed to extract transcript")
+            sys.exit(1)
+        title = args.title or extracted_title
+        youtube_url = raw_url
+        print(f"✅ Extracted {len(transcript)} characters from '{title}'")
+    else:
+        print("❌ Provide either a YouTube URL or --research-file / --outline-file")
         sys.exit(1)
 
-    title = args.title or extracted_title
-    print(f"✅ Extracted {len(transcript)} characters from '{title}'")
-
     thirty_tpl, sixty_tpl, ninety_tpl = load_prompts()
-    transcript_trunc = transcript[:4000]
+    transcript_trunc = transcript[:6000]
     today = date.today().isoformat()
 
     print("Generating 30s script...")
@@ -122,7 +113,7 @@ async def main():
     (output_dir / "30s_script.md").write_text(f"""---
 title: "{title}"
 date: {today}
-youtube_url: {args.youtube_url}
+youtube_url: "{youtube_url}"
 duration: 30s
 ---
 
@@ -132,7 +123,7 @@ duration: 30s
     (output_dir / "60s_script.md").write_text(f"""---
 title: "{title}"
 date: {today}
-youtube_url: {args.youtube_url}
+youtube_url: "{youtube_url}"
 duration: 60s
 ---
 
@@ -142,7 +133,7 @@ duration: 60s
     (output_dir / "90s_script.md").write_text(f"""---
 title: "{title}"
 date: {today}
-youtube_url: {args.youtube_url}
+youtube_url: "{youtube_url}"
 duration: 90s
 ---
 
@@ -152,7 +143,7 @@ duration: 90s
     (output_dir / "README.md").write_text(f"""# Short Form Scripts — {title}
 
 **Date:** {today}
-**Video:** {args.youtube_url}
+**Video:** {youtube_url}
 
 ## Scripts
 - `30s_script.md` — 30-second vertical script

@@ -89,4 +89,4 @@ To keep in V2:
 - **2026-04-28:** ⚡ V2 fork begins. Plan approved. Phase 0 cleanup queued. See [[2026-04-28_V2_Pivot_Local_First_Engine]] (in V1 sessions folder).
 
 ---
-[[Current_Sprint]] | [[Local_First_Skill_Engine_Plan]] | [[README]] (V2 management) | V1 parked: `00-Management/Memory/context.md`
+[[Current_Sprint]] | [[Local_First_Skill_Engine_Plan]] | [[frontend/README]] (V2 management) | V1 parked: `00-Management/Memory/context.md`

@@ -1,0 +1,17 @@
+{
+  "tool_calls": {
+    "Read": 2,
+    "PowerShell": 2,
+    "Edit": 1,
+    "Write": 1
+  },
+  "total_tool_calls": 6,
+  "total_steps": 7,
+  "files_created": [
+    "transcript.md",
+    "metrics.json"
+  ],
+  "errors_encountered": 0,
+  "output_chars": 2361,
+  "transcript_chars": 2361
+}

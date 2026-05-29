@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Content Hub V2 — Self-Improvement Command Center</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0b0d10;
+    --panel: #14181d;
+    --panel-2: #1b2026;
+    --border: #262c33;
+    --text: #e7ecf2;
+    --muted: #8a95a3;
+    --accent: #6ee7b7;
+    --accent-2: #60a5fa;
+    --warn: #fbbf24;
+    --bad: #f87171;
+    --good: #34d399;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 28px;
+    border-bottom: 1px solid var(--border);
+    background: var(--panel);
+  }
+  header h1 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  header h1 .tag {
+    color: var(--accent);
+    font-weight: 500;
+    margin-left: 6px;
+  }
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  button {
+    background: var(--panel-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  button:hover { background: #232931; }
+  button.primary { background: var(--accent); color: #051d12; border-color: var(--accent); font-weight: 500; }
+  button.primary:hover { background: #56d4a4; }
+
+  .container { padding: 24px 28px; max-width: 1600px; margin: 0 auto; }
+
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  .kpi {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .kpi .label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; }
+  .kpi .value { font-size: 26px; font-weight: 600; margin-top: 6px; }
+  .kpi .sub { color: var(--muted); font-size: 11px; margin-top: 2px; }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 18px;
+  }
+  .panel h2 {
+    margin: 0 0 14px 0;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--muted);
+  }
+  .panel-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  th { color: var(--muted); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+  tr:hover td { background: var(--panel-2); cursor: pointer; }
+  tr.selected td { background: #1f2a23; }
+  td.numeric { text-align: right; font-variant-numeric: tabular-nums; }
+  .pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .pill.skill { background: #1d2a3a; color: var(--accent-2); }
+  .pill.dryrun { background: #2a2418; color: var(--warn); }
+  .pill.kept { background: #16291f; color: var(--good); }
+  .pill.reverted { background: #2a1818; color: var(--bad); }
+
+  .delta-pos { color: var(--good); }
+  .delta-neg { color: var(--bad); }
+  .delta-zero { color: var(--muted); }
+
+  .chart-box { position: relative; height: 320px; }
+
+  .empty-state { color: var(--muted); padding: 30px; text-align: center; font-size: 13px; }
+
+  .sha-cell { font-family: "SF Mono", Consolas, monospace; font-size: 11px; color: var(--muted); }
+  select {
+    background: var(--panel-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .sha-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 320px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+  .sha-row {
+    display: grid;
+    grid-template-columns: 90px 100px 1fr 70px;
+    gap: 10px;
+    align-items: center;
+    padding: 6px 10px;
+    background: var(--panel-2);
+    border-radius: 6px;
+    font-size: 12px;
+  }
+  .sha-row .time { color: var(--muted); font-size: 11px; }
+  .sha-row .composite { text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Content Hub V2 <span class="tag">Self-Improvement Command Center</span></h1>
+  <div class="header-right">
+    <span id="dataStatus">Loading…</span>
+    <button class="primary" onclick="loadData()">Refresh</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- KPI ROW -->
+  <div class="kpi-row" id="kpiRow"></div>
+
+  <!-- RUN LIST -->
+  <div class="panel">
+    <h2>Runs — most recent first</h2>
+    <div id="runListWrap"></div>
+  </div>
+
+  <!-- PER-RUN ITERATION CHART -->
+  <div class="panel">
+    <h2>
+      Iteration trajectory
+      <select id="runSelector" onchange="renderIterationChart()" style="margin-left:12px;"></select>
+    </h2>
+    <div class="chart-box"><canvas id="iterationChart"></canvas></div>
+  </div>
+
+  <!-- LEADERBOARD + SHA HISTORY -->
+  <div class="panel-row">
+    <div class="panel" style="margin:0;">
+      <h2>Per-skill leaderboard (best composite)</h2>
+      <div class="chart-box"><canvas id="leaderboardChart"></canvas></div>
+    </div>
+    <div class="panel" style="margin:0;">
+      <h2>
+        Prompt SHA history
+        <select id="shaSkillSelector" onchange="renderShaTimeline()" style="margin-left:12px;"></select>
+      </h2>
+      <div id="shaTimelineWrap"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const TSV_URL = "/pipeline_results.tsv";
+
+let RAW_ROWS = [];
+let ITERATIONS = [];   // [{ run_id, skill, iter_idx, ts, composite, kept, prompt_sha, brief_sha, metrics: {...} }]
+let RUNS = [];         // [{ run_id, skill, iterations: [iter, ...], first_ts, last_ts }]
+let iterationChart, leaderboardChart;
+
+// ───────────────────────── TSV PARSE ─────────────────────────
+function parseTSV(text) {
+  const lines = text.trim().split(/\r?\n/);
+  if (lines.length < 2) return [];
+  const headers = lines[0].split("\t");
+  return lines.slice(1).map(line => {
+    const cells = line.split("\t");
+    const row = {};
+    headers.forEach((h, i) => row[h.trim()] = (cells[i] || "").trim());
+    row.metric_value = parseFloat(row.metric_value);
+    if (isNaN(row.metric_value)) row.metric_value = 0;
+    return row;
+  });
+}
+
+// Group rows into iterations.
+// Within a run_id, rows that share (timestamp truncated to second) form one iteration.
+// composite = average of metric_value across those rows.
+function buildIterations(rows) {
+  const groups = new Map();
+  rows.forEach(r => {
+    const tsSec = (r.timestamp_iso || "").substring(0, 19); // YYYY-MM-DDTHH:MM:SS
+    const key = `${r.run_id}|${tsSec}`;
+    if (!groups.has(key)) {
+      groups.set(key, {
+        run_id: r.run_id,
+        skill: r.skill,
+        ts: r.timestamp_iso,
+        ts_sec: tsSec,
+        kept: r.kept,
+        prompt_sha: r.prompt_sha,
+        brief_sha: r.brief_sha,
+        model: r.model,
+        metrics: {},
+        values: [],
+      });
+    }
+    const g = groups.get(key);
+    g.metrics[r.metric_name] = r.metric_value;
+    g.values.push(r.metric_value);
+  });
+
+  const iters = Array.from(groups.values()).map(g => ({
+    ...g,
+    composite: g.values.length ? g.values.reduce((a, b) => a + b, 0) / g.values.length : 0,
+  }));
+  iters.sort((a, b) => a.ts.localeCompare(b.ts));
+
+  // assign iter_idx per run
+  const counters = {};
+  iters.forEach(it => {
+    counters[it.run_id] = (counters[it.run_id] || 0) + 1;
+    it.iter_idx = counters[it.run_id];
+  });
+
+  return iters;
+}
+
+function buildRuns(iters) {
+  const map = new Map();
+  iters.forEach(it => {
+    if (!map.has(it.run_id)) {
+      map.set(it.run_id, {
+        run_id: it.run_id,
+        skill: it.skill,
+        iterations: [],
+        first_ts: it.ts,
+        last_ts: it.ts,
+        is_dryrun: false,
+      });
+    }
+    const r = map.get(it.run_id);
+    r.iterations.push(it);
+    if (it.ts < r.first_ts) r.first_ts = it.ts;
+    if (it.ts > r.last_ts) r.last_ts = it.ts;
+    if (it.kept === "DRYRUN") r.is_dryrun = true;
+  });
+
+  return Array.from(map.values())
+    .map(r => {
+      const composites = r.iterations.map(i => i.composite);
+      const baseline = composites[0];
+      const final = composites[composites.length - 1];
+      const best = Math.max(...composites);
+      const keptCount = r.iterations.filter(i => i.kept === "YES").length;
+      const revertedCount = r.iterations.filter(i => i.kept === "NO").length;
+      const dryCount = r.iterations.filter(i => i.kept === "DRYRUN").length;
+      return {
+        ...r,
+        baseline, final, best,
+        delta: final - baseline,
+        keptCount, revertedCount, dryCount,
+      };
+    })
+    .sort((a, b) => b.last_ts.localeCompare(a.last_ts));
+}
+
+// ───────────────────────── RENDER ─────────────────────────
+function renderKPIs() {
+  const totalRuns = RUNS.length;
+  const totalIters = ITERATIONS.length;
+  const realIters = ITERATIONS.filter(i => i.kept !== "DRYRUN");
+  const kept = realIters.filter(i => i.kept === "YES").length;
+  const reverted = realIters.filter(i => i.kept === "NO").length;
+  const keptPct = realIters.length ? Math.round(100 * kept / realIters.length) : 0;
+  const skills = new Set(ITERATIONS.map(i => i.skill));
+
+  document.getElementById("kpiRow").innerHTML = `
+    <div class="kpi">
+      <div class="label">Total runs</div>
+      <div class="value">${totalRuns}</div>
+      <div class="sub">${RUNS.filter(r => r.is_dryrun).length} dry-run · ${RUNS.filter(r => !r.is_dryrun).length} real</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Total iterations</div>
+      <div class="value">${totalIters}</div>
+      <div class="sub">${realIters.length} scored · ${totalIters - realIters.length} dry-run</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Kept rate (real runs)</div>
+      <div class="value">${realIters.length ? keptPct + "%" : "—"}</div>
+      <div class="sub">${kept} kept · ${reverted} reverted</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Skills covered</div>
+      <div class="value">${skills.size}</div>
+      <div class="sub">${[...skills].join(", ") || "—"}</div>
+    </div>
+  `;
+}
+
+function renderRunList() {
+  const wrap = document.getElementById("runListWrap");
+  if (!RUNS.length) {
+    wrap.innerHTML = `<div class="empty-state">No runs yet. Trigger <code>/pipeline-loop</code> or run <code>python -m prompt_lab.loop --skill hook --dry-run</code>.</div>`;
+    return;
+  }
+  const rows = RUNS.map(r => {
+    const deltaCls = r.delta > 0.01 ? "delta-pos" : r.delta < -0.01 ? "delta-neg" : "delta-zero";
+    const deltaSign = r.delta > 0 ? "+" : "";
+    const stateLabel = r.is_dryrun
+      ? `<span class="pill dryrun">dry-run</span>`
+      : `<span class="pill kept">${r.keptCount} kept</span> <span class="pill reverted">${r.revertedCount} rev</span>`;
+    return `
+      <tr onclick="selectRun('${r.run_id}')" data-run="${r.run_id}">
+        <td><code>${r.run_id}</code></td>
+        <td><span class="pill skill">${r.skill}</span></td>
+        <td class="numeric">${r.iterations.length}</td>
+        <td class="numeric">${r.baseline.toFixed(2)}</td>
+        <td class="numeric">${r.final.toFixed(2)}</td>
+        <td class="numeric">${r.best.toFixed(2)}</td>
+        <td class="numeric ${deltaCls}">${deltaSign}${r.delta.toFixed(2)}</td>
+        <td>${stateLabel}</td>
+        <td class="sha-cell">${r.last_ts.substring(0, 19).replace("T", " ")}</td>
+      </tr>
+    `;
+  }).join("");
+  wrap.innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>Run ID</th>
+          <th>Skill</th>
+          <th style="text-align:right;">Iters</th>
+          <th style="text-align:right;">Baseline</th>
+          <th style="text-align:right;">Final</th>
+          <th style="text-align:right;">Best</th>
+          <th style="text-align:right;">Δ</th>
+          <th>State</th>
+          <th>Last seen (UTC)</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+function selectRun(runId) {
+  document.querySelectorAll("tr[data-run]").forEach(r => r.classList.toggle("selected", r.dataset.run === runId));
+  document.getElementById("runSelector").value = runId;
+  renderIterationChart();
+}
+
+function renderRunSelector() {
+  const sel = document.getElementById("runSelector");
+  sel.innerHTML = RUNS.map(r => `<option value="${r.run_id}">${r.run_id} (${r.skill}, ${r.iterations.length} iters)</option>`).join("");
+}
+
+function renderIterationChart() {
+  const sel = document.getElementById("runSelector");
+  const runId = sel.value;
+  const run = RUNS.find(r => r.run_id === runId);
+  const ctx = document.getElementById("iterationChart").getContext("2d");
+  if (iterationChart) iterationChart.destroy();
+  if (!run) return;
+
+  const labels = run.iterations.map(i => `#${i.iter_idx}`);
+  const composites = run.iterations.map(i => i.composite);
+  const pointColors = run.iterations.map(i =>
+    i.kept === "YES" ? "#34d399" : i.kept === "NO" ? "#f87171" : "#fbbf24"
+  );
+
+  iterationChart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels,
+      datasets: [{
+        label: `composite — ${run.skill}`,
+        data: composites,
+        borderColor: "#60a5fa",
+        backgroundColor: "rgba(96,165,250,0.1)",
+        pointBackgroundColor: pointColors,
+        pointBorderColor: pointColors,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        borderWidth: 2,
+        tension: 0.25,
+        fill: true,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: "#e7ecf2" } },
+        tooltip: {
+          callbacks: {
+            afterLabel: (ctx) => {
+              const it = run.iterations[ctx.dataIndex];
+              return [
+                `kept: ${it.kept}`,
+                `prompt_sha: ${it.prompt_sha}`,
+                `metrics: ${Object.entries(it.metrics).map(([k,v]) => `${k}=${v.toFixed(2)}`).join(", ")}`,
+              ];
+            }
+          }
+        }
+      },
+      scales: {
+        x: { ticks: { color: "#8a95a3" }, grid: { color: "#262c33" } },
+        y: { ticks: { color: "#8a95a3" }, grid: { color: "#262c33" }, beginAtZero: true },
+      }
+    }
+  });
+}
+
+function renderLeaderboard() {
+  const bySkill = {};
+  ITERATIONS.forEach(i => {
+    if (!bySkill[i.skill]) bySkill[i.skill] = { best: -Infinity, lastReal: -Infinity, count: 0 };
+    if (i.composite > bySkill[i.skill].best) bySkill[i.skill].best = i.composite;
+    if (i.kept !== "DRYRUN" && i.composite > bySkill[i.skill].lastReal) bySkill[i.skill].lastReal = i.composite;
+    bySkill[i.skill].count++;
+  });
+  const labels = Object.keys(bySkill);
+  const data = labels.map(s => bySkill[s].best === -Infinity ? 0 : bySkill[s].best);
+
+  const ctx = document.getElementById("leaderboardChart").getContext("2d");
+  if (leaderboardChart) leaderboardChart.destroy();
+  leaderboardChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [{
+        label: "Best composite",
+        data,
+        backgroundColor: "#6ee7b7",
+        borderColor: "#34d399",
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      indexAxis: "y",
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: "#e7ecf2" } },
+        tooltip: {
+          callbacks: {
+            afterLabel: (ctx) => `iterations logged: ${bySkill[ctx.label].count}`
+          }
+        }
+      },
+      scales: {
+        x: { ticks: { color: "#8a95a3" }, grid: { color: "#262c33" }, beginAtZero: true },
+        y: { ticks: { color: "#8a95a3" }, grid: { color: "#262c33" } }
+      }
+    }
+  });
+}
+
+function renderShaSelector() {
+  const skills = [...new Set(ITERATIONS.map(i => i.skill))];
+  const sel = document.getElementById("shaSkillSelector");
+  sel.innerHTML = skills.map(s => `<option value="${s}">${s}</option>`).join("");
+}
+
+function renderShaTimeline() {
+  const wrap = document.getElementById("shaTimelineWrap");
+  const skill = document.getElementById("shaSkillSelector").value;
+  const iters = ITERATIONS.filter(i => i.skill === skill).sort((a, b) => a.ts.localeCompare(b.ts));
+  if (!iters.length) {
+    wrap.innerHTML = `<div class="empty-state">No data for ${skill}.</div>`;
+    return;
+  }
+
+  // Detect SHA transitions
+  const rows = [];
+  let prevSha = null;
+  iters.forEach(it => {
+    const shaChanged = it.prompt_sha !== prevSha;
+    rows.push({ ...it, shaChanged });
+    prevSha = it.prompt_sha;
+  });
+
+  wrap.innerHTML = `<div class="sha-timeline">` + rows.map(r => {
+    const stateLabel = r.kept === "DRYRUN"
+      ? `<span class="pill dryrun">dry</span>`
+      : r.kept === "YES"
+        ? `<span class="pill kept">kept</span>`
+        : `<span class="pill reverted">rev</span>`;
+    const shaMark = r.shaChanged ? "▶" : "·";
+    return `
+      <div class="sha-row" title="${r.run_id}">
+        <span class="time">${r.ts.substring(11, 19)}</span>
+        <span class="sha-cell">${shaMark} ${r.prompt_sha.substring(0, 12)}</span>
+        <span>${stateLabel} <span style="color:var(--muted);">${r.run_id}</span></span>
+        <span class="composite">${r.composite.toFixed(2)}</span>
+      </div>
+    `;
+  }).join("") + `</div>`;
+}
+
+// ───────────────────────── DATA LOAD ─────────────────────────
+async function loadData() {
+  const status = document.getElementById("dataStatus");
+  status.textContent = "Loading…";
+  try {
+    const res = await fetch(TSV_URL + "?t=" + Date.now());
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const text = await res.text();
+    RAW_ROWS = parseTSV(text);
+    ITERATIONS = buildIterations(RAW_ROWS);
+    RUNS = buildRuns(ITERATIONS);
+    status.textContent = `${RAW_ROWS.length} rows · loaded ${new Date().toLocaleTimeString()}`;
+
+    renderKPIs();
+    renderRunList();
+    renderRunSelector();
+    renderShaSelector();
+    if (RUNS.length) {
+      document.getElementById("runSelector").value = RUNS[0].run_id;
+      selectRun(RUNS[0].run_id);
+    } else {
+      renderIterationChart();
+    }
+    renderLeaderboard();
+    renderShaTimeline();
+  } catch (e) {
+    status.textContent = `Error: ${e.message}`;
+    console.error(e);
+  }
+}
+
+loadData();
+</script>
+
+</body>
+</html>

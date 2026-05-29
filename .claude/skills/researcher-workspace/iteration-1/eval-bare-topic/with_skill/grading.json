@@ -1,0 +1,70 @@
+{
+  "expectations": [
+    {
+      "text": "Claude attempts to run `python -m skills.researcher --list` to show available repos",
+      "passed": true,
+      "evidence": "Transcript shows 'Command Attempted: python -m skills.researcher --list — Result: Successfully listed 9 available repos' and the numbered repo list is displayed to the user."
+    },
+    {
+      "text": "Claude asks the user to select which repos to research before running",
+      "passed": true,
+      "evidence": "Response says 'Which repos would you like me to research? Pick by number or repo slug' — explicitly stops and waits for user selection."
+    },
+    {
+      "text": "Claude identifies the niche as 'AI agents' from the command argument",
+      "passed": true,
+      "evidence": "Response opens with 'Got it — researching AI agents.' Niche is correctly extracted from the bare `/researcher AI agents` command."
+    },
+    {
+      "text": "Claude shows the correct command syntax including --niche and --repos flags",
+      "passed": false,
+      "evidence": "Response shows repo slug format for user input ('e.g., 8 2 4 or cosmicstack-labs/mercury-agent') but does not show the full `python -m skills.researcher --niche ... --repos ...` command at this stage. Command is withheld until after repo selection."
+    },
+    {
+      "text": "Claude does not run the research pipeline without user confirmation of repo selection",
+      "passed": true,
+      "evidence": "Response ends with a question asking the user to pick repos. No research is started. Correctly gates on user selection."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 1,
+    "total": 5,
+    "pass_rate": 0.80
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 1, "Bash": 1, "Write": 2},
+    "total_tool_calls": 4,
+    "total_steps": 3,
+    "errors_encountered": 0,
+    "output_chars": 1100,
+    "transcript_chars": 1400
+  },
+  "timing": {
+    "executor_duration_seconds": 26.7,
+    "grader_duration_seconds": 0.0,
+    "total_duration_seconds": 26.7
+  },
+  "claims": [
+    {
+      "claim": "With_skill response flagged relevant repos for AI agents topic",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Response specifically flags mercury-agent, OpenMythos, and yao-open-prompts as likely relevant — adds value beyond just listing"
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Claude shows the correct command syntax including --niche and --repos flags",
+        "reason": "Showing the command is more appropriate at the confirmation step (after repo selection), not at the list step. Consider splitting this into two assertions or tightening to eval-3 only."
+      }
+    ],
+    "overall": "Strong execution — 4/5. The failing assertion is arguably misplaced in this eval."
+  }
+}

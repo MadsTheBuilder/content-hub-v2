@@ -1,0 +1,180 @@
+{
+  "metadata": {
+    "skill_name": "short-form",
+    "skill_path": ".claude/skills/short-form/SKILL.md",
+    "executor_model": "claude-sonnet-4-6",
+    "analyzer_model": "claude-sonnet-4-6",
+    "timestamp": "2026-05-15T00:00:00Z",
+    "evals_run": [1, 2, 3],
+    "runs_per_configuration": 1
+  },
+
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "no-args-after-cascade",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 454.4,
+        "tokens": 46997,
+        "tool_calls": 12,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "The agent ran the python -m skills.short_form command with --research-file and --outline-file arguments", "passed": true, "evidence": "Command run confirmed in transcript Step 3"},
+        {"text": "The agent reported the output directory path under Content-Hub-Vault-V2/09-Shorts/", "passed": true, "evidence": "Final Response: 'Output location: Content-Hub-Vault-V2/09-Shorts/2026-05-12_ai-agents/'"},
+        {"text": "The agent showed the opening line of the 30s script verbatim", "passed": true, "evidence": "Final Response contains verbatim 30s hook"},
+        {"text": "The agent suggested /voice-cleanup as the next step", "passed": true, "evidence": "Final Response: 'Next step: Use /voice-cleanup to process your recording'"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "no-args-after-cascade",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 3,
+        "failed": 1,
+        "total": 4,
+        "time_seconds": 525.4,
+        "tokens": 46137,
+        "tool_calls": 15,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "The agent ran the python -m skills.short_form command with --research-file and --outline-file arguments", "passed": true, "evidence": "Command run confirmed in transcript"},
+        {"text": "The agent reported the output directory path under Content-Hub-Vault-V2/09-Shorts/", "passed": true, "evidence": "Final Response: 'Output Location: Content-Hub-Vault-V2/09-Shorts/2026-05-12_ai-agents/'"},
+        {"text": "The agent showed the opening line of the 30s script verbatim", "passed": true, "evidence": "Result section includes verbatim hook"},
+        {"text": "The agent suggested /voice-cleanup as the next step", "passed": false, "evidence": "Final Response ends with 'Next step: Review scripts for tone/pacing, then record any subset manually' — no /voice-cleanup mention"}
+      ],
+      "notes": ["Old skill confirmation step was implicitly bypassed — model inferred approval from user statement; creates inconsistent behavior in real interactions"]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "topic-specified",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 605.9,
+        "tokens": 45650,
+        "tool_calls": 15,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "The agent resolved file paths containing '2026-05-12' and 'ai-agent' in the path", "passed": true, "evidence": "Step 2-3: both files found at correct 2026-05-12 paths"},
+        {"text": "The agent ran python -m skills.short_form with both --research-file and --outline-file flags", "passed": true, "evidence": "Command Run section confirms both flags"},
+        {"text": "The agent reported all 4 output files: 30s_script.md, 60s_script.md, 90s_script.md, README.md", "passed": true, "evidence": "Step 5 lists all 4 files with byte sizes"},
+        {"text": "The agent pasted the verbatim opening line of the 30s script as the hook preview", "passed": true, "evidence": "Final Response: verbatim 30s hook quoted"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "topic-specified",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 483.3,
+        "tokens": 46267,
+        "tool_calls": 18,
+        "errors": 2
+      },
+      "expectations": [
+        {"text": "The agent resolved file paths containing '2026-05-12' and 'ai-agent' in the path", "passed": true, "evidence": "Step 2 confirms both 2026-05-12 dated files located"},
+        {"text": "The agent ran python -m skills.short_form with both --research-file and --outline-file flags", "passed": true, "evidence": "Command Run section confirms both flags"},
+        {"text": "The agent reported all 4 output files: 30s_script.md, 60s_script.md, 90s_script.md, README.md", "passed": true, "evidence": "Step 7 lists all 4 files explicitly"},
+        {"text": "The agent pasted the verbatim opening line of the 30s script as the hook preview", "passed": true, "evidence": "Final Response: '**30s Hook (Opening Line):** \"LLMs are shitty, unreliable general-purpose computers...\"'"}
+      ],
+      "notes": ["2 recoverable errors: Glob timeout on large vault (fell back to PowerShell), PowerShell && syntax error (corrected to semicolon)"]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "youtube-url-fallback",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.5,
+        "passed": 2,
+        "failed": 2,
+        "total": 4,
+        "time_seconds": 385.6,
+        "tokens": 42148,
+        "tool_calls": 6,
+        "errors": 1
+      },
+      "expectations": [
+        {"text": "The agent used Mode B and ran python -m skills.short_form with the YouTube URL as a positional argument", "passed": true, "evidence": "Command run confirmed: python -m skills.short_form https://...RpEblXjLxB0"},
+        {"text": "The agent did NOT ask for a research file or outline file (Mode B is the correct path here)", "passed": true, "evidence": "Transcript goes directly from SKILL.md read to Mode B command — no research/outline prompting"},
+        {"text": "The agent reported the output directory path under Content-Hub-Vault-V2/09-Shorts/", "passed": false, "evidence": "Python exited with code 1: 'Video unavailable'. No output directory created."},
+        {"text": "The agent suggested /voice-cleanup as the next step", "passed": false, "evidence": "Final Response focused on remediation steps. No /voice-cleanup mention (expected on failure path)."}
+      ],
+      "notes": ["Video unavailability caused symmetric failure in both configurations — not attributable to skill quality difference"]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "youtube-url-fallback",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.5,
+        "passed": 2,
+        "failed": 2,
+        "total": 4,
+        "time_seconds": 235.7,
+        "tokens": 39979,
+        "tool_calls": 9,
+        "errors": 1
+      },
+      "expectations": [
+        {"text": "The agent used Mode B and ran python -m skills.short_form with the YouTube URL as a positional argument", "passed": true, "evidence": "Step 4: 'Executed: python -m skills.short_form https://...RpEblXjLxB0'"},
+        {"text": "The agent did NOT ask for a research file or outline file (Mode B is the correct path here)", "passed": true, "evidence": "Agent identified Mode B without asking for research/outline. Did note URL confirmation is required by old skill — behavioral friction absent in new skill."},
+        {"text": "The agent reported the output directory path under Content-Hub-Vault-V2/09-Shorts/", "passed": false, "evidence": "Python exited with code 1. Final Response: 'No Output Files Generated: ❌ all 4 files'"},
+        {"text": "The agent suggested /voice-cleanup as the next step", "passed": false, "evidence": "Final Response gives remediation advice only. Old skill has no instruction to suggest next pipeline step."}
+      ],
+      "notes": ["Old skill explicitly requires URL confirmation before running Mode B — documented in transcript Step 3. New skill removes this friction.", "Video unavailability caused symmetric failure"]
+    }
+  ],
+
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 0.833, "stddev": 0.236, "min": 0.5, "max": 1.0},
+      "time_seconds": {"mean": 482.0, "stddev": 92.0, "min": 385.6, "max": 605.9},
+      "tokens": {"mean": 44932, "stddev": 2011, "min": 42148, "max": 46997}
+    },
+    "without_skill": {
+      "pass_rate": {"mean": 0.75, "stddev": 0.204, "min": 0.5, "max": 1.0},
+      "time_seconds": {"mean": 414.8, "stddev": 124.9, "min": 235.7, "max": 525.4},
+      "tokens": {"mean": 44128, "stddev": 2952, "min": 39979, "max": 46267}
+    },
+    "delta": {
+      "pass_rate": "+0.083",
+      "time_seconds": "+67.2",
+      "tokens": "+804"
+    }
+  },
+
+  "notes": [
+    "The sole assertion failure across all with_skill runs was eval 3 assertions 3+4 — both caused by external YouTube video unavailability, not skill logic. The skill correctly identified Mode B and ran the right command.",
+    "The sole assertion failure unique to without_skill is eval 1 assertion 4 ('suggest /voice-cleanup') — a direct result of the old skill not including pipeline continuation guidance.",
+    "Eval 2 is non-discriminating: both configurations scored 4/4. Consider adding a /voice-cleanup suggestion assertion to eval 2 in the next iteration.",
+    "Eval 3 fails symmetrically for both configurations (2/4 each) due to an invalid test URL. Replace with a publicly accessible YouTube video for a meaningful Mode B success-path test.",
+    "Old skill's confirmation friction (Mode A: 'confirm before running', Mode B: 'confirm URL before running') was bypassed in evals because agents interpreted context implicitly. In real use, this creates unpredictable block points.",
+    "with_skill is slightly slower on average (+67s) — likely because the improved skill's clarity leads to more thorough execution steps, not inefficiency.",
+    "Old skill had 2 recoverable errors in eval 2 (Glob timeout + PowerShell syntax). New skill had 0 errors across evals 1 and 2."
+  ]
+}

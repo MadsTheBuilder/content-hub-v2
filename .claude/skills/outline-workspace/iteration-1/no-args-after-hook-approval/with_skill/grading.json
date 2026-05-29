@@ -1,0 +1,70 @@
+{
+  "expectations": [
+    {
+      "text": "The response scans Content-Hub-Vault-V2/05-Hooks/ for a file matching the 'AI agents for non-coders' topic",
+      "passed": true,
+      "evidence": "Step 2: 'Found: Content-Hub-Vault-V2/05-Hooks/2026-05-12_ai-agents.md' — explicit vault scan performed."
+    },
+    {
+      "text": "The response identifies that hook 2 specifically was requested and uses or references that hook number",
+      "passed": true,
+      "evidence": "Step 2: 'Hook #2 Selected: Pain Point Agitation (Expected Value) (marked with ⭐ as recommended)' — hook 2 identified by number from vault file."
+    },
+    {
+      "text": "The response checks Content-Hub-Vault-V2/10-Research/ for a matching research brief",
+      "passed": true,
+      "evidence": "Step 3: 'Found: Content-Hub-Vault-V2/10-Research/2026-05-12_ai-agents_brief.md (148.5 KB). Ready for injection into Stage 4 (Validation).'"
+    },
+    {
+      "text": "The response does NOT ask what topic to outline (topic was already given in the message)",
+      "passed": true,
+      "evidence": "Step 1 extracts topic directly: 'Extracted from user message: AI agents for non-coders'. No clarification question issued."
+    },
+    {
+      "text": "The response includes a python -m skills.outline command with --hook-path parameter",
+      "passed": true,
+      "evidence": "Step 5: 'python -m skills.outline \"AI agents for non-coders\" --hook-path \"Content-Hub-Vault-V2/05-Hooks/2026-05-12_ai-agents.md\" --length 8 --platform yt-long'"
+    },
+    {
+      "text": "The response suggests /cascade as the next step after outline review",
+      "passed": true,
+      "evidence": "Step 7: 'Once approved, run /cascade to generate your blog post, LinkedIn post, and Twitter thread from this outline.'"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.00
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 2, "PowerShell": 2, "Edit": 1, "Write": 1},
+    "total_tool_calls": 6,
+    "total_steps": 7,
+    "errors_encountered": 0,
+    "output_chars": 2361,
+    "transcript_chars": 2361
+  },
+  "timing": {
+    "executor_duration_seconds": 297.4,
+    "total_duration_seconds": 297.4
+  },
+  "claims": [
+    {
+      "claim": "New skill checks 10-Research/ proactively as a discrete Step 3",
+      "type": "process",
+      "verified": true,
+      "evidence": "Step 3 is explicitly titled 'Research Brief Lookup' and finds the brief independently of the hook step."
+    },
+    {
+      "claim": "New skill explicitly routes to /cascade as next step",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Step 7 user report: 'Once approved, run /cascade to generate your blog post, LinkedIn post, and Twitter thread from this outline.' Direct /cascade mention."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Perfect score for new skill on eval 1. The two key improvements (research brief check + /cascade routing) both fired correctly. Eval 1 is a clean win for the new skill — 6/6 vs 5/6 for old skill."
+  }
+}

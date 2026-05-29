@@ -1,0 +1,151 @@
+{
+  "execution_metadata": {
+    "skill": "outline",
+    "execution_date": "2026-05-15",
+    "execution_type": "regeneration_with_feedback",
+    "model": "haiku-4.5"
+  },
+  "user_input": {
+    "topic": "Why developers fail at AI",
+    "target_length_minutes": 6,
+    "platform": "yt-long",
+    "feedback_count": 2,
+    "feedback_items": [
+      "Stage 4 too technical",
+      "Stage 5 too generic"
+    ]
+  },
+  "vault_lookups": {
+    "hook_searches": 4,
+    "hook_files_found": 0,
+    "research_searches": 2,
+    "research_files_found": 0,
+    "total_hook_files_in_vault": 5,
+    "total_research_files_in_vault": 17
+  },
+  "parameters_confirmed": {
+    "topic": true,
+    "length": true,
+    "platform": true,
+    "hook_path": false,
+    "polish_mode": true,
+    "regeneration_guidance": true
+  },
+  "expected_output": {
+    "vault_path": "Content-Hub-Vault-V2/06-Outlines/2026-05-15_why-developers-fail-at-ai.md",
+    "format": "markdown",
+    "frontmatter_fields": 7,
+    "sections": {
+      "stage_1_stimulation": {
+        "duration_estimate": "0:20-0:30",
+        "required_elements": [
+          "dopamine_goal",
+          "hook",
+          "visual_notes",
+          "transition"
+        ]
+      },
+      "stage_2_captivation": {
+        "duration_estimate": "0:45-1:00",
+        "required_elements": [
+          "dopamine_goal",
+          "talking_points",
+          "visual_notes",
+          "transition"
+        ]
+      },
+      "stage_3_anticipation": {
+        "duration_estimate": "1:30-2:00",
+        "required_elements": [
+          "dopamine_goal",
+          "talking_points",
+          "head_fake",
+          "visual_notes",
+          "transition"
+        ]
+      },
+      "stage_4_validation": {
+        "duration_estimate": "1:00-1:30",
+        "required_elements": [
+          "dopamine_goal",
+          "talking_points",
+          "visual_notes",
+          "head_fake",
+          "transition"
+        ],
+        "regeneration_focus": "Reduce technical jargon; focus on relatable failure modes"
+      },
+      "stage_5_affection": {
+        "duration_estimate": "0:45-1:00",
+        "required_elements": [
+          "dopamine_goal",
+          "talking_points",
+          "visual_notes",
+          "transition"
+        ],
+        "regeneration_focus": "Personal anecdote; specific emotional stakes"
+      },
+      "stage_6_revelation": {
+        "duration_estimate": "0:30-0:45",
+        "required_elements": [
+          "dopamine_goal",
+          "talking_points",
+          "visual_notes",
+          "transition"
+        ]
+      },
+      "cta_section": {
+        "duration_estimate": "0:20-0:30",
+        "required_elements": [
+          "goal",
+          "talking_points",
+          "visual_notes"
+        ]
+      }
+    }
+  },
+  "visual_markers_expected": {
+    "b_roll": "present_in_multiple_sections",
+    "show_screen": "present_in_validation_stage",
+    "text_overlay": "present_in_all_sections",
+    "total_types": 3
+  },
+  "structural_requirements": {
+    "dopamine_ladder_stages": 6,
+    "cta_section": true,
+    "head_fakes_minimum": 2,
+    "head_fakes_found_expected": 2,
+    "total_duration_target": "6:00",
+    "total_duration_estimate": "6:00"
+  },
+  "execution_steps_completed": {
+    "step_1_topic_confirmation": true,
+    "step_2_vault_lookup": true,
+    "step_3_parameter_confirmation": true,
+    "step_4_command_construction": true,
+    "step_5_execution_simulation": true,
+    "step_6_reporting_preparation": true,
+    "step_7_next_step_prompt": true
+  },
+  "regeneration_specifics": {
+    "feedback_items_addressed": 2,
+    "stage_4_adjustments": {
+      "from": "Technical explanation of AI agents and workflow automation",
+      "to": "Relatable developer failure modes (prompt engineering theater, copy-paste solutions, edge cases missed)"
+    },
+    "stage_5_adjustments": {
+      "from": "Generic advice about clarity",
+      "to": "Personal anecdote with specific emotional resolution (creator shipped broken AI code, learned about real skill gap)"
+    }
+  },
+  "recommendations": {
+    "skill_enhancement": "Add --feedback parameter to outline command to enable guided regeneration",
+    "suggested_command_format": "python -m skills.outline \"<topic>\" --length <n> --platform <platform> --feedback \"<regeneration guidance>\"",
+    "next_steps_for_user": [
+      "Review outline for accuracy",
+      "Prepare screen shares/demos listed in Stage 4",
+      "Record talking points with focus on Stage 5 anecdote",
+      "Film using outline as shooting script"
+    ]
+  }
+}

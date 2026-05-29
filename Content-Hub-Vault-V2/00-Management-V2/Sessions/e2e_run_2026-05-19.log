@@ -1,0 +1,193 @@
+
+[pipeline] Topic: Andrej Karpathy skills
+[pipeline] URLs:  https://github.com/multica-ai/andrej-karpathy-skills
+[pipeline] Slug:  2026-05-19_andrej_karpathy_skills
+
+============================================================
+[pipeline] 1/9 ó Research
+============================================================
+NIM meta/llama-3.1-70b-instruct failed: ReadTimeout: 
+[nlm error] 
+  [retry 1] empty answer for What are Andrej Karpathy's most notable AI projects and roles?
+NIM meta/llama-3.1-70b-instruct failed: ReadTimeout: 
+NIM meta/llama-3.1-70b-instruct failed: ReadTimeout: 
+NIM meta/llama-3.1-70b-instruct failed: ReadTimeout: 
+NIM meta/llama-3.1-70b-instruct failed: ReadTimeout: 
+NIM meta/llama-3.1-70b-instruct failed: ReadTimeout: 
+NIM meta/llama-3.1-70b-instruct failed: ReadError: 
+NIM meta/llama-3.1-70b-instruct failed: ReadTimeout: 
+NIM meta/llama-3.1-70b-instruct failed: ReadTimeout: 
+Creating notebook: Andrej Karpathy skills ‚Äî YT Research
+Notebook ID: a954c76e-c3b9-47fa-82f3-f70e13407821
+Adding source: https://github.com/multica-ai/andrej-karpathy-skills
+Running primary-source pre-flight...
+  Adding primary source: https://github.com/karpathy/nanoGPT
+  Adding primary source: https://github.com/karpathy/llm.c
+  Adding primary source: https://github.com/karpathy/micrograd
+  Adding primary source: https://github.com/karpathy/minGPT
+  Adding primary source: https://github.com/karpathy/nn-zero-to-hero
+  Adding primary source: https://github.com/karpathy/llama2.c
+  Adding primary source: https://karpathy.ai/
+  Adding primary source: https://github.com/karpathy/char-rnn
+  8 primary source(s) added via scrape+search-backstop
+Waiting for all sources to process...
+Seeding questions from NotebookLM...
+Extracting analysis from NotebookLM (3 questions, budget 15)...
+  Asking: What are Andrej Karpathy's most notable AI projects and roles?
+  Queued follow-up: Follow-up: Midtraining Team Scope and Output
+  Queued follow-up: Follow-up: llm.c Reproduction Benchmarks
+  Asking: Follow-up: Midtraining Team Scope and Output
+  Queued follow-up: Follow-up: Midtraining Definition and Team Outputs
+  Asking: Follow-up: llm.c Reproduction Benchmarks
+  Queued follow-up: Follow-up: Quantification of Training Speed Comparison
+  Queued follow-up: Follow-up: Specific Hardware and Training Context for Larger Models
+  Asking: Follow-up: Midtraining Definition and Team Outputs
+  Queued follow-up: Follow-up: OpenAI's Internal Understanding of 'Midtraining'
+  Queued follow-up: Follow-up: Specific Models and Public Releases
+  Asking: Follow-up: Quantification of Training Speed Comparison
+  Asking: Follow-up: Specific Hardware and Training Context for Larger Models
+  Queued follow-up: Follow-up: GPT-2 1.6B Training Time Projection
+  Asking: Follow-up: GPT-2 1.6B Training Time Projection
+  Queued follow-up: Follow-up: Multi-Node Training Benchmarks
+  Queued follow-up: Follow-up: Scaling Comparison to nanoGPT
+  Asking: Follow-up: Multi-Node Training Benchmarks
+  Queued follow-up: Follow-up: Interconnect Speed and Throughput Impact
+  Queued follow-up: Follow-up: Comparison to PyTorch
+  Asking: Follow-up: Scaling Comparison to nanoGPT
+  Queued follow-up: Follow-up: Multi-Node Throughput Constraints
+  Queued follow-up: Follow-up: cuBLAS and cuDNN Optimizations
+  Asking: Follow-up: Interconnect Speed and Throughput Impact
+  Queued follow-up: Follow-up: Quantified Throughput Impact of Disabling Infiniband
+  Queued follow-up: Follow-up: Source of the 7% Kernel-Level Advantage
+  Asking: Follow-up: Comparison to PyTorch
+  Queued follow-up: Follow-up: Benchmark Hardware and Conditions for 7% Claim
+  Asking: Follow-up: Quantified Throughput Impact of Disabling Infiniband
+  Queued follow-up: Follow-up: Quantifying the Infiniband vs Ethernet Gap
+  Asking: Follow-up: Source of the 7% Kernel-Level Advantage
+  Queued follow-up: Follow-up: Reproducibility of the 7% Figure
+  Asking: Follow-up: Benchmark Hardware and Conditions for 7% Claim
+  Queued follow-up: Follow-up: PyTorch Nightly Version Identifier and Logged Benchmark Run
+  Asking: Follow-up: Quantifying the Infiniband vs Ethernet Gap
+
+Research written: C:\Users\madhu\Claude cowork\Content Hub V2\Content-Hub-Vault-V2\10-Research\2026-05-19_andrej_karpathy_skills\research.md
+
+Done.
+Output directory: C:\Users\madhu\Claude cowork\Content Hub V2\Content-Hub-Vault-V2\10-Research\2026-05-19_andrej_karpathy_skills
+Notebook: Andrej Karpathy skills ‚Äî YT Research (a954c76e-c3b9-47fa-82f3-f70e13407821)
+NIM meta/llama-3.1-70b-instruct failed: ReadTimeout: 
+NIM report picker failed: All providers failed. Last: ReadTimeout: 
+NIM meta/llama-3.1-70b-instruct failed: ReadTimeout: 
+NIM report picker failed: All providers failed. Last: ReadTimeout: 
+20:39:03 ERROR [notebooklm._core] RPC CREATE_ARTIFACT failed after 0.444s
+Technical generation submission failed: API rate limit or quota exceeded. Please wait before retrying.
+[pipeline] Research file: C:\Users\madhu\Claude cowork\Content Hub V2\Content-Hub-Vault-V2\10-Research\2026-05-19_andrej_karpathy_skills\research.md
+
+[pipeline] Step 2/9 ó Studio reports
+[pipeline] Found notebook_id: a954c76e-c3b9-47fa-82f3-f70e13407821
+
+============================================================
+[pipeline] 3/9 ó Ideation
+============================================================
+usage: ideation.py [-h] --topic TOPIC [--research-file RESEARCH_FILE]
+                   [--no-trends]
+ideation.py: error: the following arguments are required: --topic
+[pipeline] FAILED: 3/9 ó Ideation (exit 2)
+
+============================================================
+[pipeline] 4/9 ó Hook
+============================================================
+WARNING: NIM meta/llama-3.1-70b-instruct failed: ReadTimeout: 
+INFO: Provider nim failed (ReadTimeout: ), trying next...
+WARNING: Claude CLI failed: exit code 1
+INFO: Provider claude failed (exit code 1), trying next...
+WARNING: Ollama gemma4:e4b failed: All connection attempts failed
+INFO: Provider ollama failed (All connection attempts failed), trying next...
+ERROR: Draft failed: All providers failed. Last: All connection attempts failed
+Hook writer: "Andrej Karpathy skills" | yt-long | medium
+Drafting hooks (NIM ‚Üí Gemini)...
+[pipeline] FAILED: 4/9 ó Hook (exit 1)
+
+============================================================
+[pipeline] 5/9 ó Outline
+============================================================
+WARNING: NIM meta/llama-3.1-70b-instruct failed: ReadTimeout: 
+INFO: Provider nim failed (ReadTimeout: ), trying next...
+WARNING: Claude CLI failed: exit code 1
+INFO: Provider claude failed (exit code 1), trying next...
+WARNING: Ollama gemma4:e4b failed: All connection attempts failed
+INFO: Provider ollama failed (All connection attempts failed), trying next...
+ERROR: Draft failed: All providers failed. Last: All connection attempts failed
+Outline writer: "Andrej Karpathy skills" | yt-long | 8 min
+Drafting outline (NIM ‚Üí Gemini)...
+[pipeline] FAILED: 5/9 ó Outline (exit 1)
+
+============================================================
+[pipeline] 6/9 ó Title
+============================================================
+NIM meta/llama-3.1-70b-instruct failed: ReadTimeout: 
+Claude CLI failed: exit code 1
+Ollama gemma4:e4b failed: All connection attempts failed
+Error: Title generation failed: All providers failed. Last: All connection attempts failed
+[pipeline] FAILED: 6/9 ó Title (exit 1)
+
+============================================================
+[pipeline] 7/9 ó Short-form
+============================================================
+INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO: AI generation succeeded via nim/meta/llama-3.1-70b-instruct
+WARNING: NIM meta/llama-3.1-70b-instruct failed: ReadTimeout: 
+INFO: Provider nim failed (ReadTimeout: ), trying next...
+WARNING: Claude CLI failed: exit code 1
+INFO: Provider claude failed (exit code 1), trying next...
+WARNING: Ollama gemma4:e4b failed: All connection attempts failed
+INFO: Provider ollama failed (All connection attempts failed), trying next...
+INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO: AI generation succeeded via nim/meta/llama-3.1-70b-instruct
+üìÑ Loaded research+outline (38686 chars) for 'Andrej Karpathy skills'
+Generating 30s script...
+Generating 60s script...
+Generating 90s script...
+‚ùå One or more generations failed
+[pipeline] FAILED: 7/9 ó Short-form (exit 1)
+
+============================================================
+[pipeline] 8/9 ó Cascade
+============================================================
+INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO: AI generation succeeded via nim/meta/llama-3.1-70b-instruct
+WARNING: NIM meta/llama-3.1-70b-instruct failed: ReadTimeout: 
+INFO: Provider nim failed (ReadTimeout: ), trying next...
+INFO: AI generation succeeded via claude/cli
+WARNING: NIM meta/llama-3.1-70b-instruct failed: ReadTimeout: 
+INFO: Provider nim failed (ReadTimeout: ), trying next...
+INFO: AI generation succeeded via claude/cli
+üìÑ Loaded research+outline (38686 chars) for 'Andrej Karpathy skills'
+
+============================================================
+Generating Instagram carousel...
+Generating LinkedIn post...
+============================================================
+
+‚úÖ Distribution package written to:
+   C:\Users\madhu\Claude cowork\Content Hub V2\Content-Hub-Vault-V2\08-Distribution\2026-05-19_andrej-karpathy-skills
+
+üìù blog_post.md
+üì∏ instagram_post.md
+üíº linkedin_post.md
+üìã README.md
+
+Preview ‚Äî Instagram hook:
+**Slide 1:** Karpathy rebuilt GPT-2 in pure C. No PyTorch. No libraries. Just 700 lines.
+
+**Slide 2:** llama2.c ‚Äî train in PyTorch, run inference in a single 700-line C file. A "weekend project."
+
+**Slide 3:** micrograd. A full autograd engine in ~150 lines. Small enough to read 
+
+[pipeline] WARNING: cascade directory not found at C:\Users\madhu\Claude cowork\Content Hub V2\Content-Hub-Vault-V2\08-Distribution\2026-05-19_andrej_karpathy_skills
+
+[pipeline] Step 9/9 ó Studio slides + video
+
+============================================================
+[pipeline] Pipeline complete ó 2026-05-19_andrej_karpathy_skills
+[pipeline] Vault: C:\Users\madhu\Claude cowork\Content Hub V2\Content-Hub-Vault-V2
+============================================================

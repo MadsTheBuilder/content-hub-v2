@@ -1,0 +1,15 @@
+{
+  "eval_id": 2,
+  "eval_name": "topic-specified",
+  "skill_version": "old",
+  "expectations": [
+    {"text": "finds-both-files: Claude identifies both the research brief and outline by name", "passed": true, "evidence": "Step 1 finds both files with explicit paths."},
+    {"text": "single-confirmation-step: Claude asks for confirmation exactly once", "passed": true, "evidence": "Step 2 shows single confirmation block."},
+    {"text": "filenames-in-confirmation: The confirmation message includes actual filenames", "passed": true, "evidence": "Confirmation block lists both file paths."},
+    {"text": "correct-command-flags: Command uses --research-file and --outline-file flags", "passed": true, "evidence": "Step 3 command uses --research-file and --outline-file."},
+    {"text": "twitter-hook-preview: After-completion report previews the Twitter hook", "passed": true, "evidence": "Step 5 completion report includes Twitter Hook First Tweet."},
+    {"text": "video-link-reminder: Report mentions replacing [VIDEO_LINK] placeholder", "passed": true, "evidence": "Next Steps section: 'Replace [VIDEO_LINK] placeholders (if applicable) before posting.'"}
+  ],
+  "pass_rate": 1.0,
+  "notes": "Old skill also passes all eval 2 assertions — topic-specified mode was already handled well."
+}

@@ -1,0 +1,77 @@
+{
+  "expectations": [
+    {
+      "text": "The Python command includes the --no-polish flag",
+      "passed": true,
+      "evidence": "Transcript Step 3 Python command: 'python -m skills.hook \"Why your AI content gets zero traction\" --platform yt-long --audience \"AI builders and content creators\" --format medium --no-polish'"
+    },
+    {
+      "text": "The confirmation message explicitly notes fast/draft mode (no-polish)",
+      "passed": true,
+      "evidence": "Transcript confirmation: 'Writing 5 hooks for: \"Why your AI content gets zero traction\" — yt-long · medium. --no-polish mode active (draft output, skipping polish pass). Running now.'"
+    },
+    {
+      "text": "A new vault output file is reported (different path or acknowledged as re-run)",
+      "passed": true,
+      "evidence": "result.md reports real vault file: 'Content-Hub-Vault-V2/05-Hooks/2026-05-15_why-your-ai-content-gets-zero.md'. Python script executed successfully via NIM."
+    },
+    {
+      "text": "The ⭐ recommended hook's Spoken Line is previewed in the final response",
+      "passed": true,
+      "evidence": "result.md Recommended Hook Preview: ⭐ Hook 1 — Pain Point Agitation: 'Your AI content gets zero traction.'"
+    },
+    {
+      "text": "The next-step prompt suggests /outline",
+      "passed": true,
+      "evidence": "result.md Next Step: '/outline topic=\"Why your AI content gets zero traction\" --hook-path \"Content-Hub-Vault-V2/05-Hooks/2026-05-15_why-your-ai-content-gets-zero.md\"'"
+    },
+    {
+      "text": "At least one generated hook uses Kallaway pattern 9 (Pain Point Agitation) or pattern 10 (Shock Value)",
+      "passed": true,
+      "evidence": "Hook 1 is explicitly Pattern 9 — Pain Point Agitation (Expected Value). result.md marks it ⭐."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 3, "Write": 2, "Bash": 1},
+    "total_tool_calls": 6,
+    "total_steps": 5,
+    "errors_encountered": 0,
+    "output_chars": 4500,
+    "transcript_chars": 3600
+  },
+  "timing": {
+    "executor_duration_seconds": 45.0,
+    "total_duration_seconds": 45.0
+  },
+  "claims": [
+    {
+      "claim": "Python script executed successfully via NIM (NVIDIA Inference Microservices)",
+      "type": "process",
+      "verified": true,
+      "evidence": "Transcript: 'INFO: AI generation succeeded via nim/meta/llama-3.1-70b-instruct. Hooks written to ...'"
+    },
+    {
+      "claim": "No-polish mode correctly skipped Claude polish pass",
+      "type": "process",
+      "verified": true,
+      "evidence": "Transcript notes: '--no-polish flag prevented Claude polish pass (as expected). Execution time: ~15 seconds (fast mode confirmed)'"
+    },
+    {
+      "claim": "New skill notes pipeline position in re-run context",
+      "type": "quality",
+      "verified": true,
+      "evidence": "result.md confirmation: '(Step 2 of 7 — re-generating with shock/pain-first angle)'"
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  }
+}

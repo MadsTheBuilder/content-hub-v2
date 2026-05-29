@@ -1,0 +1,14 @@
+{
+  "eval_id": 2,
+  "eval_name": "topic-with-flags",
+  "prompt": "/hook \"The one editing trick that 3x'd my watch time\" --platform yt-shorts --format short --audience \"beginner YouTubers aged 18-30\"",
+  "assertions": [
+    "The confirmation message echoes back the correct topic 'The one editing trick that 3x'd my watch time'",
+    "The confirmation message explicitly shows platform=yt-shorts and format=short (not defaults)",
+    "The Python command includes --platform yt-shorts",
+    "The Python command includes --format short",
+    "The Python command includes the custom --audience value 'beginner YouTubers aged 18-30'",
+    "The output reports a vault file path under Content-Hub-Vault-V2/05-Hooks/",
+    "The ⭐ recommended hook's Spoken Line is previewed in the final response"
+  ]
+}

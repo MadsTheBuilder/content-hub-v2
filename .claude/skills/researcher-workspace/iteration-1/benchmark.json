@@ -1,0 +1,183 @@
+{
+  "metadata": {
+    "skill_name": "researcher",
+    "skill_path": "c:\\Users\\madhu\\Claude cowork\\Content Hub V2\\.claude\\skills\\researcher",
+    "executor_model": "claude-sonnet-4-6",
+    "analyzer_model": "claude-sonnet-4-6",
+    "timestamp": "2026-05-15T00:00:00Z",
+    "evals_run": ["eval-no-args", "eval-bare-topic", "eval-full-invocation"],
+    "runs_per_configuration": 1
+  },
+
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "eval-no-args",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 3,
+        "failed": 1,
+        "total": 4,
+        "time_seconds": 21.7,
+        "tokens": 36792,
+        "tool_calls": 3,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Claude asks the user to provide a niche or topic before proceeding", "passed": true, "evidence": "Response gates on niche with 'First, what niche or topic area interests you?'"},
+        {"text": "Claude does NOT auto-select repos or run the pipeline without user input", "passed": true, "evidence": "No command run, response stops after asking for niche"},
+        {"text": "Claude explains or references the researcher skill as Step 1 of the pipeline", "passed": true, "evidence": "Opens with 'let’s kick off the researcher pipeline' referencing the pipeline context"},
+        {"text": "Claude mentions /hook as the next step after the brief is reviewed", "passed": false, "evidence": "No /hook mention — appropriate since brief not yet generated, but assertion is strict"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "eval-no-args",
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.50,
+        "passed": 2,
+        "failed": 2,
+        "total": 4,
+        "time_seconds": 20.9,
+        "tokens": 36542,
+        "tool_calls": 3,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Claude asks the user to provide a niche or topic before proceeding", "passed": true, "evidence": "Response asks for niche: 'what’s your general interest area or niche?'"},
+        {"text": "Claude does NOT auto-select repos or run the pipeline without user input", "passed": true, "evidence": "No command run, waits for user"},
+        {"text": "Claude explains or references the researcher skill as Step 1 of the pipeline", "passed": false, "evidence": "Says 'I can help you kick off the researcher skill' but no pipeline chain or step position mentioned"},
+        {"text": "Claude mentions /hook as the next step after the brief is reviewed", "passed": false, "evidence": "Lists 3 steps (show repos, pick, run research) but omits /hook entirely"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "eval-bare-topic",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.80,
+        "passed": 4,
+        "failed": 1,
+        "total": 5,
+        "time_seconds": 26.7,
+        "tokens": 37551,
+        "tool_calls": 4,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Claude attempts to run `python -m skills.researcher --list` to show available repos", "passed": true, "evidence": "Command attempted and succeeded, 9 repos listed"},
+        {"text": "Claude asks the user to select which repos to research before running", "passed": true, "evidence": "'Which repos would you like me to research? Pick by number or repo slug'"},
+        {"text": "Claude identifies the niche as 'AI agents' from the command argument", "passed": true, "evidence": "'Got it — researching AI agents.'"},
+        {"text": "Claude shows the correct command syntax including --niche and --repos flags", "passed": false, "evidence": "Shows repo slug input format but not the full command at this stage"},
+        {"text": "Claude does not run the research pipeline without user confirmation of repo selection", "passed": true, "evidence": "Stops at repo selection, does not proceed further"}
+      ],
+      "notes": ["With_skill adds value by flagging likely AI-agent-relevant repos from the list"]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "eval-bare-topic",
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.80,
+        "passed": 4,
+        "failed": 1,
+        "total": 5,
+        "time_seconds": 22.7,
+        "tokens": 37180,
+        "tool_calls": 4,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Claude attempts to run `python -m skills.researcher --list` to show available repos", "passed": true, "evidence": "Command succeeded, 9 repos listed"},
+        {"text": "Claude asks the user to select which repos to research before running", "passed": true, "evidence": "'Which repos would you like me to research for the AI agents niche?'"},
+        {"text": "Claude identifies the niche as 'AI agents' from the command argument", "passed": true, "evidence": "'I’ll run isolated content gap research on AI agents'"},
+        {"text": "Claude shows the correct command syntax including --niche and --repos flags", "passed": false, "evidence": "Does not show command syntax at the repo-selection stage"},
+        {"text": "Claude does not run the research pipeline without user confirmation of repo selection", "passed": true, "evidence": "Holds at selection step, says 'I’ll confirm before running'"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "eval-full-invocation",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.00,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 28.7,
+        "tokens": 37792,
+        "tool_calls": 3,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Claude confirms the repo (microsoft/autogen) and niche (AI agents) with the user before running", "passed": true, "evidence": "Shows confirmation block with all details + 'Confirm?'"},
+        {"text": "Claude shows the correct command: `python -m skills.researcher --niche \"AI agents\" --repos microsoft/autogen`", "passed": true, "evidence": "Exact command shown in powershell code block"},
+        {"text": "Claude mentions the output file path pattern: Content-Hub-Vault-V2/10-Research/YYYY-MM-DD_ai-agents_brief.md", "passed": true, "evidence": "Shows 'Content-Hub-Vault-V2/10-Research/2026-05-15_ai-agents_brief.md'"},
+        {"text": "Claude mentions /hook as the next step after reviewing the brief", "passed": true, "evidence": "Ends with '/hook topic=\"From Single Agent to Multi-Agent...\"'"},
+        {"text": "Claude explains what the brief contains (Recommended Video Angle, synthesized sections)", "passed": true, "evidence": "Shows all 5 brief sections + Recommended Video Angle with specific title"}
+      ],
+      "notes": ["Simulated output is rich and usable — video angle specific enough to pass directly to /hook"]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "eval-full-invocation",
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.00,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 29.6,
+        "tokens": 37595,
+        "tool_calls": 3,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Claude confirms the repo (microsoft/autogen) and niche (AI agents) with the user before running", "passed": true, "evidence": "Shows confirmation block with repo/niche + 'Confirm? (yes/no)'"},
+        {"text": "Claude shows the correct command: `python -m skills.researcher --niche \"AI agents\" --repos microsoft/autogen`", "passed": true, "evidence": "Exact command shown in powershell code block"},
+        {"text": "Claude mentions the output file path pattern: Content-Hub-Vault-V2/10-Research/YYYY-MM-DD_ai-agents_brief.md", "passed": true, "evidence": "Mentions 'Content-Hub-Vault-V2/10-Research/2026-05-15_ai-agents_brief.md'"},
+        {"text": "Claude mentions /hook as the next step after reviewing the brief", "passed": true, "evidence": "Ends with '/hook topic=\"How to Ship Agent Orchestration...\"'"},
+        {"text": "Claude explains what the brief contains (Recommended Video Angle, synthesized sections)", "passed": true, "evidence": "Shows 'Recommended Video Angle' and 'Content Gaps Identified'"}
+      ],
+      "notes": []
+    }
+  ],
+
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 0.85, "stddev": 0.11, "min": 0.75, "max": 1.00},
+      "time_seconds": {"mean": 25.7, "stddev": 3.5, "min": 21.7, "max": 28.7},
+      "tokens": {"mean": 37378, "stddev": 507, "min": 36792, "max": 37792}
+    },
+    "old_skill": {
+      "pass_rate": {"mean": 0.77, "stddev": 0.23, "min": 0.50, "max": 1.00},
+      "time_seconds": {"mean": 24.4, "stddev": 4.0, "min": 20.9, "max": 29.6},
+      "tokens": {"mean": 37106, "stddev": 357, "min": 36542, "max": 37595}
+    },
+    "delta": {
+      "pass_rate": "+0.08",
+      "time_seconds": "+1.3",
+      "tokens": "+272"
+    }
+  },
+
+  "notes": [
+    "Eval 1 (no-args) is the key discriminating test: with_skill scores 0.75 vs old_skill 0.50. The new SKILL.md frontmatter pipeline context is the differentiator.",
+    "Eval 2 (bare-topic) and Eval 3 (full-invocation) show near-identical pass rates. Both configurations handle the interaction flow correctly for these cases.",
+    "Assertion 4 in eval-1 ('mentions /hook') is likely too strict — mentioning /hook before a brief exists is premature. This assertion explains the 0.75 ceiling on with_skill in eval-1.",
+    "Assertion 4 in eval-2 ('shows command syntax') fires at the wrong stage — command is shown at confirmation, not at list stage. Contributes to both configs missing it.",
+    "Token usage is nearly identical across configs (37K ± 500), suggesting the new frontmatter adds minimal overhead.",
+    "Qualitative difference on eval-2: with_skill flags relevant repos by topic; old_skill lists them without topic-guided recommendations — not captured by current assertions."
+  ]
+}

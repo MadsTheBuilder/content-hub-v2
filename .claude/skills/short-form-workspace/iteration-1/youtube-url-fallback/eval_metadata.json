@@ -1,0 +1,11 @@
+{
+  "eval_id": 3,
+  "eval_name": "youtube-url-fallback",
+  "prompt": "I want short-form scripts from this YouTube video about Claude Code agents. I don't have a research file or outline for it yet. Here's the URL: https://www.youtube.com/watch?v=RpEblXjLxB0",
+  "assertions": [
+    "The agent used Mode B and ran python -m skills.short_form with the YouTube URL as a positional argument",
+    "The agent did NOT ask for a research file or outline file (Mode B is the correct path here)",
+    "The agent reported the output directory path under Content-Hub-Vault-V2/09-Shorts/",
+    "The agent suggested /voice-cleanup as the next step"
+  ]
+}

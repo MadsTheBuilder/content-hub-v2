@@ -7,7 +7,7 @@ type: session_summary
 # Session: Phase 4a — `/cascade` Skill Build
 
 Implements: [[Chase_AI_System_Breakdown]] Phase 4a
-References: [[Current_Sprint]] | [[Local_First_Skill_Engine_Plan]] | [[marketing_brain]]
+References: [[Architecture_Building]] | [[Local_First_Skill_Engine_Plan]] | [[marketing_brain]]
 Modifies: `skills/cascade.py` | `prompts/cascade.md` | `.claude/skills/cascade/SKILL.md`
 
 ## What Was Done

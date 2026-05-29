@@ -7,7 +7,7 @@ type: session_summary
 # Session: Phase 3a + 3b — Hook & Outline Skills
 
 Implements: [[Phase 3a Hook Skill]] | [[Phase 3b Outline Skill]]
-References: [[marketing_brain]] | [[Chase_AI_System_Breakdown]] | [[Current_Sprint]]
+References: [[marketing_brain]] | [[Chase_AI_System_Breakdown]] | [[Architecture_Building]]
 Modifies: [[Local_First_Skill_Engine_Plan]]
 
 ## What Was Done

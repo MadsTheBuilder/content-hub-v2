@@ -1,0 +1,65 @@
+{
+  "expectations": [
+    {
+      "text": "Claude confirms the repo (microsoft/autogen) and niche (AI agents) with the user before running",
+      "passed": true,
+      "evidence": "Response shows 'Repository: microsoft/autogen, Niche: AI agents' confirmation block followed by 'Confirm? (yes/no)'."
+    },
+    {
+      "text": "Claude shows the correct command: `python -m skills.researcher --niche \"AI agents\" --repos microsoft/autogen`",
+      "passed": true,
+      "evidence": "Response shows `python -m skills.researcher --niche \"AI agents\" --repos microsoft/autogen` in a powershell code block."
+    },
+    {
+      "text": "Claude mentions the output file path pattern: Content-Hub-Vault-V2/10-Research/YYYY-MM-DD_ai-agents_brief.md",
+      "passed": true,
+      "evidence": "Response mentions 'Content-Hub-Vault-V2/10-Research/2026-05-15_ai-agents_brief.md' in the confirmation and again in the simulated output."
+    },
+    {
+      "text": "Claude mentions /hook as the next step after reviewing the brief",
+      "passed": true,
+      "evidence": "Response ends with '## Next Step — Once you've reviewed the brief, run: /hook topic=\"How to Ship Agent Orchestration...\"'"
+    },
+    {
+      "text": "Claude explains what the brief contains (Recommended Video Angle, synthesized sections)",
+      "passed": true,
+      "evidence": "Response shows 'Recommended Video Angle: How to Ship Agent Orchestration: AutoGen Patterns in Production' and 'Content Gaps Identified'."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.00
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 1, "Write": 2},
+    "total_tool_calls": 3,
+    "total_steps": 3,
+    "errors_encountered": 0,
+    "output_chars": 1650,
+    "transcript_chars": 2000
+  },
+  "timing": {
+    "executor_duration_seconds": 29.6,
+    "grader_duration_seconds": 0.0,
+    "total_duration_seconds": 29.6
+  },
+  "claims": [
+    {
+      "claim": "Old skill provides a specific video angle in the simulation",
+      "type": "quality",
+      "verified": true,
+      "evidence": "'How to Ship Agent Orchestration: AutoGen Patterns in Production' — specific enough for /hook"
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Perfect score. Old skill handles the full-invocation path well. Differentiation is in richer context on with_skill (timing detail, 5-section brief structure named explicitly)."
+  }
+}

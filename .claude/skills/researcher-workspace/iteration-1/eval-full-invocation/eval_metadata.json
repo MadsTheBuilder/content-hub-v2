@@ -1,0 +1,12 @@
+{
+  "eval_id": 3,
+  "eval_name": "eval-full-invocation",
+  "prompt": "research the microsoft/autogen repo, niche is AI agents",
+  "assertions": [
+    "Claude confirms the repo (microsoft/autogen) and niche (AI agents) with the user before running",
+    "Claude shows the correct command: `python -m skills.researcher --niche \"AI agents\" --repos microsoft/autogen`",
+    "Claude mentions the output file path pattern: Content-Hub-Vault-V2/10-Research/YYYY-MM-DD_ai-agents_brief.md",
+    "Claude mentions /hook as the next step after reviewing the brief",
+    "Claude explains what the brief contains (Recommended Video Angle, synthesized sections)"
+  ]
+}

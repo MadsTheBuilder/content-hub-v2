@@ -1,0 +1,45 @@
+﻿{
+  "skill_name": "title",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "/title",
+      "expected_output": "Skill should check Content-Hub-Vault-V2/06-Outlines/ for the most recent outline to extract a concept, or ask once for the concept. Then run python -m skills.title and produce 10 titles (5 Tier-1 + 5 Tier-2) with thumbnail text, saved to Content-Hub-Vault-V2/07-Titles/. Report the vault path and list all 5 Tier-1 titles inline.",
+      "files": [],
+      "expectations": [
+        "The agent handles missing concept gracefully — either reads from a recent outline file in Content-Hub-Vault-V2/06-Outlines/ or asks once for the video topic",
+        "The python -m skills.title command is executed with a quoted concept string",
+        "A vault file is created under Content-Hub-Vault-V2/07-Titles/",
+        "The response shows all 5 Tier-1 titles numbered in the chat",
+        "The response mentions the next step (cascade or short-form)"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "/title building a local RAG pipeline with pgvector and FastAPI — the mistakes I made scaling to 1M vectors",
+      "expected_output": "Uses the full concept string as-is. Runs python -m skills.title with the concept quoted. Produces 10 titles that are specific to RAG/pgvector/FastAPI, at least some reflecting the 'mistakes' angle. Saves vault file to 07-Titles/ and lists all 5 Tier-1 titles.",
+      "files": [],
+      "expectations": [
+        "The concept string is passed verbatim (or closely) to python -m skills.title without truncation",
+        "A vault file is created under Content-Hub-Vault-V2/07-Titles/",
+        "The response shows all 5 Tier-1 titles numbered in the chat",
+        "At least one Tier-1 or Tier-2 title reflects the 'mistakes' or 'lessons learned' angle",
+        "Titles are specific to the technology (pgvector, RAG, FastAPI) — not generic AI titles",
+        "Thumbnail text is included for each title in the vault file"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "/title fine-tuning LLMs on custom datasets — make all the Tier-1 titles question-format and all Tier-2 titles use the 'I trained X' structure",
+      "expected_output": "Handles the style constraint by appending it to the concept string before calling python -m skills.title. The resulting titles for 'fine-tuning LLMs' should honor the style notes where possible. Vault file created in 07-Titles/. All 5 Tier-1 titles listed inline.",
+      "files": [],
+      "expectations": [
+        "The style constraint is incorporated into the python call (appended to concept string or otherwise passed)",
+        "A vault file is created under Content-Hub-Vault-V2/07-Titles/",
+        "The response shows all 5 Tier-1 titles numbered in the chat",
+        "At least 3 of the 5 Tier-1 titles are in question-format (ending with '?')",
+        "The concept 'fine-tuning LLMs on custom datasets' is recognizable in the titles"
+      ]
+    }
+  ]
+}

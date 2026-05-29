@@ -1,0 +1,12 @@
+{
+  "eval_id": 2,
+  "eval_name": "specific-file-cleanup",
+  "prompt": "/voice-cleanup Content-Hub-Vault-V2/07-Short-Form/2026-05-15_ai-tools-arent-the-problem/instagram_caption.md",
+  "assertions": [
+    "Claude echoes the exact provided file path in its confirmation message",
+    "Claude documents running: python -m skills.voice_cleanup with the quoted file path argument",
+    "Claude describes saving output to instagram_caption_cleaned.md beside the original",
+    "Claude reports which AI provider handled the cleanup (claude / gemini / ollama)",
+    "Claude shows or describes a first-300-character preview of the cleaned output"
+  ]
+}

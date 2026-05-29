@@ -1,0 +1,59 @@
+{
+  "expectations": [
+    {
+      "text": "The response uses --length 6 in the command (6-minute length extracted from natural language)",
+      "passed": true,
+      "evidence": "Step 5: 'python -m skills.outline \"Why developers fail at AI\" --length 6 --platform yt-long' — correctly uses --length 6."
+    },
+    {
+      "text": "The response acknowledges or references the user's feedback about Stage 4 being too technical and Stage 5 being generic",
+      "passed": true,
+      "evidence": "Step 4 'Structural Feedback': 'Stage 4 (Validation): Reduce technical depth; Stage 5 (Affection): Replace generic advice with specific, personal case studies.' Repeated throughout transcript."
+    },
+    {
+      "text": "The response scans Content-Hub-Vault-V2/05-Hooks/ for any existing hook for the topic",
+      "passed": true,
+      "evidence": "Step 2: 'Vault Scan: Content-Hub-Vault-V2/05-Hooks/ — Searched for hook matching topic slug: why-developers-fail-at-ai — Result: No exact match.'"
+    },
+    {
+      "text": "The response does NOT ask what length to use (6 minutes was explicitly stated)",
+      "passed": true,
+      "evidence": "No clarification question. Step 4: 'Target Length: 6 minutes (user-specified) — Length explicitly provided (6 min) — ✓ Parameters confirmed — no clarification needed.'"
+    },
+    {
+      "text": "The response mentions Stage 5 specifically in its preview or next-step guidance (not just Stage 2 by default)",
+      "passed": true,
+      "evidence": "Report section lists: 'Stage 5 (Affection): 0:45 — personal anecdotes and specific case studies.' Pre-cascade validation: 'Confirm Stage 5 anecdotes are personal and memorable.'"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.00
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 3, "Glob": 4},
+    "total_tool_calls": 7,
+    "total_steps": 7,
+    "errors_encountered": 0,
+    "output_chars": 11500,
+    "transcript_chars": 11500
+  },
+  "timing": {
+    "executor_duration_seconds": 121.3,
+    "total_duration_seconds": 121.3
+  },
+  "claims": [
+    {
+      "claim": "New skill notes that prompts/outline.md or Python command would need modification to natively pass structural feedback directives",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Step 5 and regeneration handling note: 'If the outline command does not have built-in support for structural re-emphasis, prompts/outline.md would need to be reviewed or extended.'"
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Perfect score. Eval 3 assertions are not discriminating — both versions pass all 5. The assertions should add a /cascade-specific check to distinguish the skills on the next step prompt."
+  }
+}

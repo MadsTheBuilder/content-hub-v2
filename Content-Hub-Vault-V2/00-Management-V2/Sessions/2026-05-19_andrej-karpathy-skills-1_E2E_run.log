@@ -1,0 +1,43 @@
+
+[pipeline] Topic: andrej-karpathy-skills_1
+[pipeline] URLs:  https://github.com/multica-ai/andrej-karpathy-skills
+[pipeline] Slug:  2026-05-19_andrej-karpathy-skills-1
+
+============================================================
+[pipeline] 1/9 � Research
+============================================================
+Creating notebook: andrej-karpathy-skills_1 — YT Research
+Notebook ID: 78cda845-af9a-4c55-9166-80595d98a719
+Adding source: https://github.com/multica-ai/andrej-karpathy-skills
+Running primary-source pre-flight...
+  Adding primary source: https://github.com/karpathy/nanoGPT
+  Adding primary source: https://github.com/karpathy/llm.c
+  Adding primary source: https://github.com/karpathy/nanochat
+  Adding primary source: https://github.com/karpathy/micrograd
+  Adding primary source: https://github.com/karpathy/minGPT
+  Adding primary source: https://karpathy.ai/
+  Adding primary source: https://github.com/EurekaLabsAI
+  Adding primary source: https://arxiv.org/abs/1506.02078
+  8 primary source(s) added via scrape+search-backstop
+Waiting for all sources to process...
+Seeding questions from NotebookLM...
+Extracting analysis from NotebookLM (3 questions, budget 15)...
+  Asking: Summarize Karpathy's journey from PhD student to Director at Tesla.
+  Queued follow-up: Follow-up: CS 231n Enrollment Growth Source
+  Queued follow-up: Follow-up: ImageNet Human Baseline Result
+  Asking: Follow-up: CS 231n Enrollment Growth Source
+  Asking: Follow-up: ImageNet Human Baseline Result
+  Queued follow-up: Follow-up: Source Verification for Karpathy Baseline Numbers
+  Asking: Follow-up: Source Verification for Karpathy Baseline Numbers
+  Queued follow-up: Follow-up: Exact ILSVRC 2014 Error Rates
+  Asking: Follow-up: Exact ILSVRC 2014 Error Rates
+
+Research written: C:\Users\madhu\Claude cowork\Content Hub V2\Content-Hub-Vault-V2\10-Research\2026-05-19_andrej-karpathy-skills-1\research.md
+
+Done.
+Output directory: C:\Users\madhu\Claude cowork\Content Hub V2\Content-Hub-Vault-V2\10-Research\2026-05-19_andrej-karpathy-skills-1
+Notebook: andrej-karpathy-skills_1 — YT Research (78cda845-af9a-4c55-9166-80595d98a719)
+NIM meta/llama-3.1-70b-instruct failed: ReadTimeout: 
+NIM report picker failed: All providers failed. Last: ReadTimeout: 
+NIM meta/llama-3.1-70b-instruct failed: ReadTimeout: 
+NIM report picker failed: All providers failed. Last: ReadTimeout: 

@@ -1,0 +1,12 @@
+{
+  "eval_id": 2,
+  "eval_name": "topic-and-hook-path-specified",
+  "prompt": "/outline 'How to stop wasting time on AI tools that don't stick' --hook-path Content-Hub-Vault-V2/05-Hooks/2026-05-10_ai-tools-that-dont-stick.md --length 12",
+  "assertions": [
+    "The response does NOT ask for length or platform confirmation (both were already specified or are default)",
+    "The response includes a python -m skills.outline command with --hook-path and --length 12",
+    "The response checks Content-Hub-Vault-V2/10-Research/ for a research brief even though hook was explicit",
+    "The response previews Stage 2 (Captivation) section in its report",
+    "The response suggests /cascade as the next step"
+  ]
+}

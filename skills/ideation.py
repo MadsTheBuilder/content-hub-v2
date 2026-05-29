@@ -11,6 +11,8 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
 from skills.utils.ai import polish
+from skills.brief_loader import load_brief, apply_cli_overrides
+from skills.brief_args import add_brief_args
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +28,7 @@ def find_research_file(topic: str) -> Path | None:
         return None
 
     candidates = sorted(
-        [f for f in RESEARCH_DIR.glob("*.md") if f.name != ".gitkeep"],
+        [f for f in RESEARCH_DIR.glob("**/*.md") if f.name != ".gitkeep"],
         key=lambda f: f.stat().st_mtime,
         reverse=True,
     )
@@ -72,7 +74,10 @@ async def main():
     parser.add_argument("--topic", required=True, help="Topic / niche to ideate on (e.g. 'AI agents')")
     parser.add_argument("--research-file", default="", help="Path to a specific research .md file (optional)")
     parser.add_argument("--no-trends", action="store_true", help="Skip loading trending context")
+    add_brief_args(parser)
     args = parser.parse_args()
+    brief = load_brief()
+    brief = apply_cli_overrides(brief, args)
 
     # Load research notes
     if args.research_file:
@@ -89,6 +94,12 @@ async def main():
 
     print(f"📚 Research file: {research_path.name}")
     research_notes = research_path.read_text(encoding="utf-8", errors="ignore")
+
+    # Warn if research was run without primary sources
+    psc_match = re.search(r'^primary_sources_found:\s*(\d+)', research_notes, re.MULTILINE)
+    if psc_match and int(psc_match.group(1)) == 0:
+        print("[warn] Research file has 0 primary sources — findings rest on secondary commentary only")
+
     # Truncate to avoid token overflow; research files can be long
     research_notes = research_notes[:6000]
 

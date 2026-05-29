@@ -1,0 +1,12 @@
+{
+  "eval_id": 2,
+  "eval_name": "topic-plus-angle",
+  "prompt": "/title how I replaced my entire backend with Claude Code agents — the focus should be on cost savings and reduced headcount, not the technical how-to",
+  "assertions": [
+    "The agent passes the full concept + angle constraint string to python -m skills.title without truncating or separating them",
+    "The agent runs python -m skills.title without asking for confirmation",
+    "A vault file path under Content-Hub-Vault-V2/07-Titles/ is reported or a clear failure reason is given",
+    "At least one Tier-1 title in the output reflects a business/cost-savings or headcount-reduction angle",
+    "The response lists the 5 Tier-1 titles or documents failure clearly"
+  ]
+}

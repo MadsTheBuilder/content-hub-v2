@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "The agent ran the python -m skills.short_form command with --research-file and --outline-file arguments",
+      "passed": true,
+      "evidence": "Transcript Step 3: 'python -m skills.short_form --research-file \"Content-Hub-Vault-V2/10-Research/2026-05-12_ai_agents/research.md\" --outline-file \"Content-Hub-Vault-V2/06-Outlines/2026-05-12_ai-agents.md\" --title \"AI agents\"'"
+    },
+    {
+      "text": "The agent reported the output directory path under Content-Hub-Vault-V2/09-Shorts/",
+      "passed": true,
+      "evidence": "Final Response: 'Output location: Content-Hub-Vault-V2/09-Shorts/2026-05-12_ai-agents/'"
+    },
+    {
+      "text": "The agent showed the opening line of the 30s script verbatim",
+      "passed": true,
+      "evidence": "Final Response contains verbatim quote: '\"LLMs are shitty, unreliable general-purpose computers. Not your conversational partner. Your prompt *is* the program.\"'"
+    },
+    {
+      "text": "The agent suggested /voice-cleanup as the next step",
+      "passed": true,
+      "evidence": "Final Response: 'Next step: Use /voice-cleanup to process your recording once you\\'ve recorded these scripts.'"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 3, "Bash": 6, "Glob": 1, "Monitor": 1, "Write": 1},
+    "total_tool_calls": 12,
+    "total_steps": 6,
+    "errors_encountered": 0,
+    "output_chars": 4515
+  },
+  "timing": {
+    "executor_duration_seconds": 454.4,
+    "total_duration_seconds": 454.4
+  },
+  "claims": [
+    {
+      "claim": "Mode A was correctly identified (research+outline, not YouTube URL)",
+      "type": "process",
+      "verified": true,
+      "evidence": "Transcript confirms Mode A path, used --research-file and --outline-file flags"
+    },
+    {
+      "claim": "All 4 output files were created in the vault",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Step 5 confirms: 30s_script.md (963 bytes), 60s_script.md (1417 bytes), 90s_script.md (1780 bytes), README.md (379 bytes)"
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": ["NIM provider failed, fell back to Gemini 2.5 Flash"]
+  }
+}

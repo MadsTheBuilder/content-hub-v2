@@ -1,0 +1,16 @@
+{
+  "eval_id": 1,
+  "eval_name": "no-args-after-outline",
+  "skill_version": "new",
+  "expectations": [
+    {"text": "finds-both-files: Claude identifies both research brief (2026-05-12_ai-agents_brief.md) and outline (2026-05-12_ai-agents.md) by name", "passed": true, "evidence": "Step 2 shows explicit search results: Research: 2026-05-12_ai-agents_brief.md, Outline: 2026-05-12_ai-agents.md"},
+    {"text": "single-confirmation-step: Claude asks for confirmation exactly once", "passed": true, "evidence": "Step 4 shows single confirmation: 'Running cascade on: AI agents — research from 2026-05-12_ai-agents_brief.md, outline from 2026-05-12_ai-agents.md. Go?'"},
+    {"text": "filenames-in-confirmation: The confirmation message includes actual filenames", "passed": true, "evidence": "Confirmation explicitly names both files: 2026-05-12_ai-agents_brief.md and 2026-05-12_ai-agents.md"},
+    {"text": "correct-command-flags: Command uses --research-file and --outline-file flags", "passed": true, "evidence": "Step 5 command: python -m skills.cascade --research-file '...' --outline-file '...' --title 'AI agents'"},
+    {"text": "twitter-hook-preview: After-completion report previews the Twitter hook", "passed": true, "evidence": "Step 7 shows: 'Forget the conversational partner. Treat your LLM as a shitty, unreliable general-purpose computer...' (151 chars)"},
+    {"text": "video-link-reminder: Report mentions replacing [VIDEO_LINK] placeholder before posting", "passed": true, "evidence": "Step 7: 'Reminder: Replace [VIDEO_LINK] placeholder in twitter_thread.md and linkedin_post.md before posting.'"},
+    {"text": "next-step-suggestion: Report suggests /short-form as the next pipeline step", "passed": true, "evidence": "Step 7: 'Next step: Run /short-form to generate 3 short-form scripts from the same outline.'"}
+  ],
+  "pass_rate": 1.0,
+  "notes": "New skill excels at pipeline chaining — explicitly surfaces /short-form as next step and provides cleaner single-line confirmation with filenames."
+}

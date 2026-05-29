@@ -1,0 +1,26 @@
+{
+  "eval_name": "youtube-url-fallback / old_skill",
+  "execution_date": "2026-05-15",
+  "tool_calls": {
+    "Read": 3,
+    "Bash": 4,
+    "Write": 2
+  },
+  "total_tool_calls": 9,
+  "total_steps": 5,
+  "errors_encountered": 1,
+  "error_details": {
+    "type": "VideoUnavailable",
+    "message": "ERROR: [youtube] RpEblXjLxB0: Video unavailable",
+    "library": "yt_dlp",
+    "stage": "transcript_extraction"
+  },
+  "success": false,
+  "output_files_generated": 0,
+  "expected_output_files": 4,
+  "execution_mode": "Mode B (YouTube URL Fallback)",
+  "skill_integrity": "PASS",
+  "error_handling": "PASS",
+  "documentation_alignment": "PASS",
+  "notes": "Skill implementation is correct. Failure due to external factor (video unavailability), not skill logic."
+}

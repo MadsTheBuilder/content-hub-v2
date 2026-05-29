@@ -1,0 +1,187 @@
+{
+  "metadata": {
+    "skill_name": "outline",
+    "skill_path": ".claude/skills/outline/SKILL.md",
+    "executor_model": "claude-sonnet-4-6",
+    "analyzer_model": "claude-sonnet-4-6",
+    "timestamp": "2026-05-15T00:00:00Z",
+    "evals_run": [1, 2, 3],
+    "runs_per_configuration": 1
+  },
+
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "Hook approval — no explicit args",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.00,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 297.4,
+        "tokens": 49713,
+        "tool_calls": 6,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Scans 05-Hooks/ for topic match", "passed": true, "evidence": "Step 2: Found 2026-05-12_ai-agents.md"},
+        {"text": "Identifies hook 2 by number", "passed": true, "evidence": "Step 2: Hook #2 Selected (starred)"},
+        {"text": "Checks 10-Research/ for research brief", "passed": true, "evidence": "Step 3: Found 2026-05-12_ai-agents_brief.md"},
+        {"text": "Does NOT ask what topic to outline", "passed": true, "evidence": "Topic extracted directly in Step 1"},
+        {"text": "Command includes --hook-path", "passed": true, "evidence": "Step 5 command has --hook-path flag"},
+        {"text": "Suggests /cascade as next step", "passed": true, "evidence": "Step 7: 'run /cascade to generate blog post, LinkedIn, Twitter'"}
+      ],
+      "notes": ["First attempt timed out (stream idle at 371s). Retry succeeded at 297s."]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "Hook approval — no explicit args",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.833,
+        "passed": 5,
+        "failed": 1,
+        "total": 6,
+        "time_seconds": 58.1,
+        "tokens": 46755,
+        "tool_calls": 6,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Scans 05-Hooks/ for topic match", "passed": true, "evidence": "Step 2 vault scan found 2026-05-12_ai-agents.md"},
+        {"text": "Identifies hook 2 by number", "passed": true, "evidence": "Step 2: Hook 2 (starred) identified"},
+        {"text": "Checks 10-Research/ for research brief", "passed": true, "evidence": "Step 3 searches 10-Research/ and finds brief"},
+        {"text": "Does NOT ask what topic to outline", "passed": true, "evidence": "Topic extracted without asking"},
+        {"text": "Command includes --hook-path", "passed": true, "evidence": "Step 5 command includes --hook-path"},
+        {"text": "Suggests /cascade as next step", "passed": false, "evidence": "Ends with 'Then film — the outline is your shooting script.' No /cascade mentioned."}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "Topic + hook path specified explicitly",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.60,
+        "passed": 3,
+        "failed": 2,
+        "total": 5,
+        "time_seconds": 91.7,
+        "tokens": 50912,
+        "tool_calls": 6,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "No length or platform confirmation asked", "passed": false, "evidence": "Step 4 asks platform confirmation even though it's the default"},
+        {"text": "Command includes --hook-path and --length 12", "passed": false, "evidence": "Command drops --hook-path when file is missing; Python's load_hook() has its own fallback"},
+        {"text": "Checks 10-Research/ for research brief", "passed": true, "evidence": "Step 3 explicitly scans 10-Research/ and lists files"},
+        {"text": "Previews Stage 2 (Captivation) in report", "passed": true, "evidence": "Step 6 report includes Stage 2 Captivation placeholder"},
+        {"text": "Suggests /cascade as next step", "passed": true, "evidence": "Step 6: 'run /cascade to generate blog post, LinkedIn post, and Twitter thread'"}
+      ],
+      "notes": ["Regression: over-applies CLAUDE.md §1, asks platform confirmation for a default value. Also incorrectly drops --hook-path when file is missing — Python handles that fallback internally."]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "Topic + hook path specified explicitly",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.80,
+        "passed": 4,
+        "failed": 1,
+        "total": 5,
+        "time_seconds": 80.8,
+        "tokens": 48017,
+        "tool_calls": 12,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "No length or platform confirmation asked", "passed": true, "evidence": "Step 3: All parameters provided explicitly, no confirmation required"},
+        {"text": "Command includes --hook-path and --length 12", "passed": true, "evidence": "Step 4 command passes --hook-path through even though file doesn't exist"},
+        {"text": "Checks 10-Research/ for research brief", "passed": false, "evidence": "No research vault lookup; old skill jumps from hook check to parameter confirmation"},
+        {"text": "Previews Stage 2 (Captivation) in report", "passed": true, "evidence": "Step 5 includes Example Stage 2 Captivation preview with talking points"},
+        {"text": "Suggests /cascade as next step", "passed": true, "evidence": "Step 7: 'cascade it into short-form clips with /cascade'"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "Regenerate with structural feedback",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.00,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 121.3,
+        "tokens": 48175,
+        "tool_calls": 7,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Uses --length 6 in command (extracted from natural language)", "passed": true, "evidence": "Step 5: python -m skills.outline ... --length 6 — correctly extracts from '6 minutes'"},
+        {"text": "Acknowledges Stage 4 too technical + Stage 5 generic feedback", "passed": true, "evidence": "Step 4 Structural Feedback: Stage 4 reduce technical depth; Stage 5 replace generic advice with specific case studies"},
+        {"text": "Scans 05-Hooks/ for existing hook for topic", "passed": true, "evidence": "Step 2 Vault Scan: no exact match found for why-developers-fail-at-ai"},
+        {"text": "Does NOT ask what length (6 minutes explicitly stated)", "passed": true, "evidence": "No clarification question; Step 4 confirms parameters with no gaps"},
+        {"text": "Mentions Stage 5 specifically in preview or guidance", "passed": true, "evidence": "Report: Stage 5 (Affection): 0:45 — personal anecdotes and specific case studies"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "Regenerate with structural feedback",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.00,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 73.3,
+        "tokens": 45426,
+        "tool_calls": 5,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Uses --length 6 in command (extracted from natural language)", "passed": true, "evidence": "Step 4: python -m skills.outline ... --length 6"},
+        {"text": "Acknowledges Stage 4 too technical + Stage 5 generic feedback", "passed": true, "evidence": "Step 3: Stage 4 too technical → simplification; Stage 5 too generic → personal anecdote"},
+        {"text": "Scans 05-Hooks/ for existing hook for topic", "passed": true, "evidence": "Step 2: Search pattern: 05-Hooks/*why-developers-fail* — no match"},
+        {"text": "Does NOT ask what length (6 minutes explicitly stated)", "passed": true, "evidence": "No clarification question; length confirmed from user message"},
+        {"text": "Mentions Stage 5 specifically in preview or guidance", "passed": true, "evidence": "Next-step prompt: Stage 5 should land with a personal anecdote that feels earned"}
+      ],
+      "notes": []
+    }
+  ],
+
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 0.87, "stddev": 0.19, "min": 0.60, "max": 1.00},
+      "time_seconds": {"mean": 170.1, "stddev": 90.8, "min": 91.7, "max": 297.4},
+      "tokens": {"mean": 49600, "stddev": 1120, "min": 48175, "max": 50912}
+    },
+    "without_skill": {
+      "pass_rate": {"mean": 0.88, "stddev": 0.09, "min": 0.80, "max": 1.00},
+      "time_seconds": {"mean": 70.7, "stddev": 9.4, "min": 58.1, "max": 80.8},
+      "tokens": {"mean": 46733, "stddev": 1058, "min": 45426, "max": 48017}
+    },
+    "delta": {
+      "pass_rate": "-0.01",
+      "time_seconds": "+99.4",
+      "tokens": "+2867"
+    }
+  },
+
+  "notes": [
+    "Net pass rate: new skill 0.87 vs old skill 0.88 — marginal loss driven entirely by eval 2 regression.",
+    "Eval 1 is a clean win: new skill 6/6 vs old skill 5/6. The /cascade routing is the differentiator — old skill ends with 'Then film', new skill explicitly routes to /cascade.",
+    "Eval 2 regression: new skill over-applies §1 caution when hook file is missing. Asks platform confirmation for a default (unnecessary) and drops --hook-path from command (wrong — Python's load_hook() handles missing files internally). Fix: add explicit SKILL.md guidance: always pass --hook-path unchanged; defaults never need confirmation.",
+    "Eval 3 is a tie: both skills score 5/5 on regeneration with structural feedback. Evals.json feedback noted the assertions don't discriminate between skills here — both handle this case equally well.",
+    "Time overhead: new skill averages 170s vs old skill 70s. The eval 1 retry inflates this significantly (297s). Excluding the retry, new skill times are 91.7s and 121.3s — still slower than old skill (58s, 80s, 73s), but not dramatically so.",
+    "Recommendation: patch the eval 2 regression in SKILL.md before considering this an improvement. Add one sentence: 'Always pass --hook-path to Python unchanged — Python handles missing files via load_hook() fallback. Never ask for platform confirmation when the default applies.'"
+  ]
+}

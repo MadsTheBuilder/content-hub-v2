@@ -7,7 +7,7 @@ type: implementation_plan
 
 # Local-First Skill Engine — Build Plan for Content Hub V2
 
-References: [[2026-04-28_V2_Pivot_Local_First_Engine]] | [[context]] | [[Current_Sprint]]
+References: [[2026-04-28_V2_Pivot_Local_First_Engine]] | [[context]] | [[Architecture_Building]]
 
 ## Context
 
@@ -51,16 +51,16 @@ prompts/<name>.md                    ← Single source of truth for the prompt t
 
 ### Strip (delete from V2 — they reserve V1 for SaaS)
 
-| Path | Reason |
-|---|---|
-| `frontend/` | Next.js UI is SaaS-only. Local engine is Claude Code + vault. |
-| `remotion-service/` | Chase's "don't automate" zone. We stop at the script. |
-| `backend/content/renderer_video.py`, `renderer_slides.py`, `renderer_talking_head.py` | Same. These are the broken layer. |
-| `backend/content/storyboard.py` | Coupled to the dropped renderers. |
-| `backend/experiments/` (router + models) | A/B framework is a SaaS feature. |
-| `supabase/` migrations | Not running Supabase locally. |
-| `frontend/__tests__/` | Gone with frontend. |
-| `tmp/video-bug-report.md`, `tmp/video-notes.md` | Bug report belongs to V1's pipeline. |
+| Path                                                                                  | Reason                                                        |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| `frontend/`                                                                           | Next.js UI is SaaS-only. Local engine is Claude Code + vault. |
+| `remotion-service/`                                                                   | Chase's "don't automate" zone. We stop at the script.         |
+| `backend/content/renderer_video.py`, `renderer_slides.py`, `renderer_talking_head.py` | Same. These are the broken layer.                             |
+| `backend/content/storyboard.py`                                                       | Coupled to the dropped renderers.                             |
+| `backend/experiments/` (router + models)                                              | A/B framework is a SaaS feature.                              |
+| `supabase/` migrations                                                                | Not running Supabase locally.                                 |
+| `frontend/__tests__/`                                                                 | Gone with frontend.                                           |
+| `tmp/video-bug-report.md`, `tmp/video-notes.md`                                       | Bug report belongs to V1's pipeline.                          |
 
 ### Keep (core dependencies for the local engine)
 
@@ -242,4 +242,4 @@ The hook + outline skills are only as good as the Callaway extraction. One-time,
 - Custom dashboard / GUI (Claude Code IS the UI)
 
 ---
-[[Current_Sprint]] | [[context]] | [[CLAUDE]] | [[2026-04-28_V2_Pivot_Local_First_Engine]]
+[[Architecture_Building]] | [[context]] | [[CLAUDE]] | [[2026-04-28_V2_Pivot_Local_First_Engine]]

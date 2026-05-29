@@ -7,7 +7,7 @@ type: session_summary
 # Session: Phase 4b — `/short-form` Skill Build
 
 Implements: [[Chase_AI_System_Breakdown]] Phase 4b
-References: [[2026-04-29_Phase4a_Cascade_Skill]] | [[Current_Sprint]] | [[context]]
+References: [[2026-04-29_Phase4a_Cascade_Skill]] | [[Architecture_Building]] | [[context]]
 Modifies: [[09-Shorts]] (vault output target)
 
 ## What Was Done

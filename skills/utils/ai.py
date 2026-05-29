@@ -16,20 +16,23 @@ Usage:
 
 import asyncio
 import logging
+import os
 import sys
+import time
 from pathlib import Path
 
-# Add project root to path so we can import backend modules
+from dotenv import load_dotenv
+
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from backend.config import settings
+load_dotenv(PROJECT_ROOT / ".env")
 
 logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
-# Gemini client (reuses existing pattern from backend)
+# Gemini client
 # ---------------------------------------------------------------------------
 
 _genai_client = None
@@ -42,13 +45,14 @@ def _get_gemini():
         return _genai_client
     if _genai_failed:
         return None
-    if not settings.google_ai_studio_key:
+    api_key = os.getenv("GOOGLE_AI_STUDIO_KEY", "")
+    if not api_key:
         logger.warning("GOOGLE_AI_STUDIO_KEY not set — Gemini unavailable.")
         _genai_failed = True
         return None
     try:
         from google import genai
-        _genai_client = genai.Client(api_key=settings.google_ai_studio_key)
+        _genai_client = genai.Client(api_key=api_key)
         return _genai_client
     except Exception:
         logger.exception("Failed to create Gemini client.")
@@ -71,6 +75,33 @@ async def _gemini_generate(prompt: str, model: str = "gemini-2.5-flash") -> dict
     except Exception as e:
         logger.warning("Gemini %s failed: %s", model, e)
         return {"text": "", "success": False, "provider": f"gemini/{model}", "error": str(e)}
+
+
+async def _nim_generate(prompt: str, model: str = "meta/llama-3.1-70b-instruct") -> dict:
+    """Call NVIDIA NIM API (OpenAI-compatible)."""
+    api_key = os.getenv("NVIDIA_NIM_API_KEY", "")
+    if not api_key:
+        return {"text": "", "success": False, "provider": f"nim/{model}", "error": "NVIDIA_NIM_API_KEY not set"}
+    try:
+        import httpx
+        async with httpx.AsyncClient(timeout=15) as client:
+            response = await client.post(
+                "https://integrate.api.nvidia.com/v1/chat/completions",
+                headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+                json={"model": model, "messages": [{"role": "user", "content": prompt}], "max_tokens": 4096},
+            )
+            if response.status_code == 200:
+                data = response.json()
+                text = data["choices"][0]["message"]["content"]
+                return {"text": text, "success": True, "provider": f"nim/{model}"}
+            error_preview = response.text[:500] if response.text else "[no response body]"
+            logger.warning("NIM %s failed with HTTP %s: %s", model, response.status_code, error_preview)
+            return {"text": "", "success": False, "provider": f"nim/{model}", "error": f"HTTP {response.status_code}: {error_preview}"}
+    except Exception as e:
+        error_msg = f"{type(e).__name__}: {str(e)[:500]}"
+        logger.warning("NIM %s failed: %s", model, error_msg)
+        time.sleep(1)
+        return {"text": "", "success": False, "provider": f"nim/{model}", "error": error_msg}
 
 
 async def _ollama_generate(prompt: str, model: str = "gemma4:e4b") -> dict:
@@ -105,14 +136,15 @@ async def _claude_generate(prompt: str, model: str = "claude-sonnet-4-6") -> dic
     """Call Claude via CLI subprocess (works with Claude Pro, no API key needed)."""
     import sys
     exe = _find_claude_exe()
+    _env = {**__import__("os").environ, "PYTHONIOENCODING": "utf-8"}
     try:
         if sys.platform == "win32":
-            # On Windows, .cmd wrappers require shell=True to resolve correctly
             proc = await asyncio.create_subprocess_shell(
                 f'"{exe}" -p -',
                 stdin=asyncio.subprocess.PIPE,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
+                env=_env,
             )
         else:
             proc = await asyncio.create_subprocess_exec(
@@ -120,15 +152,17 @@ async def _claude_generate(prompt: str, model: str = "claude-sonnet-4-6") -> dic
                 stdin=asyncio.subprocess.PIPE,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
+                env=_env,
             )
         prompt_bytes = prompt.encode("utf-8")
         stdout, stderr = await asyncio.wait_for(proc.communicate(input=prompt_bytes), timeout=180)
-        text = stdout.decode().strip()
+        text = stdout.decode("utf-8", errors="replace").strip()
         if proc.returncode == 0 and text:
             return {"text": text, "success": True, "provider": "claude/cli"}
-        err = stderr.decode().strip() or f"exit code {proc.returncode}"
-        logger.warning("Claude CLI failed: %s", err)
-        return {"text": "", "success": False, "provider": "claude/cli", "error": err}
+        err_text = stderr.decode("utf-8", errors="replace").strip()
+        err = err_text or f"exit code {proc.returncode}"
+        logger.warning("Claude CLI failed (rc=%s): %s", proc.returncode, err[:500])
+        return {"text": "", "success": False, "provider": "claude/cli", "error": err[:500]}
     except asyncio.TimeoutError:
         return {"text": "", "success": False, "provider": "claude/cli", "error": "Timeout after 180s"}
     except FileNotFoundError:
@@ -142,14 +176,34 @@ async def _claude_generate(prompt: str, model: str = "claude-sonnet-4-6") -> dic
 # Main entry point
 # ---------------------------------------------------------------------------
 
+_ollama_up: bool | None = None
+
+async def _ollama_available() -> bool:
+    global _ollama_up
+    if _ollama_up is not None:
+        return _ollama_up
+    try:
+        import httpx
+        async with httpx.AsyncClient(timeout=2) as client:
+            r = await client.get("http://localhost:11434/api/tags")
+            _ollama_up = r.status_code == 200
+    except Exception:
+        _ollama_up = False
+    if not _ollama_up:
+        logger.info("Ollama not available at localhost:11434 — will skip in cascade")
+    return _ollama_up
+
+
 PROVIDER_MAP = {
+    "nim": _nim_generate,
     "gemini": _gemini_generate,
     "ollama": _ollama_generate,
     "claude": _claude_generate,
 }
 
 # Default cascade: try each in order until one succeeds
-DEFAULT_CASCADE = ["gemini", "ollama", "claude"]
+# Gemini dropped 2026-05-19 — hitting 503 UNAVAILABLE consistently. Claude takes its slot.
+DEFAULT_CASCADE = ["claude", "nim", "ollama"]
 
 
 async def generate(
@@ -184,6 +238,9 @@ async def generate(
     chain = cascade or DEFAULT_CASCADE
     last_error = ""
     for prov_name in chain:
+        if prov_name == "ollama" and not await _ollama_available():
+            last_error = "Ollama not running"
+            continue
         func = PROVIDER_MAP.get(prov_name)
         if not func:
             continue
@@ -205,10 +262,10 @@ async def generate(
 # ---------------------------------------------------------------------------
 
 async def draft(prompt: str) -> dict:
-    """Quick draft using cheapest available model (Ollama first, then Gemini lite)."""
-    return await generate(prompt, cascade=["ollama", "gemini"])
+    """Quick draft (Claude → NIM → Ollama)."""
+    return await generate(prompt, cascade=["claude", "nim", "ollama"])
 
 
 async def polish(prompt: str) -> dict:
-    """Premium polish using best available model (Claude first, then Gemini)."""
-    return await generate(prompt, cascade=["claude", "gemini"])
+    """Premium polish (Claude → NIM → Ollama)."""
+    return await generate(prompt, cascade=["claude", "nim", "ollama"])

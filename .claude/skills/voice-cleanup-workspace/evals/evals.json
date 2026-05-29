@@ -1,0 +1,43 @@
+{
+  "skill_name": "voice-cleanup",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "just finished /short-form and got my instagram caption script for the AI automation video. /voice-cleanup",
+      "expected_output": "Claude reads the SKILL.md, recognises no file path was provided, and proactively suggests the most likely Short-Form output path (Content-Hub-Vault-V2/07-Short-Form/<date>_<slug>/instagram_caption.md) rather than just asking for input generically. It asks a concrete 'clean this one?' question and explains it is the final step in the pipeline.",
+      "files": [],
+      "expectations": [
+        "Claude proposes a concrete likely file path from the Short-Form vault folder rather than a generic 'paste text or give me a path' prompt",
+        "Claude frames /voice-cleanup as the final step in the pipeline (step 7 of 7 or equivalent)",
+        "Claude does not attempt to run python -m skills.voice_cleanup without a file argument",
+        "Claude asks a yes/no confirmation question, not an open-ended input request"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "/voice-cleanup Content-Hub-Vault-V2/07-Short-Form/2026-05-15_ai-tools-arent-the-problem/instagram_caption.md",
+      "expected_output": "Claude confirms the specific file path, waits for confirmation, documents running python -m skills.voice_cleanup with the quoted file path, and reports the output _cleaned.md path plus a 300-character preview and the AI provider used.",
+      "files": [],
+      "expectations": [
+        "Claude echoes the exact provided file path in its confirmation message",
+        "Claude documents running: python -m skills.voice_cleanup with the quoted file path argument",
+        "Claude describes saving output to instagram_caption_cleaned.md beside the original",
+        "Claude reports which AI provider handled the cleanup (claude / gemini / ollama)",
+        "Claude shows or describes a first-300-character preview of the cleaned output"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "clean all the scripts in Content-Hub-Vault-V2/07-Short-Form/2026-05-15_ai-tools-arent-the-problem/ please",
+      "expected_output": "Claude recognises a batch/folder intent, describes listing .md files in the folder, confirms the list before proceeding, runs voice_cleanup on each file individually, and reports N files cleaned with all output paths listed.",
+      "files": [],
+      "expectations": [
+        "Claude recognises this as a batch folder request, not a single-file request",
+        "Claude describes listing or globbing *.md files in the specified folder",
+        "Claude asks for confirmation before processing, listing the files it found",
+        "Claude describes running cleanup on each file sequentially, not just one",
+        "Claude reports all output _cleaned.md paths, not just the first"
+      ]
+    }
+  ]
+}

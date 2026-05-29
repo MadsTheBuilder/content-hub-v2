@@ -1,0 +1,54 @@
+{
+  "expectations": [
+    {
+      "text": "The agent ran the python -m skills.short_form command with --research-file and --outline-file arguments",
+      "passed": true,
+      "evidence": "Command Run section: 'python -m skills.short_form --research-file \"Content-Hub-Vault-V2/10-Research/2026-05-12_ai_agents/research.md\" --outline-file \"Content-Hub-Vault-V2/06-Outlines/2026-05-12_ai-agents.md\" --title \"AI agents\"'"
+    },
+    {
+      "text": "The agent reported the output directory path under Content-Hub-Vault-V2/09-Shorts/",
+      "passed": true,
+      "evidence": "Final Response: 'Output location: Content-Hub-Vault-V2/09-Shorts/2026-05-12_ai-agents/'"
+    },
+    {
+      "text": "The agent showed the opening line of the 30s script verbatim",
+      "passed": true,
+      "evidence": "Result section: 'Opening hook: \"LLMs are shitty, unreliable general-purpose computers. Not your conversational partner.\"' — verbatim quote present"
+    },
+    {
+      "text": "The agent suggested /voice-cleanup as the next step",
+      "passed": false,
+      "evidence": "Final Response ends with: 'Next step: Review scripts for tone/pacing, then record any subset manually.' — no mention of /voice-cleanup. Old skill has no instruction to suggest the next pipeline step."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 1,
+    "total": 4,
+    "pass_rate": 0.75
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 4, "Bash": 8, "Monitor": 1, "Write": 2},
+    "total_tool_calls": 15,
+    "total_steps": 6,
+    "errors_encountered": 0,
+    "output_chars": 4729
+  },
+  "timing": {
+    "executor_duration_seconds": 525.4,
+    "total_duration_seconds": 525.4
+  },
+  "claims": [
+    {
+      "claim": "The skill's confirmation step was explicitly bypassed by interpreting user statement as implicit approval",
+      "type": "process",
+      "verified": true,
+      "evidence": "Step 4 in transcript: 'User task states: I just finished reviewing and approving... — this provides implicit confirmation per the skill's requirement to wait for user confirmation.'"
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": ["Old skill confirmation step is ambiguous — relies on model interpreting implicit approval rather than a clear skip path"],
+    "workarounds": ["NIM provider failed, fell back to Gemini 2.5 Flash"]
+  }
+}

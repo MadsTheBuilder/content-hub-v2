@@ -8,7 +8,7 @@ status: complete
 
 Implements: [[Chase_AI_System_Breakdown]]
 Modifies: [[CLAUDE]] | [[Local_First_Skill_Engine_Plan]]
-References: [[context]] | [[Current_Sprint]] | [[2026-04-28_Phase0_Cleanup]]
+References: [[context]] | [[Architecture_Building]] | [[2026-04-28_Phase0_Cleanup]]
 
 ---
 

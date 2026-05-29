@@ -1,0 +1,44 @@
+{
+  "skill": "title",
+  "purpose": "Frozen test inputs for /prompt-lab autoresearch loop. Hold constant across iterations so score deltas reflect prompt quality, not input variance.",
+  "topics": [
+    {
+      "topic": "How Claude's extended thinking mode changes debugging",
+      "outline_summary": "Stage 1: Hook on visible vs root cause analysis. Stage 2: Why traditional debugging limits you. Stage 3: What extended thinking reveals. Stage 4: Three real examples (backend latency, data loss, race condition). Stage 5: How to integrate into workflow. Stage 6: Future of AI-assisted debugging."
+    },
+    {
+      "topic": "The hidden costs of async/await in Rust",
+      "outline_summary": "Stage 1: Hook on production failures you can't see coming. Stage 2: Where Tokio tutorials fall short. Stage 3: Three costs nobody mentions. Stage 4: Deep dive: Future allocations, executor starvation, panic semantics with code. Stage 5: Detection patterns and fixes. Stage 6: When async is actually the wrong choice."
+    },
+    {
+      "topic": "Why local-first databases are finally winning",
+      "outline_summary": "Stage 1: Hook on instant + offline-first. Stage 2: Why cloud-only fails. Stage 3: What changed (WASM, CRDTs, replication). Stage 4: Architecture walk: SQLite WASM + Replicache + real-time sync. Stage 5: Migration path from cloud-only. Stage 6: Tradeoffs and limitations."
+    },
+    {
+      "topic": "Context switching as the productivity killer",
+      "outline_summary": "Stage 1: Hook on invisible cost measurement. Stage 2: Why time-boxing misses the point. Stage 3: Research: 15-25 min recovery per switch. Stage 4: Audit your day: calendar analysis, interrupt patterns, communication tools. Stage 5: Redesign workflows: batching, async-first, decision protocols. Stage 6: Team orchestration and protection."
+    },
+    {
+      "topic": "Building AI agent orchestration",
+      "outline_summary": "Stage 1: Hook on two agents easy, five agents chaos. Stage 2: Where current frameworks break. Stage 3: The composition problem. Stage 4: Architecture deep dive: state machines, message queues, supervisor patterns. Stage 5: Scaling from 2 to 10 agents. Stage 6: Debugging distributed agent systems."
+    },
+    {
+      "topic": "Benchmarking AI models on your use case",
+      "outline_summary": "Stage 1: Hook on MMLU vs your reality. Stage 2: Why synthetic evals lie. Stage 3: Eval design principles. Stage 4: Step-by-step: define test set, create rubric, test Claude vs alternatives. Stage 5: Cost analysis and tradeoff scoring. Stage 6: Monitoring production performance."
+    },
+    {
+      "topic": "Economics of local LLM vs cloud",
+      "outline_summary": "Stage 1: Hook on cost confusion. Stage 2: Hidden variables (latency, fine-tuning, ops). Stage 3: Spreadsheet model: hardware, compute, bandwidth, team time. Stage 4: Three case studies: indie hackers, startups, enterprises. Stage 5: Breakeven calculation for your setup. Stage 6: Future cost curves and inflection points."
+    },
+    {
+      "topic": "Fitness through optionality-based systems",
+      "outline_summary": "Stage 1: Hook on why rigid schedules fail. Stage 2: Willpower is unreliable. Stage 3: Optionality principle. Stage 4: System design: activity buffet, intensity scaling, micro-commitments. Stage 5: Your personal design walkthrough. Stage 6: Maintaining long-term without burnout."
+    }
+  ],
+  "model_settings": {
+    "temperature": 0.7,
+    "max_tokens": 2000,
+    "seed": 42
+  },
+  "notes": "8 topics with condensed outline summaries (5-8 lines each, matching Dopamine Ladder stages). Tests whether title.py generates titles that are both specific to the outline AND competitive against benchmark titles."
+}

@@ -15,7 +15,7 @@ You are a vertical video scriptwriter specializing in AI tools and developer pro
 - No rhetorical questions as hooks. Open with a statement or a contrarian take.
 - The hook is the first 3-4 seconds — it must stop the scroll. State the payoff immediately.
 
-**Task:** Convert the YouTube video transcript below into a 30-second vertical video script. Target word count: 75-90 words spoken (at natural pace ≈ 150 wpm).
+**Task:** Convert the source content below into a 30-second vertical video script. The source may be a YouTube transcript, or our own research notes and video outline — treat it as the authoritative content. Target word count: 75-90 words spoken (at natural pace ≈ 150 wpm).
 
 **Input:**
 - Transcript: {transcript}
@@ -54,7 +54,7 @@ You are a vertical video scriptwriter specializing in AI tools and developer pro
 - No rhetorical questions as hooks. Open with a statement or a contrarian take.
 - The hook is the first 3-4 seconds — it must stop the scroll. State the payoff immediately.
 
-**Task:** Convert the YouTube video transcript below into a 60-second vertical video script. Target word count: 150-180 words spoken (at natural pace ≈ 150 wpm).
+**Task:** Convert the source content below into a 60-second vertical video script. The source may be a YouTube transcript, or our own research notes and video outline — treat it as the authoritative content. Target word count: 150-180 words spoken (at natural pace ≈ 150 wpm).
 
 **Input:**
 - Transcript: {transcript}
@@ -94,7 +94,7 @@ You are a vertical video scriptwriter specializing in AI tools and developer pro
 - No rhetorical questions as hooks. Open with a statement or a contrarian take.
 - The hook is the first 3-4 seconds — it must stop the scroll. State the payoff immediately.
 
-**Task:** Convert the YouTube video transcript below into a 90-second vertical video script. Target word count: 225-270 words spoken (at natural pace ≈ 150 wpm).
+**Task:** Convert the source content below into a 90-second vertical video script. The source may be a YouTube transcript, or our own research notes and video outline — treat it as the authoritative content. Target word count: 225-270 words spoken (at natural pace ≈ 150 wpm).
 
 **Input:**
 - Transcript: {transcript}

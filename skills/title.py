@@ -7,127 +7,68 @@ Output:
     Prints the path to the written vault file.
 """
 
+import asyncio
 import json
 import re
-import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
 
+PROJECT_ROOT = Path(__file__).parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+
 from dotenv import load_dotenv
+from skills.utils.ai import generate
+from skills.brief_loader import load_brief
 
-# Load .env to make env vars available
-load_dotenv()
+load_dotenv(PROJECT_ROOT / ".env")
 
-
-def find_project_root() -> Path:
-    """Walk up from __file__ until we find a directory with 'skills/' and 'prompts/'."""
-    current = Path(__file__).resolve().parent
-    while current != current.parent:
-        if (current / "skills").exists() and (current / "prompts").exists():
-            return current
-        current = current.parent
-    # Fallback: assume parent of skills/
-    return Path(__file__).resolve().parent.parent
+VAULT_DIR = PROJECT_ROOT / "Content-Hub-Vault-V2" / "07-Titles"
+TITLES_DATA = PROJECT_ROOT / "skills" / "data" / "competitor_titles.json"
+PROMPT_PATH = PROJECT_ROOT / "prompts" / "title.md"
 
 
-def generate_titles(concept: str) -> str:
-    """Generate YouTube titles for a concept using Claude.
+async def generate_titles(concept: str) -> str:
+    """Generate YouTube titles for a concept using the AI cascade.
 
-    Args:
-        concept: The video concept string
-
-    Returns:
-        The generated titles output from Claude
-
-    Raises:
-        RuntimeError: If Claude CLI call fails
+    Returns the generated titles text.
+    Raises RuntimeError on failure.
     """
-    project_root = find_project_root()
-
-    # Load competitor titles
-    titles_path = project_root / "skills" / "data" / "competitor_titles.json"
-    with open(titles_path, "r", encoding="utf-8") as f:
+    with open(TITLES_DATA, "r", encoding="utf-8") as f:
         all_titles = json.load(f)
 
-    # Take top 30
     top_30 = all_titles[:30]
-
-    # Format as numbered list
     formatted_list = "\n".join(
         f"{i}. \"{entry['title']}\" — {entry['view_count']:,} views (@{entry['channel']})"
         for i, entry in enumerate(top_30, start=1)
     )
 
-    # Load prompt template
-    prompt_path = project_root / "prompts" / "title.md"
-    prompt_template = prompt_path.read_text(encoding="utf-8")
-
-    # Replace placeholders
+    prompt_template = PROMPT_PATH.read_text(encoding="utf-8")
     prompt_text = prompt_template.replace("{competitor_titles}", formatted_list).replace("{concept}", concept)
 
-    # Call Claude CLI via subprocess.
-    # shell=True lets Windows find claude.cmd (npm wrapper) without needing
-    # the npm bin dir explicitly on PATH.
-    try:
-        result = subprocess.run(
-            "claude -p -",
-            input=prompt_text,
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
-            timeout=180,
-            shell=True,
-        )
-        if result.returncode != 0:
-            raise RuntimeError(f"Claude CLI failed (exit {result.returncode}): {result.stderr.strip()}")
-        output = result.stdout.strip()
-        if not output:
-            raise RuntimeError("Claude CLI returned empty output")
-        return output
-    except subprocess.TimeoutExpired:
-        raise RuntimeError("Claude CLI call timed out after 180 seconds")
+    # Import the generate function with custom cascade fallback
+    from skills.utils.ai import generate
+    result = await generate(prompt_text, cascade=["claude", "nim", "ollama"])
+    if not result["success"] or not result["text"].strip():
+        raise RuntimeError(f"Title generation failed: {result.get('error', 'Empty response')}")
+    return result["text"].strip()
 
 
 def write_vault(concept: str, output: str) -> Path:
-    """Write generated titles to the vault.
-
-    Args:
-        concept: The original video concept
-        output: The generated titles output
-
-    Returns:
-        Path to the written file
-    """
-    project_root = find_project_root()
-
-    # Create slug from concept
+    """Write generated titles to the vault."""
     slug = re.sub(r"[^a-z0-9]+", "-", concept.lower()).strip("-")[:50]
-
-    # Create date string
     date_str = datetime.now().strftime("%Y-%m-%d")
-
-    # Create output directory
-    out_dir = project_root / "Content-Hub-Vault-V2" / "07-Titles"
-    out_dir.mkdir(parents=True, exist_ok=True)
-
-    # Build output path
-    path = out_dir / f"{date_str}_{slug}.md"
-
-    # Write file with frontmatter
-    content = f"""---
-concept: {concept}
-date: {date_str}
----
-
-{output}
-"""
-    path.write_text(content, encoding="utf-8")
+    VAULT_DIR.mkdir(parents=True, exist_ok=True)
+    path = VAULT_DIR / f"{date_str}_{slug}.md"
+    path.write_text(f"---\nconcept: {concept}\ndate: {date_str}\n---\n\n{output}\n", encoding="utf-8")
     return path
 
 
-def main():
-    """Main entry point for CLI usage."""
+async def _main() -> None:
     if len(sys.argv) < 2:
         print("Usage: python -m skills.title \"video concept\"")
         sys.exit(1)
@@ -135,7 +76,7 @@ def main():
     concept = sys.argv[1]
 
     try:
-        output = generate_titles(concept)
+        output = await generate_titles(concept)
         path = write_vault(concept, output)
         print(str(path))
     except RuntimeError as e:
@@ -144,6 +85,10 @@ def main():
     except Exception as e:
         print(f"Unexpected error: {e}", file=sys.stderr)
         sys.exit(1)
+
+
+def main():
+    asyncio.run(_main())
 
 
 if __name__ == "__main__":

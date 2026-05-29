@@ -7,7 +7,7 @@ type: session_summary
 # Session: Phase 2 — Ideation Skill
 
 Implements: [[Phase2_Ideation_Skill]]
-References: [[Current_Sprint]] | [[Local_First_Skill_Engine_Plan]] | [[context]]
+References: [[Architecture_Building]] | [[Local_First_Skill_Engine_Plan]] | [[context]]
 Modifies: [[02-Ideas]] (vault output dir created)
 
 ## What Was Done

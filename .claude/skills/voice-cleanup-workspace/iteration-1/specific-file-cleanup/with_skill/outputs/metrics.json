@@ -1,0 +1,47 @@
+{
+  "skill": "voice-cleanup",
+  "execution_mode": "specific-file-cleanup",
+  "file_path": "Content-Hub-Vault-V2/07-Short-Form/2026-05-15_ai-tools-arent-the-problem/instagram_caption.md",
+  "user_prompt": "/voice-cleanup Content-Hub-Vault-V2/07-Short-Form/2026-05-15_ai-tools-arent-the-problem/instagram_caption.md",
+  "tool_calls": {
+    "Read": 1,
+    "Bash": 1,
+    "Write": 1
+  },
+  "total_tool_calls": 3,
+  "total_steps": 5,
+  "steps_breakdown": [
+    "Read skill file",
+    "Send confirmation message",
+    "Wait for user confirmation",
+    "Execute python -m skills.voice_cleanup command",
+    "Report cleaned file path, preview, and provider"
+  ],
+  "files_created": [
+    "transcript.md"
+  ],
+  "errors_encountered": 0,
+  "output_format": {
+    "type": "markdown",
+    "cleaned_file_stem": "instagram_caption_cleaned.md",
+    "preview_chars": 300
+  },
+  "simulation_details": {
+    "vault_file_exists": false,
+    "command_simulated": "python -m skills.voice_cleanup \"Content-Hub-Vault-V2/07-Short-Form/2026-05-15_ai-tools-arent-the-problem/instagram_caption.md\"",
+    "output_location": "beside original as {stem}_cleaned.md",
+    "ai_provider": "claude",
+    "voice_profile_source": "Content-Hub-Vault-V2/01-Knowledge/voice_profile.md",
+    "pipeline_position": "step-7-of-7"
+  },
+  "character_counts": {
+    "transcript_chars": 3847,
+    "confirmation_message_chars": 312,
+    "preview_chars": 300,
+    "final_report_chars": 892,
+    "total_output_chars": 4941
+  },
+  "timestamp": "2026-05-15T00:00:00Z",
+  "model_routing": "claude-first (premium polish)",
+  "success": true
+}

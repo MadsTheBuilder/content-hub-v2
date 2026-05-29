@@ -1,0 +1,14 @@
+{
+  "eval_id": 1,
+  "eval_name": "no-args-after-researcher",
+  "prompt": "I just ran /researcher on 'Why most creators quit before 1000 subscribers' and got a research brief. Ready to write hooks now. /hook",
+  "assertions": [
+    "The skill confirms the topic 'Why most creators quit before 1000 subscribers' before running without asking the user to re-state it",
+    "The confirmation message includes the default platform (yt-long) and format (medium)",
+    "The skill constructs a python -m skills.hook command with the topic as an argument",
+    "The output reports a vault file path under Content-Hub-Vault-V2/05-Hooks/",
+    "The ⭐ recommended hook's Spoken Line is previewed in the final response",
+    "The response suggests /outline as the next step with a --hook-path argument",
+    "The skill response explicitly references the pipeline position or the researcher-to-hook transition (e.g. step 2, or researcher → hook → outline)"
+  ]
+}

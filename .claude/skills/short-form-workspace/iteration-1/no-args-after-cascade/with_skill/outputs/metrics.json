@@ -1,0 +1,18 @@
+{
+  "tool_calls": {
+    "Read": 4,
+    "Glob": 2,
+    "Bash": 1,
+    "PowerShell": 3,
+    "Monitor": 1,
+    "TaskStop": 1
+  },
+  "total_tool_calls": 12,
+  "total_steps": 6,
+  "errors_encountered": 1,
+  "error_details": "PowerShell syntax error in first attempt (empty pipe element) — fixed in second call",
+  "success": true,
+  "output_files_created": 5,
+  "execution_time_ms": "~45000",
+  "provider_used": "gemini-2.5-flash (NIM fallback failed)"
+}

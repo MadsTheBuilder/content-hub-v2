@@ -7,7 +7,7 @@ status: Complete
 # Session Log: Phase 4c — `/voice-cleanup`
 
 Implements: [[Phase4c_VoiceCleanup]]
-References: [[Current_Sprint]] | [[voice_profile]] | [[2026-04-29_Phase4a_Cascade_Skill]] | [[2026-04-29_Phase4b_ShortForm_Skill]]
+References: [[Architecture_Building]] | [[voice_profile]] | [[2026-04-29_Phase4a_Cascade_Skill]] | [[2026-04-29_Phase4b_ShortForm_Skill]]
 Modifies: [[skills/voice_cleanup.py]] | [[prompts/voice_cleanup.md]] | [[.claude/skills/voice-cleanup/SKILL.md]]
 
 ---

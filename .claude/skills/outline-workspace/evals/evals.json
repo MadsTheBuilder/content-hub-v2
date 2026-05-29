@@ -1,0 +1,45 @@
+{
+  "skill_name": "outline",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Hook 2 looks perfect — let's build the outline now. The topic was 'AI agents for non-coders'.",
+      "expected_output": "Claude scans the Hooks vault for the matching hook file, confirms which hook it's using (hook 2), checks for a matching research brief in the Research vault, confirms default parameters (8 min, yt-long), runs the outline command, reports the vault path, previews Stage 2, and suggests /cascade as next step.",
+      "files": [],
+      "expectations": [
+        "The response scans Content-Hub-Vault-V2/05-Hooks/ for a file matching the 'AI agents for non-coders' topic",
+        "The response identifies that hook 2 specifically was requested and uses or references that hook number",
+        "The response checks Content-Hub-Vault-V2/10-Research/ for a matching research brief",
+        "The response does NOT ask what topic to outline (topic was already given in the message)",
+        "The response includes a python -m skills.outline command with --hook-path parameter",
+        "The response suggests /cascade as the next step after outline review"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "/outline 'How to stop wasting time on AI tools that don't stick' --hook-path Content-Hub-Vault-V2/05-Hooks/2026-05-10_ai-tools-that-dont-stick.md --length 12",
+      "expected_output": "Claude uses the explicit hook path and 12-minute length, still checks for a research brief, does NOT ask for parameter confirmation since they were specified, runs the command with all three parameters, reports the vault path, previews Stage 2 (Captivation), and suggests /cascade.",
+      "files": [],
+      "expectations": [
+        "The response does NOT ask for length or platform confirmation (both were already specified or are default)",
+        "The response includes a python -m skills.outline command with --hook-path and --length 12",
+        "The response checks Content-Hub-Vault-V2/10-Research/ for a research brief even though hook was explicit",
+        "The response previews Stage 2 (Captivation) section in its report",
+        "The response suggests /cascade as the next step"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "The last outline was way too heavy on the technical stuff in Stage 4 and Stage 5 felt generic. Can we redo the outline for 'Why developers fail at AI' at 6 minutes? Make Stage 5 more personal and specific.",
+      "expected_output": "Claude acknowledges the regeneration request with the user's feedback, locates any existing hook for the topic, runs with 6-minute length, explicitly notes that Stage 5 should be personal/specific (not generic), previews Stage 5 in its report, and suggests /cascade.",
+      "files": [],
+      "expectations": [
+        "The response uses --length 6 in the command (6-minute length extracted from natural language)",
+        "The response acknowledges or references the user's feedback about Stage 4 being too technical and Stage 5 being generic",
+        "The response scans Content-Hub-Vault-V2/05-Hooks/ for any existing hook for the topic",
+        "The response does NOT ask what length to use (6 minutes was explicitly stated)",
+        "The response mentions Stage 5 specifically in its preview or next-step guidance (not just Stage 2 by default)"
+      ]
+    }
+  ]
+}

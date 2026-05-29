@@ -1,0 +1,13 @@
+{
+  "eval_id": 1,
+  "eval_name": "no-args-after-hook-approval",
+  "prompt": "Hook 2 looks perfect — let's build the outline now. The topic was 'AI agents for non-coders'.",
+  "assertions": [
+    "The response scans Content-Hub-Vault-V2/05-Hooks/ for a file matching the 'AI agents for non-coders' topic",
+    "The response identifies that hook 2 specifically was requested and uses or references that hook number",
+    "The response checks Content-Hub-Vault-V2/10-Research/ for a matching research brief",
+    "The response does NOT ask what topic to outline (topic was already given in the message)",
+    "The response includes a python -m skills.outline command with --hook-path parameter",
+    "The response suggests /cascade as the next step after outline review"
+  ]
+}

@@ -1,238 +1,235 @@
 ---
-status: Active
-sprint: "Chase AI System — Full Build"
-created: "2026-04-29"
-description: "Task list derived from [[Chase_AI_System_Breakdown]]. This is the canonical plan. Ignore any older task lists in V1 vault."
+date: 2026-05-15
+updated: 2026-05-22 (session 2)
+tags: [sprint, tasks]
+description: "Active sprint tasks for Content Hub V2 — tracks completed, in-progress, and next-up work items with links to session logs."
 ---
 
-# Current Sprint: Chase AI Content System
-
-> Source of truth: [[Chase_AI_System_Breakdown]] (`00-Management-V2/Plans/Chase_AI_System_Breakdown.md`).
-> All phases and order come from that document. Do not reconcile with V1 task lists.
-
----
-
-## Status Overview
-
-| # | Phase | Status |
-|---|-------|--------|
-| 1 | Phase 0b — GitHub Trending Script | ✅ Done |
-| 2 | Phase 1 — YT Pipeline Skill | ✅ Done — [[2026-04-29_YT_Pipeline_Skill]] |
-| 2 | Callaway Ingestion (via YT Pipeline) | ✅ Done — marketing_brain.md written |
-| 3 | Phase 4a — Content Cascade (`/cascade`) | ✅ Done — [[2026-04-29_Phase4a_Cascade_Skill]] |
-| 3 | Phase 4b — Short Form (`/short-form`) | ✅ Done — [[2026-04-29_Phase4b_ShortForm_Skill]] |
-| 3 | Phase 4c — Voice Cleanup (`/voice-cleanup`) | ✅ Done — [[2026-04-30_Phase4c_VoiceCleanup_Skill]] |
-| 4 | Phase 2 — Ideation Skill (`/ideation`) | ✅ Done — [[2026-04-30_Phase2_Ideation_Skill]] |
-| 5 | Phase 3a — Hook Skill (`/hook`) | ✅ Done — [[2026-05-06_Phase3a_3b_Hook_Outline_Skills]] |
-| 5 | Phase 3b — Outline Skill (`/outline`) | ✅ Done — [[2026-05-06_Phase3a_3b_Hook_Outline_Skills]] |
-| 5 | Phase 3c — Title Skill (`/title`) | ✅ Done — [[2026-05-07_Phase3c_Title_Skill]] |
-| 6 | Phase 0a — Twitter Scraping Web App | 🟡 In progress — data layer done; actor on hold |
-
-**Status legend:** `[ ]` not started · `[~]` in progress · `[x]` complete · `[!]` blocked
-
----
-
-## Inputs Needed From You
-
-- [x] Callaway YouTube channel link + ~10 specific video URLs → unblocks Callaway Ingestion, `/hook`, `/outline`
-  - Channel: https://www.youtube.com/@kallawaymarketing
-  - Top 10 by views (fetched 2026-04-29):
-    1. 921,838 views — [Social Media Isn't Hard. It's Misunderstood.](https://www.youtube.com/watch?v=h_yQswsXwhY) (2025-04-23)
-    2. 659,779 views — [Give me 15 mins, and I'll make your hooks impossible to skip](https://www.youtube.com/watch?v=2byPP_9F0-Q) (2025-07-03)
-    3. 440,302 views — [How to Become a Storytelling Genius (Dopamine Ladders)](https://www.youtube.com/watch?v=jtmstMt4WLc) (2025-11-20)
-    4. 374,510 views — [Social Media Is About to Change Forever](https://www.youtube.com/watch?v=Vcqgw5zWtDQ) (2025-06-26)
-    5. 270,751 views — [How Social Media Algorithms Actually Work (And How to Beat Them)](https://www.youtube.com/watch?v=8cQidXgtGmU) (2026-03-25)
-    6. 244,699 views — [You're Not Ready for the Next Phase of Social Media](https://www.youtube.com/watch?v=XxzV82GNolg) (2025-10-09)
-    7. 198,456 views — [Game Theory Is The Cheat Code to Social Media](https://www.youtube.com/watch?v=o2nP0lfIsso) (2025-08-21)
-    8. 172,419 views — [The ONLY 6 Words You Need to Hook ANY Viewer](https://www.youtube.com/watch?v=S9FlxFv9dxg) (2025-10-01)
-    9. 128,207 views — [How to Build a Cult-Like Personal Brand on Social Media](https://www.youtube.com/watch?v=auPtvaoibgk) (2025-08-13)
-   10. 105,267 views — [How to Create Irresistible Thumbnails](https://www.youtube.com/watch?v=Iqy644uOOqM) (2025-05-21)
-- [x] Your historical title + view count data → unblocked via competitor channel scrape (@nateherk + @Chase-H-AI, 40 titles in `skills/data/competitor_titles.json`)
-- [x] Voice profile seed: 10–20 lines on your tone, phrases to avoid → unblocks `/voice-cleanup`
-- [ ] Apify API key + Telegram bot token + Grok API key + Twitter API credentials → unblocks Phase 0a
-
----
-
-## Phase 0b — GitHub Trending Script ✅ DONE
-
-Fountainhead #2. Daily script → top 10 trending AI repos + Claude's pick → written to Obsidian vault.
-
-- [x] Script written: `github_trending.py`
-- [x] Pulls top 10 trending repos (last 7 days) + top 5 for month
-- [x] Claude's daily pick with reasoning
-- [x] Output written to `Content-Hub-Vault/04-Trends/`
-- [x] Scheduling: set up via Windows Task Scheduler or run manually each morning
-
-Session log: [[2026-04-29_GitHub_Trending_Script]]
-
----
-
-## Phase 1 — YT Pipeline Skill (Priority 2 — build next)
-
-Core research primitive. One slash command: topic → NotebookLM analysis → Obsidian vault.
-
-### Setup: `notebooklm-py`
-- [x] Clone `notebooklm-py` repo (CLI wrapper for NotebookLM API)
-- [x] Install and confirm `notebooklm-py` works: pass a YouTube URL, get analysis back
-
-### Skill: `/yt-pipeline`
-- [x] `prompts/yt_pipeline.md` — sourcing + analysis prompt
-- [x] `skills/yt_pipeline.py` — calls `notebooklm-py` as subprocess, writes to vault
-- [x] `.claude/skills/yt-pipeline/SKILL.md` — slash command entry
-- [x] Smoke test: search mode confirmed working (yt-dlp → numbered results)
-
----
-
-## Callaway Ingestion — One-Time Setup (Priority 2, runs after YT Pipeline)
-
-Feeds Callaway's craft into Obsidian so `/hook`, `/outline`, `/title` can reference it.
-
-- [x] URLs provided — top 10 by view count, fetched 2026-04-29 (see Inputs section above)
-- [x] Run `/yt-pipeline` on ~10 Callaway URLs
-- [x] NotebookLM extracts: hook patterns, pacing rules, title formulas, outline logic, voice markers
-- [x] Output lands in vault as `Content-Hub-Vault/01-Knowledge/callaway_hooks.md`, `callaway_titles.md`, etc.
-- [x] Manual review pass (you edit the extraction)
-
----
-
-## Phase 4a — Content Cascade `/cascade` (Priority 3) ✅ DONE
-
-YouTube video → blog post + Twitter thread + LinkedIn. One command, three platforms.
-
-- [x] `prompts/cascade.md` — voice-tuned, 3 sections (blog / Twitter / LinkedIn), banned phrases embedded
-- [x] `skills/cascade.py` — YouTube URL → yt_dlp transcript → AI router → 3 platform outputs
-- [x] `.claude/skills/cascade/SKILL.md` — slash command entry
-- [x] Smoke test: Kallaway top video → 4 files in `Content-Hub-Vault-V2/08-Distribution/2026-04-29_social-media-isnt-hard-its-misunderstood/`
-
-Session log: [[2026-04-29_Phase4a_Cascade_Skill]]
-
----
-
-## Phase 4b — Short Form `/short-form` (Priority 3) ✅ DONE
-
-Long-form transcript → 3 vertical scripts (30 / 60 / 90 sec). Re-scripted for format, not clipped.
-
-- [x] `prompts/short_form.md`
-- [x] `skills/short_form.py` — reads transcript/outline from vault
-- [x] `.claude/skills/short-form/SKILL.md`
-- [x] Smoke test: 3 scripts at 30/60/90s in `Content-Hub-Vault-V2/09-Shorts/`
-
-Session log: [[2026-04-29_Phase4b_ShortForm_Skill]]
-
----
-
-## Phase 4c — Voice Cleanup `/voice-cleanup` (Priority 3) ✅ DONE
-
-De-AI'ify any skill output. Run after any other skill.
-
-- [x] `prompts/voice_cleanup.md` — consolidated banned patterns + positive voice markers
-- [x] `skills/voice_cleanup.py` — file or stdin mode, Claude-first, saves `_cleaned.md`
-- [x] `.claude/skills/voice-cleanup/SKILL.md` — covers file/stdin/post-cascade workflows
-- [x] Smoke test: paste AI text in → clean human-sounding version out, no "Let's dive in" or "it's not X it's Y"
-
-Session log: [[2026-04-30_Phase4c_VoiceCleanup_Skill]]
-
----
-
-## Phase 2 — Ideation Skill `/ideation` (Priority 4)
-
-Reads Obsidian research → returns ~9 ranked video ideas with competitive reasoning.
-
-- [x] `prompts/ideation.md` — gap analysis, performance outliers, audience desire map
-- [x] `skills/ideation.py` — reads vault research notes for the topic
-- [x] `.claude/skills/ideation/SKILL.md`
-- [x] `Content-Hub-Vault-V2/02-Ideas/` — vault output directory created
-- [x] Live smoke test: invoke after a YT Pipeline run → 9 ranked ideas written to vault
-
-Session log: [[2026-04-30_Phase2_Ideation_Skill]]
-
----
-
-## Phase 3a — Hook Skill `/hook` (Priority 5) ✅ DONE
-
-Drafts the first ~30 seconds. 5 variations, each with spoken hook + visual hook + text overlay.
-
-- [x] `prompts/hook.md` — all 10 Kallaway patterns + Dopamine Ladder opening stages + 5-variation format
-- [x] `skills/hook.py` — reads marketing_brain from V2 vault, draft() → polish() cascade, writes to `05-Hooks/`
-- [x] `.claude/skills/hook/SKILL.md`
-- [x] Smoke test: 5 hook variations (spoken + visual + overlay) written to `Content-Hub-Vault-V2/05-Hooks/`
-
-Session log: [[2026-05-06_Phase3a_3b_Hook_Outline_Skills]]
-
----
-
-## Phase 3b — Outline Skill `/outline` (Priority 5) ✅ DONE
-
-Structural skeleton: sections, talking points, visual aids, source references, related vault docs.
-
-- [x] `prompts/outline.md` — Dopamine Ladder 6-stage backbone + pacing rules + visual markers
-- [x] `skills/outline.py` — reads marketing_brain from V2 vault, --hook-path input, draft() → polish()
-- [x] `.claude/skills/outline/SKILL.md`
-- [x] Smoke test: outline with per-section durations + B-roll cues in `Content-Hub-Vault-V2/06-Outlines/`
-
-Session log: [[2026-05-06_Phase3a_3b_Hook_Outline_Skills]]
-
----
-
-## Phase 3c — Title Skill `/title` (Priority 5) ✅ DONE
-
-5 Tier-1 titles (safe, proven patterns) + 5 Tier-2 titles (calculated risks, A/B flag) + thumbnail text. Competitor data used in place of personal history.
-
-- [x] `scripts/scrape_competitor_titles.py` — scrapes @nateherk + @Chase-H-AI via Apify; writes 40 titles to `skills/data/competitor_titles.json`
-- [x] `prompts/title.md` — tier system prompt with `{competitor_titles}` + `{concept}` placeholders
-- [x] `skills/title.py` — reads JSON top-30, calls `claude -p -` via subprocess, writes to vault
-- [x] `.claude/skills/title/SKILL.md`
-- [x] Smoke test: `/title "how I built a RAG pipeline that actually works"` → 10 titles with competitor pattern citations in `Content-Hub-Vault-V2/07-Titles/`
-
-Session log: [[2026-05-07_Phase3c_Title_Skill]]
-
----
-
-## Phase 0a — Twitter Scraping Web App (Priority 6 — build last)
-
-Fountainhead #1. Scored, niche-relevant tweets → Telegram every ~45 minutes. Reply via Telegram → Twitter.
-
-- [x] Supabase: `tweets` + `tweet_actions` tables created and verified — [[2026-05-07_Phase0a_Twitter_Data_Layer]]
-- [x] `backend/research/apify_client.py` — `scrape_twitter()` appended; normalizes to 9-field schema; fallback logic + error handling done
-- [x] `skills/data/twitter_config.json` — keywords, accounts, max_results, min_composite_score
-
-> **⏸ ON HOLD — Twitter actor not resolved**
-> `quacker~twitter-scraper` → HTTP 403 (access denied). `apify~twitter-scraper` → HTTP 404 (does not exist).
-> Candidate replacement: `apidojo/twitter-scraper-lite` — requires **paid Apify plan** (~$0.016/query).
-> **Decision needed:** upgrade Apify plan or use native X API v2 (free, 500k tweets/month).
-> Once decided, update actor slugs in `backend/research/apify_client.py:416–418` — one-line change.
-
-- [ ] Apify tweet scraper: pulls 40–90 tweets matching keywords + accounts
-- [ ] Scoring: velocity + authority + timing + opportunity + replyability
-- [ ] Supabase: store tweets + reply history + scores (prevents repeats)
-- [ ] Softmax selection (deliberate randomisation — not always top scorer)
-- [ ] Telegram bot: push tweet + scores + Grok-drafted reply options
-- [ ] Twitter API: post reply from Telegram approval
-- [ ] Randomised ~45-min timer (APScheduler or cron)
-
----
-
-## Human Checkpoints (The Collaborator Model)
-
-These are the gates you own — AI does not advance past these automatically:
-
-- [ ] After Phase 0b: pick a topic from the daily trending feed
-- [ ] After YT Pipeline: read the research, decide what angle to explore
-- [ ] After Ideation: pick one idea from the ranked list, modify as needed
-- [ ] After Hook: approve or iterate before moving to outline
-- [ ] After Outline + Title: confirm both before filming
-- [ ] After Content Cascade: approve Twitter thread before it posts
-- [ ] After Short Form: review scripts before recording
-
----
-
-## Ad-hoc Research (outside sprint)
-
-- [x] 2026-05-06 — Ruflo / Claude Code primitives research → [[2026-05-06_Ruflo_Research_Handoff]]. Artifacts in `00-Management-V2/Memory/Research/2026-05-06_ruflo/`.
-
----
-
-## Cross-References
-
-Implements: [[Chase_AI_System_Breakdown]]
-References: [[context]] | [[Local_First_Skill_Engine_Plan]] | [[2026-04-29_GitHub_Trending_Script]] | [[2026-05-06_Ruflo_Research_Handoff]]
+# Current Sprint
+
+## Active — Webapp Sprint (2026-05-22)
+
+- [~] **Design-doc web app wiring** — See [[Webapp_sprint]]
+  - Mini-phase breakdown of [[Design_Doc_Web_App_Plan]] across 7 phases (Scaffold → Backend → Frontend port → Wire 5 stages → Distribution multi-tab → Dashboard/Brain/polish → Launch + E2E).
+  - 14–19h total estimate; supersedes [[Content_Hub_Web_Design_Spec]] and [[Wrapper_Plan]] (Streamlit).
+  - **Plan reconciled with prototype updates (2026-05-22)** — see [[Design_Doc_Web_App_Plan]] § Runtime note + § Prototype updates. Changes: SourcesPanel added to component list + Frontend Port + Phase 1 copy list; canvas instruction corrected (particles.js creates its own canvas dynamically — no `<canvas>` in `web/index.html`); React 19.2.6 (Vite) documented as the resolved version vs prototype's CDN React 18.
+  - **Phase 1 (Scaffold) — done, pending browser verify**: `Design-doc/web/` (Vite + React 19.2.6 + `react-markdown` + `clsx`) and `Design-doc/server/` (FastAPI shell + `/api/health` + CORS) both boot; assets (`styles.css`, `particles.js`, `Icons.jsx`, `SourcesPanel.jsx`) ported to `web/src/`; runtime documented in [[runtime|Design-doc/server/runtime.md]]; Vite proxy `/api → :8765` wired. Shared runtime follow-up completed: repo `.venv` is the source of truth (Python 3.12.10), missing wrapper deps were installed, and the FastAPI/Streamlit compatibility gap was closed by reconciling the shared pins. See [[2026-05-22_Webapp_Phase1_Scaffold]] + [[2026-05-22_Webapp_Phase1_Resync]] + [[2026-05-22_Webapp_Phase1_Runtime_Fix]] (re-sync after prototype updates: `styles.css` 2096→2644, `Icons.jsx` +3 icons, new `SourcesPanel.jsx` 794 lines with `useState` import + named/default exports).
+  - **Phase 2 (Backend) — complete**: All endpoints shipped and smoke-tested. See [[2026-05-22_Webapp_Phase2_Backend]].
+    - `server/jobs.py` — job registry + asyncio.Queue SSE bus + single-job constraint
+    - `server/pipeline.py` — 8 subprocess wrappers + stage output resolvers
+    - `server/vault.py` — recent/read_file/outputs with path-traversal guard
+    - `server/brain.py` — Claude CLI analysis (no separate API key)
+    - `server/main.py` — full router: health + vault + jobs/stream + 8 pipeline + brain endpoints
+    - All smoke tests passed: health ✅, title job end-to-end ✅, SSE streaming ✅, 409 conflict ✅, vault/recent ✅, vault/file ✅
+  - **Phase 3 (Frontend port) — complete**: All 7 verification blockers fixed and confirmed. See [[2026-05-23_Webapp_Phase3_Frontend_Port]] (original session) + [[2026-05-23_Webapp_Phase3_Lint_Fix]] (verification fixes).
+    - `Brain.jsx` — removed bogus `./StackedPanel` import; both `StackedPanel` + `SourcesPanel` now imported from `./SourcesPanel.jsx`
+    - `TweaksPanel.jsx` — `TweakSection` prop renamed `label` → `title` (matches App.jsx call sites); removed unused `handleOpen`; `react-refresh/only-export-components` suppressed on `useTweaks` export; `react-hooks/refs` suppressed narrowly on `offsetRef` render-read and `valueRef` render-write (both are intentional drag-perf patterns)
+    - `SourcesPanel.jsx` — duplicate `"outline-rag"` key resolved; distribution tree entry renamed to `"dist-outline-rag"`
+    - `StageWorkspace.jsx` — `react-hooks/set-state-in-effect` + `exhaustive-deps` suppressed on the stage-reset effect (intentionally keyed on `stageId` only)
+    - `particles.js` — removed unused `t` accumulator; `catch (e)` → `catch {}` (optional binding)
+    - Build: ✅ clean (`vite build`) · Lint: ✅ clean (`eslint .`)
+  - **Phase 4 (Wire 5 stages) — complete**: `api.js`, `useJobStream.js`, `VaultPicker.jsx`, `MarkdownViewer.jsx`, `OutputBrowser.jsx` created; `StageWorkspace.jsx` + `SourcesPanel.jsx` rewritten; `App.jsx` cleaned. Build + lint clean (187 modules). Live verification run 2026-05-24: ideation + hooks produce real vault files; SSE streams correctly; history drawer returns real artifacts. Research SSE works but researcher skill requires non-empty `--repos` — with the playbook payload (`repos: []`) no file is written (skill CLI gap, not frontend defect). Agent memory notes 01–08 absent (execution-record gap). See [[2026-05-24_phase4-wire-stages]].
+  - **Phase 5 (Distribution multi-tab) — complete**: `DistributionWorkspace.jsx` + 5 tab files (`OutlineTab`, `TitleTab`, `CascadeTab`, `ShortFormTab`, `VoiceCleanupTab`) created; `Sidebar.jsx` consolidated (title/outline removed); `App.jsx` routes to `DistributionWorkspace`; `Dashboard.jsx` Outline card links to `#distribution/outline`. Hash routing without router library. Build + lint clean (193 modules). See [[2026-05-24_Webapp_Phase5_Distribution]].
+  - **Phase 6 (Dashboard + Brain + polish) — complete**: `usePipelineSnapshot` hook + `jobActivity.js` created; Dashboard live recents; Sidebar dynamic status dots + health badge; Brain real analysis via `runBrainAnalysis` + `useJobStream`; `ConflictError` + 409 inline notices wired in StageWorkspace + Brain + all 5 Distribution tabs; TweaksPanel already localStorage-clean. Build + lint clean (195 modules, 0 problems). See [[2026-05-24_phase6-dashboard-brain-polish]].
+  - **Next**: Phase 7 — Launch convenience (`start.ps1`) + full-chain E2E acceptance run.
+
+- [x] **Design-doc theme rewrite + system graph (2026-05-27)** — See [[2026-05-27_Design_Doc_Theme_And_Graph]]
+  - `Design-doc/systems-deck.html` fully reskinned to V2 design system (Inter + JetBrains Mono, `#0D0F12` palette, per-slide `--page-accent` ambient gradients via `data-accent` + JS)
+  - `Design-doc/graph.html` created — interactive D3.js v7 force-directed graph, 29 nodes × 6 types, 40 directed edges × 6 link types; click-to-focus, legend toggle, zoom/pan
+
+- [x] **Self-Improvement Loop — structural build (2026-05-28)** — See [[2026-05-28_Self-Improvement-Loop-Execution]] (Implements: [[The-Self-Improvement-Loop]] + [[Self-Improvement-Loop-Tasks]])
+  - Six-agent dispatch executed: A1 (tracking foundation) → A2 (8 fixtures, Maximum Realism) → A3 (8 LLM-judge scorers + `_judge.py`) → A5 (`brief.md` + `brief_loader` + 8 skills wired) → A4 (`prompt_lab/loop.py` — dry-run verified, 3 rows written to TSV) → A6 (`.claude/skills/pipeline-loop/SKILL.md` shell with §9 fragility caveat).
+  - User overrides applied: Phase 7 webapp skipped; build all 5 Opportunities full scope; LLM-judge YES; brief HYBRID (file + CLI overrides); fixtures MAXIMUM REALISM; agents ASK on ambiguity.
+  - A5 hit session limit at 5/8 skills wired — orchestrator closed gap on `researcher.py`, `short_form.py`, `voice_cleanup.py` (4-line surgical wiring each).
+  - **Status:** structural only. Functional validation (scorer trust, loop convergence, prompt-beats-baseline) requires first real `/prompt-lab` run — out of scope this sprint, burns NLM/NIM credits.
+  - **Next:** run `/prompt-lab --skill hook --iterations 20` against real model + review `pipeline_results.tsv` for convergence before `/pipeline-loop` is permitted to fire.
+
+- [ ] **Vault graph audit — 3 open decisions (2026-05-28)** — See [[2026-05-28_Vault_Graph_Audit]]
+  - `notebooklm-py/tests/` (35 MB VCR cassettes) — remove unless patching the library
+  - `10-Research/` PDFs/PNGs (~55 MB) — user deciding
+  - `thinking/` session JSONLs (7.7 MB, grows) — user deciding retention policy
+
+- [x] **Graph embedded in systems deck as slide 11 (2026-05-28)** — See [[2026-05-28_Graph_Embedded_In_Deck]]
+  - Diagnosed graph sizing bug: `clientWidth = 0` at parse time because SVG was inside a hidden `position:absolute` slide
+  - Embedded graph as slide 11 in `systems-deck.html` with lazy D3 init (`setTimeout(initGraph, 80)` triggered from `go()` on first visit); SVG reads real dimensions after slide is visible
+
+- [x] **Auto-compaction settings** — See [[2026-05-22_Settings_AutoCompact]]
+  - Added `autoCompactEnabled: true` + `autoCompactWindow: 100000` to `.claude/settings.json`
+  - Fires at 100k tokens (schema minimum; ~50% of a 200k window); applies to all sessions in this project
+
+- [x] **Phase 4 execution playbook** - See [[2026-05-23_phase4-wire-5-stages]]
+  - Subagent-per-task runbook for [[Webapp_sprint]] Phase 4
+  - Each worker writes its own memory note under `Design-doc/web/src/.agent-context/phase4/`
+  - Final verification agent acts as the eval gate before sprint docs can be marked complete
+
+- [x] **Root file organisation (2026-05-26)** — See [[2026-05-26_Root_File_Organisation]]
+  - Eight stranded root files moved into purposeful folders: Streamlit trio → `app/`, daily script → `scripts/`, `.bat` launchers → `bin/`, stale one-offs → `archive/`.
+  - Path constants in moved files updated (`.parent` → `.parent.parent`) and subprocess calls in [[control_room.py]] re-pathed for `github_trending.py`.
+  - Verified: `py_compile` clean, runtime import smoke test resolves VAULT/REPO/ROOT to correct project paths.
+
+- [x] **V1 strip execution (2026-05-26)** — See [[2026-05-26_Cleanup_Execution]] (Implements: [[2026-05-26_Cleanup_Verification]])
+  - Stripped V1 keys/packages from [[.env]], [[.env.example]], [[requirements.txt]]; trimmed stale paths from [[.claude/settings.json]] + [[.gitignore]]; deleted [[.claude/worktrees/]] (~395 MB).
+  - [[graphify-out/GRAPH_REPORT.md]] replaced with stale-marker; `/graphify --update` deferred to interactive run.
+  - Verified: `import skills.pipeline`, `from skills.utils import ai`, and full `scripts/github_trending.py` run all clean.
+
+## Completed — Pipeline Bug Fix + Claude-First Cascade (2026-05-19)
+
+- [x] **Pipeline hardening** — See [[2026-05-19_Pipeline_Bug_Fix_Claude_First]]
+  - Fixed 6 bugs from [[2026-05-19_Refined_Pipeline_E2E_Test]]: ideation `--topic`, slug alignment (hyphens everywhere), NIM timeout 15s, Claude CLI stderr logging, `_ollama_available()` skip check, Claude-first cascade
+  - 6 files changed: `skills/utils/ai.py`, `skills/pipeline.py`, `skills/yt_pipeline.py`, `skills/title.py`, `skills/research_plan.py`, `skills/research_sources.py`
+  - All 5 verification criteria passed loop 1
+  - **Post-session fix**: B_NEW — `--outline-path` renamed to `--outline-file` in `pipeline.py:162,175` (steps 7 & 8 would have crashed with argparse rc=2)
+  - **Next**: Re-run full E2E (`python -m skills.pipeline "topic" "url"`) to confirm clean 9/9 pass
+
+## Completed — NIM Eval Run (2026-05-15)
+
+- [x] **NIM full-pipeline eval** — See [[2026-05-15_NIM_Eval_Pipeline_Run]]
+  - Ran pipeline against *Claude Code Has Evolved* (`https://www.youtube.com/watch?v=d86VCtQ_dN8`)
+  - Fixed `skills/pipeline.py` — added `_SUBPROCESS_ENV` with `PYTHONPATH` so subprocess skills can import from project root
+  - All outputs archived to `Content-Hub-Vault-V2/NIM test run/`; eval report at [[NIM test run/EVAL_REPORT.md]]
+  - **3 bugs confirmed — pending fixes:**
+    1. `skills/yt_pipeline.py:28` — `SECTION_PATTERN` uses `.+` with `re.DOTALL`; must be `[^\n]+` — root cause of empty research file
+    2. `skills/utils/ai.py:88` — NIM errors log blank string; HTTP status + body not captured before exception handler
+    3. `skills/pipeline.py:64` + `skills/hook.py` — hook step not passed `--research-file`; hooks generated blind from topic title only
+
+## Completed — Outline Skill-Creator Loop (2026-05-15)
+
+- [x] **Outline SKILL.md improvement** — See [[2026-05-15_Outline-Skill-Creator-Improvement-Loop]]
+  - Added YAML frontmatter with pipeline position (Step 3 of 7) and explicit /cascade routing to `.claude/skills/outline/SKILL.md`
+  - Added Step 3 (10-Research/ scan) and improved hook-number handling; snapshot at `.claude/skills/outline-workspace/skill-snapshot/SKILL.md`
+  - 6-agent eval run (3 evals × with_skill + without_skill); net: 0.87 vs 0.88 — tie/marginal loss due to eval 2 regression
+  - **Win — Eval 1**: 6/6 vs 5/6 — /cascade routing is the differentiator
+  - **Regression — Eval 2**: 3/5 vs 4/5 — new skill drops --hook-path when file missing (wrong) and asks platform confirmation for default (unnecessary)
+  - Static HTML viewer at `.claude/skills/outline-workspace/iteration-1/eval_review.html`
+  - **Next**: patch eval 2 regression (add explicit --hook-path passthrough guard + no-defaults-confirmation note), re-run eval 2 only
+
+## Completed — Hook Skill-Creator Loop (2026-05-15)
+
+- [x] **Hook SKILL.md improvement** — See [[2026-05-15_Hook-Skill-Creator-Improvement-Loop]]
+  - Added YAML frontmatter with pushy description to `.claude/skills/hook/SKILL.md`; added Pipeline Position section (Step 2 of 7: researcher → **/hook** → outline)
+  - 6-agent eval run (3 evals × with_skill + old_skill); benchmark: +0.103 pass rate delta (100% vs 89.7%)
+  - 2 failing assertions for old_skill: no pipeline reference (eval-1), no --no-polish acknowledgment in confirmation (eval-3)
+  - Static HTML viewer at `.claude/skills/hook-workspace/iteration-1/eval_review.html`
+  - Eval 2 (topic-with-flags) non-discriminating — both skills pass 7/7; replace with bare /hook test in iteration 2
+
+## Completed — Voice-Cleanup Skill-Creator Loop (2026-05-15)
+
+- [x] **Voice-Cleanup SKILL.md improvement** — See [[2026-05-15_Voice_Cleanup_Skill_Improvement]]
+  - Rewrote `.claude/skills/voice-cleanup/SKILL.md` with YAML frontmatter, pipeline position (Step 7 of 7), smart no-args path inference, and explicit batch folder mode
+  - 6-agent eval run (3 evals × with_skill + old_skill); benchmark: +0.58 pass rate delta (100% vs 43%)
+  - Eval 3 (batch folder) was 5/5 vs 0/5 — batch mode was completely missing from old skill
+  - Static HTML viewer at `.claude/skills/voice-cleanup-workspace/iteration-1/eval_review.html`
+  - Eval 2 (specific file) non-discriminating — both skills pass 5/5; replace in iteration 2
+
+## Completed — Researcher Skill-Creator Loop (2026-05-15)
+
+- [x] **Researcher SKILL.md improvement** — See [[2026-05-15_Researcher_Skill_Creator_Loop]]
+  - Rewrote `.claude/skills/researcher/SKILL.md` with YAML frontmatter, pipeline position (Step 1 of 7), defined brief output structure, mandatory /hook handoff
+  - 6-agent eval run (3 evals × with_skill + old_skill); benchmark: +0.08 pass rate delta, stddev halved
+  - Static HTML viewer at `.claude/skills/researcher-workspace/iteration-1/eval_review.html`
+  - Iteration 2 pending user feedback from viewer
+
+## Completed — Researcher Optimisation (2026-05-13)
+
+- [x] **Researcher Optimisation** — See [[Researcher_Optimisation]], [[2026-05-13_Researcher_Optimisation_Complete]]
+  - Goal: deep doc crawler + readable 5-section brief, on top of the existing semantic verification baseline ([[2026-05-13_Researcher_Source_Verification_Agent]])
+  - Modifies: [[skills/researcher.py]], [[prompts/researcher.md]], new `skills/researcher_crawler.py`
+
+  ### Phase 1 — Deep documentation crawler ✓
+  - [x] 1.1 Create `skills/researcher_crawler.py` with `discover_primary_docs()`
+  - [x] 1.2 GitHub Contents API probe (reuse `_gh_headers()` pattern)
+  - [x] 1.3 Priority ranker: README → docs/index → quickstart → CONTRIBUTING/ARCHITECTURE → docs/*.md → examples
+  - [x] 1.4 Raw fetch via `raw.githubusercontent.com`
+  - [x] 1.5 Cap at 6 primary docs (`--max-primary-docs`, default 6)
+  - [x] 1.6 Wire into `researcher.py` between README step and web research
+  - [x] 1.7 Smoke-test on doc-rich + doc-sparse repos
+
+  ### Phase 2 — Audit + improve Haiku verification ✓
+  - [x] 2.1 Read current verify code end-to-end
+  - [x] 2.2 Add "wrong entity" failure-mode example to prompt
+  - [x] 2.3 Treat short/empty `get_guide()` summaries as "keep, with warning"
+  - [x] 2.4 Log warning on Haiku-call failure (currently silent)
+  - [x] 2.5 Extend tool schema to return `reasons: dict[source_id, str]`
+  - [x] 2.6 Verify on `mercury-agent` + `terax-ai` cases
+
+  ### Phase 3 — Context extraction & injection ✓
+  - [x] 3.1 Add `extract_repo_context()` helper
+  - [x] 3.2 Haiku tool-use returns `core_use_cases / key_concepts / common_patterns / anti_patterns / audience`
+  - [x] 3.3 Render to markdown block
+  - [x] 3.4 Prepend to `chat.configure(custom_prompt=...)`
+  - [x] 3.5 Add `{repo_context}` placeholder in `prompts/researcher.md`
+  - [x] 3.6 Spot-check that answers reference context concepts
+
+  ### Phase 4 — Brief reformatter ✓
+  - [x] 4.1 Collect 11 answers + context + sources into structured payload
+  - [x] 4.2 Synthesis call (Haiku first, upgrade to Sonnet if flat)
+  - [x] 4.3 Output 5 sections: What it does / Who it's for / How it works / When to use / Watch out for
+  - [x] 4.4 Append `## Sources` with one-line summaries
+  - [x] 4.5 Append `## Raw findings` in collapsed `<details>` block
+  - [x] 4.6 Keep existing frontmatter
+  - [x] 4.7 Output path unchanged
+  - [x] 4.8 User reads cold + confirms
+
+  ### Phase 5 — Slides + infographics ✓
+  - [x] 5.1 Build artifact instruction string from context + brief
+  - [x] 5.2 `generate_slide_deck(instructions=...)`
+  - [x] 5.3 `generate_infographic(instructions=...)`
+  - [x] 5.4 Poll via existing `wait_for_completion()`
+  - [x] 5.5 Log artifact URLs/IDs into brief frontmatter
+  - [x] 5.6 Confirm artifacts reflect actual research
+
+## Completed This Session
+
+- [x] **Research Guardrails (all 5)** — See [[2026-05-08_Research_Guardrails_Implementation]]
+  - `skills/research_sources.py` (new) — primary-source pre-flight
+  - `skills/research_plan.py` (new) — QuestionPlan dedup + follow-up generator
+  - `prompts/research_followups.md` (new) — drill-down prompt
+  - `prompts/yt_pipeline.md` — Q8 competitive + Q10-12 angle battery (12 total)
+  - `prompts/researcher.md` — Lens 7.5 competitive + Angle Battery output section
+  - `skills/yt_pipeline.py` — pre-flight + QuestionPlan loop + frontmatter tracking
+  - `skills/researcher.py` — pre-flight + Angle Battery per repo
+  - `skills/ideation.py` — `primary_sources_found: 0` warning
+
+## Failed / Parked
+
+- [x] ~~**TRIBE v2 fMRI Content Scoring**~~ — **FAILED (2026-05-11)** — See [[2026-05-11_TRIBE_v2_LLaMA_CPU_Fix]]
+  - LLaMA 3.2-3B text pipeline takes ~32 min for a full document; Windows hard-kills the process at ~10 min every run (6 attempts)
+  - exca's per-process caching means zero progress accumulates across kills
+  - **Parked as future production item**: re-evaluate when scoring real video content (audio/video path suits TRIBE better than raw text; T4/A100 cloud GPU would remove the kill issue entirely)
+  - See [[2026-05-11_TRIBE_v2_Analysis_VRAM_Debug]] for all patches applied
+
+## Completed — Researcher Source Quality
+
+- [x] **Researcher source verification agent** — See [[2026-05-13_Researcher_Source_Verification_Agent]]
+  - Reverted `_repo_keywords()`, `_is_relevant_source()`, and keyword filtering block
+  - Built semantic verification: `sources.get_guide()` per discovered source → Claude Haiku `keep_sources` tool call (batched) → `source_ids=verified_source_ids` on all `chat.ask()` calls
+  - Option A (Claude API, `AsyncAnthropic()`) — `anthropic==0.39.0` confirmed present
+  - Primary sources (repo URL + README) always kept; only web-research-discovered sources go through verification
+
+## In Progress — Other
+
+- [ ] **Control Room Wrapper — Smoke Test** — All 4 files built. See [[2026-05-12_Control_Room_Build]]
+  - `vault_index.py` ✓, `runner.py` ✓, `control_room.py` ✓, `run_control_room.bat` ✓
+  - Streamlit 1.57.0 installed. `.vscode/settings.json` created to fix venv auto-activation.
+  - **Blocked on:** opening a new VS Code terminal and running `python -m streamlit run control_room.py`
+  - Resume: see [[2026-05-12_Control_Room_Build]] § Exact Resumption Steps
+
+## Completed — Refined Pipeline Implementation (2026-05-19)
+
+- [x] **Refined Pipeline — NLM-Driven Content Engine v1** — See [[2026-05-19_Refined_Pipeline_Implementation]]
+  - Full implementation of [[Refined_Pipeline]] approved 2026-05-19
+  - Removed hardcoded `_RESEARCH_QUESTIONS` + `_ANGLE_BATTERY` from `researcher.py`; replaced with NLM-driven loop via `seed_questions_from_nlm` + `QuestionPlan(budget=15)` + `generate_followups()`
+  - Removed `PROMPTS_FILE`, `SECTION_PATTERN`, `_load_questions()` from `yt_pipeline.py`; same NLM-driven loop
+  - Rewrote `pipeline.py` from 5-step to 9-step orchestrator with per-step voice-cleanup hooks
+  - Studio steps wired: step 2 calls `studio.generate_reports()`, step 9 calls `studio.inject_cascade_and_generate()` — both read `notebook_id` from `research.md` frontmatter
+  - Twitter → Instagram rename throughout `cascade.py` + `prompts/cascade.md`
+  - New modules: `skills/helpers/nlm_seed.py`, `skills/helpers/nim_picker.py`, `skills/studio.py`
+  - NIM error logging fixed in `skills/utils/ai.py` (HTTP status + 500-char body preview)
+  - Verified by 4-agent parallel loop (Validator + Smoke Tester + Verifier), 2 iterations, ALL CLEAR
+  - **Next: E2E pipeline run in next session** (burns NLM/NIM credits — user's instruction)
+
+## Next Up
+
+- [x] **End-to-end verification** — TypeScript/nexu-io run scored 5/5 guardrails post-fix. See [[2026-05-08_Researcher_Fix_Verified]]. OpenMythos dogfood run was the trigger; verification confirmed on a clean topic.
+
+- [x] **researcher.py fix verified** — See [[2026-05-08_Researcher_Fix_Verified]] — 5/5 guardrails pass. Root cause was passing `prompts/researcher.md` blob to NotebookLM; fixed with `_RESEARCH_QUESTIONS` individual questions pattern.

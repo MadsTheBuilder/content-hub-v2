@@ -1,0 +1,65 @@
+{
+  "expectations": [
+    {
+      "text": "Claude confirms the repo (microsoft/autogen) and niche (AI agents) with the user before running",
+      "passed": true,
+      "evidence": "Response shows 'Got it — researching microsoft/autogen for the AI agents niche.' followed by 'Confirm?' with a full list of what will happen."
+    },
+    {
+      "text": "Claude shows the correct command: `python -m skills.researcher --niche \"AI agents\" --repos microsoft/autogen`",
+      "passed": true,
+      "evidence": "Response shows exactly: `python -m skills.researcher --niche \"AI agents\" --repos microsoft/autogen` in a powershell code block."
+    },
+    {
+      "text": "Claude mentions the output file path pattern: Content-Hub-Vault-V2/10-Research/YYYY-MM-DD_ai-agents_brief.md",
+      "passed": true,
+      "evidence": "Response confirms 'Save the output to Content-Hub-Vault-V2/10-Research/2026-05-15_ai-agents_brief.md' — uses today's date as expected."
+    },
+    {
+      "text": "Claude mentions /hook as the next step after reviewing the brief",
+      "passed": true,
+      "evidence": "Response ends with '### Next Step: Once you've reviewed the brief, kick off the hook generation: /hook topic=\"From Single Agent to Multi-Agent...\"'"
+    },
+    {
+      "text": "Claude explains what the brief contains (Recommended Video Angle, synthesized sections)",
+      "passed": true,
+      "evidence": "Simulated brief shows all 5 sections (What it does, Who it's for, How it works, When to use, Watch out for) plus 'Recommended Video Angle' with specific angle text."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.00
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 1, "Write": 2},
+    "total_tool_calls": 3,
+    "total_steps": 3,
+    "errors_encountered": 0,
+    "output_chars": 1850,
+    "transcript_chars": 2200
+  },
+  "timing": {
+    "executor_duration_seconds": 28.7,
+    "grader_duration_seconds": 0.0,
+    "total_duration_seconds": 28.7
+  },
+  "claims": [
+    {
+      "claim": "With_skill provides a specific, usable video angle title in the simulation",
+      "type": "quality",
+      "verified": true,
+      "evidence": "'From Single Agent to Multi-Agent: How AutoGen Solves Real Collaboration Problems' — specific enough to use as a /hook topic"
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Perfect score. All assertions pass with strong evidence. The new skill's richer simulated output is notably better than baseline."
+  }
+}

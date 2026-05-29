@@ -1,0 +1,16 @@
+{
+  "eval_id": 1,
+  "eval_name": "no-args-after-outline",
+  "skill_version": "old",
+  "expectations": [
+    {"text": "finds-both-files: Claude identifies both research brief (2026-05-12_ai-agents_brief.md) and outline (2026-05-12_ai-agents.md) by name", "passed": true, "evidence": "Step 1 shows search results finding both files correctly."},
+    {"text": "single-confirmation-step: Claude asks for confirmation exactly once", "passed": true, "evidence": "Step 3 shows one confirmation block with 'Confirm to proceed? (y/n)'"},
+    {"text": "filenames-in-confirmation: The confirmation message includes actual filenames", "passed": true, "evidence": "Confirmation block lists both file paths explicitly."},
+    {"text": "correct-command-flags: Command uses --research-file and --outline-file flags", "passed": true, "evidence": "Step 4 command: python -m skills.cascade --research-file '...' --outline-file '...' --title 'ai-agents'"},
+    {"text": "twitter-hook-preview: After-completion report previews the Twitter hook", "passed": true, "evidence": "Step 6 completion report includes Twitter Hook First Tweet preview."},
+    {"text": "video-link-reminder: Report mentions replacing [VIDEO_LINK] placeholder before posting", "passed": true, "evidence": "Post-Cascade Actions section mentions replacing [VIDEO_LINK] before posting."},
+    {"text": "next-step-suggestion: Report suggests /short-form as the next pipeline step", "passed": false, "evidence": "Post-Cascade Actions section lists manual publishing steps but does NOT mention /short-form or any pipeline chaining."}
+  ],
+  "pass_rate": 0.857,
+  "notes": "Old skill handles file discovery and confirmation correctly but lacks pipeline chaining — no /short-form suggestion. Confirmation is more verbose than necessary."
+}

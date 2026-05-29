@@ -10,6 +10,8 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
 from skills.utils.ai import polish
+from skills.brief_loader import load_brief, apply_cli_overrides
+from skills.brief_args import add_brief_args
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +24,10 @@ async def main():
     parser = argparse.ArgumentParser(description="De-AI'ify content — rewrite in the creator's authentic voice")
     parser.add_argument("file", nargs="?", help="Path to a markdown file to clean (omit to read from stdin)")
     parser.add_argument("--inplace", action="store_true", help="Overwrite the original file instead of writing _cleaned.md")
+    add_brief_args(parser)
     args = parser.parse_args()
+    brief = load_brief()
+    brief = apply_cli_overrides(brief, args)
 
     if args.file:
         input_path = Path(args.file)

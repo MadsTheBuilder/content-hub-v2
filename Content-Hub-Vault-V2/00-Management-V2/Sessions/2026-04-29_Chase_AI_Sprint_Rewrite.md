@@ -8,7 +8,7 @@ type: session_summary
 
 ## What Was Done
 
-Rewrote [[Current_Sprint]] to match [[Chase_AI_System_Breakdown]] exactly. The old sprint used a different phase numbering (from [[Local_First_Skill_Engine_Plan]]) which conflicted with the Chase AI plan naming and caused confusion with V1 vault task lists.
+Rewrote [[Architecture_Building]] to match [[Chase_AI_System_Breakdown]] exactly. The old sprint used a different phase numbering (from [[Local_First_Skill_Engine_Plan]]) which conflicted with the Chase AI plan naming and caused confusion with V1 vault task lists.
 
 New sprint:
 - Uses Chase AI phase labels (0a, 0b, 1, 2, 3a, 3b, 3c, 4a, 4b, 4c) directly
@@ -28,5 +28,5 @@ New sprint:
 - `/title` blocked on historical title + view count data
 - Phase 0a (Twitter app) blocked on Apify + Telegram + Grok + Twitter API credentials
 
-Modifies: [[Current_Sprint]]
+Modifies: [[Architecture_Building]]
 References: [[Chase_AI_System_Breakdown]] | [[2026-04-29_GitHub_Trending_Script]]

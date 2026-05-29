@@ -1,0 +1,12 @@
+{
+  "eval_id": 2,
+  "eval_name": "eval-bare-topic",
+  "prompt": "/researcher AI agents",
+  "assertions": [
+    "Claude attempts to run `python -m skills.researcher --list` to show available repos",
+    "Claude asks the user to select which repos to research before running",
+    "Claude identifies the niche as 'AI agents' from the command argument",
+    "Claude shows the correct command syntax including --niche and --repos flags",
+    "Claude does not run the research pipeline without user confirmation of repo selection"
+  ]
+}

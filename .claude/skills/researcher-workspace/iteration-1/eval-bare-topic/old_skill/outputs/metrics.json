@@ -1,0 +1,23 @@
+{
+  "eval_id": "eval-bare-topic_old_skill",
+  "timestamp": "2026-05-15T00:00:00Z",
+  "skill_version": "old_snapshot",
+  "test_case": "bare_topic",
+  "user_message": "/researcher AI agents",
+  "skill_trigger": "matched",
+  "niche_extracted": "AI agents",
+  "niche_source": "inline_with_command",
+  "list_command_executed": true,
+  "list_command_success": true,
+  "repos_listed": 9,
+  "response_quality": {
+    "follows_skill_spec": true,
+    "asks_user_to_select": true,
+    "waits_for_confirmation": true,
+    "never_auto_selects": true,
+    "provides_context": true,
+    "suggests_relevant_repos": true
+  },
+  "next_step": "wait_for_user_repo_selection",
+  "notes": "The old skill correctly requires user to explicitly select repos. Response provides helpful context about which repos might be relevant to AI agents without violating the 'never auto-select' constraint."
+}

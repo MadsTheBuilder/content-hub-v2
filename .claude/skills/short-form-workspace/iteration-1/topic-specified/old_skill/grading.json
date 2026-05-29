@@ -1,0 +1,58 @@
+{
+  "expectations": [
+    {
+      "text": "The agent resolved file paths containing '2026-05-12' and 'ai-agent' in the path",
+      "passed": true,
+      "evidence": "Step 2 confirms both files located: 'research file: ...2026-05-12_ai_agents/research.md (8,375 bytes)' and 'outline file: 2026-05-12_ai-agents.md (8,520 bytes)'"
+    },
+    {
+      "text": "The agent ran python -m skills.short_form with both --research-file and --outline-file flags",
+      "passed": true,
+      "evidence": "Command Run: 'python -m skills.short_form --research-file \"Content-Hub-Vault-V2/10-Research/2026-05-12_ai_agents/research.md\" --outline-file \"Content-Hub-Vault-V2/06-Outlines/2026-05-12_ai-agents.md\" --title \"AI Agents\"'"
+    },
+    {
+      "text": "The agent reported all 4 output files: 30s_script.md, 60s_script.md, 90s_script.md, README.md",
+      "passed": true,
+      "evidence": "Step 7: 'All 4 expected files created: 30s_script.md (963 bytes), 60s_script.md (1,417 bytes), 90s_script.md (1,780 bytes), README.md (379 bytes)'"
+    },
+    {
+      "text": "The agent pasted the verbatim opening line of the 30s script as the hook preview",
+      "passed": true,
+      "evidence": "Final Response: '**30s Hook (Opening Line):** \"LLMs are shitty, unreliable general-purpose computers. Not your conversational partner.\"' — verbatim from the generated script"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 6, "PowerShell": 5, "Bash": 2, "Write": 2, "Glob": 2, "Monitor": 1},
+    "total_tool_calls": 18,
+    "total_steps": 9,
+    "errors_encountered": 2,
+    "output_chars": 4639
+  },
+  "timing": {
+    "executor_duration_seconds": 483.3,
+    "total_duration_seconds": 483.3
+  },
+  "claims": [
+    {
+      "claim": "Old skill does not suggest /voice-cleanup as next step",
+      "type": "process",
+      "verified": true,
+      "evidence": "Final Response closes with 'All scripts are ready for review and recording. Each stands alone...' — no pipeline continuation hint."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": ["No pipeline continuation hint — user would need to remember /voice-cleanup themselves"],
+    "workarounds": ["Glob timed out on large vault, fell back to PowerShell Get-ChildItem"]
+  },
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Assertions check the right things. Eval 2 is non-discriminating between old and new skill on these particular assertions — both execute identically. Consider adding a /voice-cleanup assertion to eval 2 as well."
+  }
+}

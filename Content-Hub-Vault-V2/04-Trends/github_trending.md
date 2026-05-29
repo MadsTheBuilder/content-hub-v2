@@ -1,4 +1,4 @@
- GitHub Trending AI Repos — 2026-04-29
+# GitHub Trending AI Repos — 2026-05-26
 
 > Auto-generated daily. 🎯 = Claude's pick for best video topic.
 
@@ -8,79 +8,32 @@
 
 | Repo | Stars | ⚡ Stars/day | Language | Description |
 |------|------:|------------:|----------|-------------|
-| [nexu-io/open-design](https://github.com/nexu-io/open-design) 🎯 | 2,657 | 2657.0 | TypeScript | 🎨 Local-first, open-source alternative to Anthropic's Claude Design. ⚡ 1… |
-| [HKUDS-AI/polymarket-ai-trading](https://github.com/HKUDS-AI/polymarket-ai-trading) | 147 | 147.0 | HTML | AI-assisted paper trading for Polymarket: OpenAI market insight, vector … |
 
 ## Last 30 Days — Top 5
 
 | Repo | Stars | ⚡ Stars/day | Language | Description |
 |------|------:|------------:|----------|-------------|
-| [MemPalace/mempalace](https://github.com/MemPalace/mempalace) | 50,278 | 2094.9 | Python | The best-benchmarked open-source AI memory system. And it's free. |
-| [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | 49,713 | 2071.4 | Python | 🪨 why use many token when few token do trick — Claude Code skill that cu… |
-| [kyegomez/OpenMythos](https://github.com/kyegomez/OpenMythos) | 11,100 | 1110.0 | Python | A theoretical reconstruction of the Claude Mythos architecture, built fr… |
-| [JackChen-me/open-multi-agent](https://github.com/JackChen-me/open-multi-agent) 🎯 | 5,966 | 213.1 | TypeScript | From a goal to a task DAG, automatically. TypeScript-native multi-agent … |
-| [AgriciDaniel/claude-obsidian](https://github.com/AgriciDaniel/claude-obsidian) | 3,657 | 166.2 | Python | Claude + Obsidian knowledge companion. Persistent, compounding wiki vaul… |
+| [yaojingang/yao-open-prompts](https://github.com/yaojingang/yao-open-prompts) | 2,282 | 120.1 | Python | Yao Open Prompts：中文 AI 提示词库，覆盖工作、学习、内容、营销和生活场景 |
+| [opensquilla/opensquilla](https://github.com/opensquilla/opensquilla) | 1,894 | 99.7 | Python | OpenSquilla — Token-Efficient AI Agent with same budget, higher intellig… |
+| [raiyanyahya/how-to-train-your-gpt](https://github.com/raiyanyahya/how-to-train-your-gpt) 🎯 | 1,857 | 84.4 | Jupyter Notebook | Build a modern LLM from scratch. Every line commented. Explained like we… |
+| [Open-Less/openless](https://github.com/Open-Less/openless) | 1,682 | 58.0 | HTML | Hold a key, speak, release — AI-polished text appears at your cursor in … |
+| [Helvesec/rmux](https://github.com/Helvesec/rmux) | 1,226 | 122.6 | Rust | Universal Rust multiplexer with a typed SDK — drive any CLI or TUI app f… |
 
 ---
 
 ## Claude's Daily Picks
 
-### 7-day pick → [nexu-io/open-design](https://github.com/nexu-io/open-design)
+### 7-day pick → []()
 
-Local-first design tooling that runs inside AI coding environments is a genuinely new category, and the multi-agent compatibility angle (Claude Code, Cursor, Gemini CLI) gives you a concrete demo hook that differentiates it from 'just another Figma clone' explainer.
+No repos available in the 7-day list to evaluate.
 
-### 30-day pick → [JackChen-me/open-multi-agent](https://github.com/JackChen-me/open-multi-agent)
+→ Deep dive: [[/]]
 
-Goal-to-DAG orchestration with live tracing is a teachable, visual concept that demystifies multi-agent systems without requiring a PhD — the three-dependency constraint makes it approachable enough to build on-screen in a single video.
+### 30-day pick → [raiyanyahya/how-to-train-your-gpt](https://github.com/raiyanyahya/how-to-train-your-gpt)
 
----
+A from-scratch modern LLM build with every line commented hits the sweet spot of high teaching potential and evergreen audience interest, and the 'explain like we're five' framing translates naturally into a tutorial series without being overexposed like nanoGPT clones.
 
-## Deep Dive: 7-Day Pick — [nexu-io/open-design](https://github.com/nexu-io/open-design)
-
-**Language:** TypeScript · **Stars:** 2,657 · **Velocity:** 2657.0/day
-
-### What problem does it solve?
-
-Design tools like Figma and cloud-based AI design assistants lock you into subscriptions, send your work to remote servers, and offer little control over design system consistency. Developers and content creators who want AI-generated UI components, presentations, or brand assets have no fully offline, open-source option that respects data privacy and integrates with their existing coding workflow.
-
-### How it works
-
-open-design runs as a local skill layer on top of AI coding agents (Claude Code, Codex, Cursor, Gemini CLI, etc.), giving each agent access to 19 design skills and 71 pre-built brand-grade design systems. It renders output in a sandboxed preview environment and exports finished assets as HTML, PDF, or PPTX — all processed locally with no cloud dependency.
-
-### Best use cases
-
-- A developer uses it inside Cursor to scaffold a polished landing page with a consistent design system, then exports it as an HTML file — without leaving their editor or touching Figma.
-- A content creator runs it via Claude Code to generate on-brand pitch deck slides as PPTX, iterating with natural language prompts while keeping all assets local.
-- An indie hacker integrates it into their Codex workflow to rapidly prototype and preview multiple UI variants across different brand design systems before committing to one.
-
-### Getting started
-
-Clone the repo from GitHub, install dependencies with npm/bun, then drop the skill files into your AI agent's skills directory (e.g., .claude/skills/ for Claude Code) and invoke a design skill via your agent's slash command or prompt interface.
+→ Deep dive: [[raiyanyahya_how-to-train-your-gpt/raiyanyahya_how-to-train-your-gpt]]
 
 ---
-
-## Deep Dive: 30-Day Pick — [JackChen-me/open-multi-agent](https://github.com/JackChen-me/open-multi-agent)
-
-**Language:** TypeScript · **Stars:** 5,966 · **Velocity:** 213.1/day
-
-### What problem does it solve?
-
-Building multi-agent AI systems requires manually wiring task dependencies, managing execution order, and coordinating tool calls across agents — a brittle, hard-to-maintain process. open-multi-agent removes that orchestration burden by automatically decomposing a plain-language goal into a dependency graph (DAG) and executing it without manual wiring. This unlocks complex, multi-step AI workflows that would otherwise require significant infrastructure code.
-
-### How it works
-
-Given a goal string, the system uses an LLM to produce a Directed Acyclic Graph of subtasks, where each node is an agent with defined inputs, outputs, and MCP tool access. A scheduler resolves dependencies in topological order, running independent tasks in parallel and feeding outputs downstream, while a live tracer streams execution state in real time. The entire runtime sits on just three dependencies, keeping the footprint minimal and the internals transparent.
-
-### Best use cases
-
-- Automated research pipelines — input a topic and let agents fan out to search, summarize, and synthesize findings in parallel before a final agent writes the report
-- Codebase analysis workflows — decompose 'audit this repo for security issues' into agents that read files, cross-reference dependencies, and aggregate findings with no manual task ordering
-- Data enrichment pipelines — take a list of companies and orchestrate concurrent agents to scrape, classify, and score each one, with a reducer agent joining results at the end
-
-### Getting started
-
-Install the package, define your MCP tool server connections in a config object, then call the orchestrator with a plain-language goal string — the DAG is inferred and executed automatically with trace output to stdout. The TypeScript-native design means full type safety from goal definition through agent outputs with no additional build tooling required.
-
----
-
-*Generated 2026-04-29 13:33 · [GitHub Trending](https://github.com/trending)*
+*Generated 2026-05-26 15:24 · [GitHub Trending](https://github.com/trending)*

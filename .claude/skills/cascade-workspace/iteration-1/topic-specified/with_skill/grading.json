@@ -1,0 +1,15 @@
+{
+  "eval_id": 2,
+  "eval_name": "topic-specified",
+  "skill_version": "new",
+  "expectations": [
+    {"text": "finds-both-files: Claude identifies both the research brief and outline by name", "passed": true, "evidence": "Step 2 file discovery finds 2026-05-12_ai-agents_brief.md and 2026-05-12_ai-agents.md explicitly."},
+    {"text": "single-confirmation-step: Claude asks for confirmation exactly once", "passed": true, "evidence": "Step 3 shows one confirmation with 'Ready to proceed? (yes/no)'"},
+    {"text": "filenames-in-confirmation: The confirmation message includes actual filenames", "passed": true, "evidence": "Confirmation block: 'Research from: Content-Hub-Vault-V2/10-Research/2026-05-12_ai-agents_brief.md; Outline from: ...'"},
+    {"text": "correct-command-flags: Command uses --research-file and --outline-file flags", "passed": true, "evidence": "Step 5 command: python -m skills.cascade --research-file '...' --outline-file '...' --title 'AI agents'"},
+    {"text": "twitter-hook-preview: After-completion report previews the Twitter hook", "passed": true, "evidence": "Step 6 shows Twitter Hook: 'Most people think AI is just ChatGPT. But a new wave is about to automate...'"},
+    {"text": "video-link-reminder: Report mentions replacing [VIDEO_LINK] placeholder", "passed": true, "evidence": "Completion report: 'IMPORTANT: Replace [VIDEO_LINK] placeholders in twitter_thread.md and linkedin_post.md before posting.'"}
+  ],
+  "pass_rate": 1.0,
+  "notes": "Perfect pass. New skill surfaces the content cap note and error handling guidance in notes section."
+}

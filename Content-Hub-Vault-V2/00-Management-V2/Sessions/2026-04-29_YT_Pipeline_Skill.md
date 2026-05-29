@@ -7,7 +7,7 @@ type: session_summary
 # Session: YT Pipeline Skill
 
 Implements: [[Chase_AI_System_Breakdown]] Phase 1
-References: [[Current_Sprint]] | [[context]]
+References: [[Architecture_Building]] | [[context]]
 
 ## What Was Done
 

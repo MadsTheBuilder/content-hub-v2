@@ -1,0 +1,12 @@
+﻿{
+  "eval_id": 3,
+  "eval_name": "style-constraint",
+  "prompt": "/title fine-tuning LLMs on custom datasets — make all the Tier-1 titles question-format and all Tier-2 titles use the 'I trained X' structure",
+  "assertions": [
+    "The style constraint is incorporated into the python call (appended to concept string or otherwise passed)",
+    "A vault file is created under Content-Hub-Vault-V2/07-Titles/",
+    "The response shows all 5 Tier-1 titles numbered in the chat",
+    "At least 3 of the 5 Tier-1 titles are in question-format (ending with '?')",
+    "The concept 'fine-tuning LLMs on custom datasets' is recognizable in the titles"
+  ]
+}

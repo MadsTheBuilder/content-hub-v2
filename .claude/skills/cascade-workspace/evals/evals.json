@@ -1,0 +1,101 @@
+{
+  "skill_name": "cascade",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "cascade — I just approved my ai-agents outline, let's generate the distribution content now",
+      "expected_output": "Claude finds both research and outline files for ai-agents, confirms once with both filenames, runs cascade with --research-file and --outline-file flags, reports output dir + Twitter hook preview + VIDEO_LINK reminder + /short-form next step suggestion.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "finds-both-files",
+          "description": "Claude identifies both the research brief (2026-05-12_ai-agents_brief.md) and the outline (2026-05-12_ai-agents.md) by name"
+        },
+        {
+          "name": "single-confirmation-step",
+          "description": "Claude asks for confirmation exactly once, not in multiple separate steps"
+        },
+        {
+          "name": "filenames-in-confirmation",
+          "description": "The confirmation message includes the actual filenames (not just the topic label)"
+        },
+        {
+          "name": "correct-command-flags",
+          "description": "The command uses --research-file and --outline-file flags (not just a URL)"
+        },
+        {
+          "name": "twitter-hook-preview",
+          "description": "After-completion report previews the Twitter hook / first tweet"
+        },
+        {
+          "name": "video-link-reminder",
+          "description": "Report mentions replacing [VIDEO_LINK] placeholder before posting"
+        },
+        {
+          "name": "next-step-suggestion",
+          "description": "Report suggests /short-form as the next pipeline step"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "/cascade ai agents",
+      "expected_output": "Claude finds the ai-agents research and outline files, shows filenames in one confirmation, runs cascade with correct flags, reports output dir + Twitter hook + VIDEO_LINK reminder.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "finds-both-files",
+          "description": "Claude identifies both the research brief (2026-05-12_ai-agents_brief.md) and the outline (2026-05-12_ai-agents.md) by name"
+        },
+        {
+          "name": "single-confirmation-step",
+          "description": "Claude asks for confirmation exactly once"
+        },
+        {
+          "name": "filenames-in-confirmation",
+          "description": "The confirmation message includes the actual filenames"
+        },
+        {
+          "name": "correct-command-flags",
+          "description": "The command uses --research-file and --outline-file flags"
+        },
+        {
+          "name": "twitter-hook-preview",
+          "description": "After-completion report previews the Twitter hook"
+        },
+        {
+          "name": "video-link-reminder",
+          "description": "Report mentions replacing [VIDEO_LINK] placeholder"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "cascade this video for me: https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "expected_output": "Claude routes to YouTube fallback mode (does not look for local files), confirms the URL once, runs python -m skills.cascade with the URL, reports 4 files + Twitter hook + VIDEO_LINK reminder.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "routes-to-youtube-mode",
+          "description": "Claude identifies this as YouTube fallback mode and does NOT look for local research/outline files"
+        },
+        {
+          "name": "single-confirmation-with-url",
+          "description": "Confirmation shows the YouTube URL"
+        },
+        {
+          "name": "correct-command-syntax",
+          "description": "Command is python -m skills.cascade <url> with no --research-file or --outline-file flags"
+        },
+        {
+          "name": "twitter-hook-preview",
+          "description": "After-completion report previews the Twitter hook"
+        },
+        {
+          "name": "video-link-reminder",
+          "description": "Report mentions replacing [VIDEO_LINK] placeholder"
+        }
+      ]
+    }
+  ]
+}

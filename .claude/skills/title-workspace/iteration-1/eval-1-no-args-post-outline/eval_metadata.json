@@ -1,0 +1,12 @@
+﻿{
+  "eval_id": 1,
+  "eval_name": "no-args-post-outline",
+  "prompt": "/title",
+  "assertions": [
+    "The agent handles missing concept gracefully — either reads from a recent outline file in Content-Hub-Vault-V2/06-Outlines/ or asks once for the video topic",
+    "The python -m skills.title command is executed with a quoted concept string",
+    "A vault file is created under Content-Hub-Vault-V2/07-Titles/",
+    "The response shows all 5 Tier-1 titles numbered in the chat",
+    "The response mentions the next step (cascade or short-form)"
+  ]
+}

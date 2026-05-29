@@ -1,121 +1,113 @@
-# Content Hub — Agent Definitions
+# Content Hub V2 — Agent Definitions
 
-These are the specialist agents for Content Hub. When Claude Code delegates work, it should pick the right agent based on the task scope.
+Specialist agents for V2 (local-first skill engine). When Claude Code delegates work, pick the agent whose domain matches the task. Referenced by [[CLAUDE.md]] § 9 for `/orchestrate` auto-triggering.
+
+V2 is a 7-stage content pipeline: `researcher → ideation → hook → outline → cascade → short-form → voice-cleanup` (+ `title` and `yt-pipeline` as one-shots). Two-layer skill pattern: `.claude/skills/<name>/SKILL.md` (Claude Code entry) + `skills/<name>.py` (helper) + `prompts/<name>.md` (prompt source of truth).
 
 ---
 
 ## pipeline-agent
-**Role:** Content generation pipeline specialist
-**When to use:** Any work touching the generation pipeline — scripting, storyboard, rendering, or the pipeline orchestration in `router.py`.
+**Role:** Core content pipeline specialist
+**When to use:** Any work touching the 7 long-form skills — script generation, prompts, AI routing, stage chaining.
 
 **Owns:**
-- `backend/content/scripting.py` — LLM cascade, prompt construction, model fallback
-- `backend/content/storyboard.py` — script → frame dict conversion
-- `backend/content/renderer_slides.py` — Playwright PNG rendering
-- `backend/content/renderer_video.py` — Remotion MP4 rendering
-- `backend/content/renderer_talking_head.py` — ZIP packaging
-- `backend/content/router.py` — generation endpoint + background task
+- `skills/researcher.py`, `skills/ideation.py`, `skills/hook.py`, `skills/outline.py`, `skills/cascade.py`, `skills/short_form.py`, `skills/voice_cleanup.py` — the 7 pipeline stages
+- `skills/title.py`, `skills/yt_pipeline.py` — one-shot helpers
+- `skills/pipeline.py` — chained execution of all 7 stages
+- `skills/utils/ai.py` — AI router (Gemini → Ollama → Claude)
+- `skills/utils/transcript.py` — YouTube transcript extraction
+- `prompts/*.md` — single source of truth for prompt text
 
-**Key contract:** Storyboard frames must always include `bg_gradient`, `accent_color`, `headline`, `body`, `slide_number`. If you change the frame schema, update both storyboard.py AND the renderer.
+**Key contract:** Each stage reads from the previous stage's vault output folder and writes to its own. `skills/utils/ai.py` is the only place model providers are selected — never call Anthropic / Gemini / Ollama SDKs directly from a stage skill.
 
-**Tools needed:** Read, Edit, Bash (to test rendering)
+**Cost-aware routing:** Ollama (free) for drafts → Claude (paid) for polish and hooks. Gemini still available where wired (research).
+
+**Tools needed:** Read, Edit, Bash (`python -m skills.<name>`)
 
 ---
 
 ## research-agent
-**Role:** Research layer and RAG specialist
-**When to use:** Work on trending content scraping, embedding, retrieval, or the research brief assembly.
+**Role:** Research + trend discovery specialist
+**When to use:** Work on trending repo scraping, NotebookLM research, or the brief assembly that feeds `/researcher`.
 
 **Owns:**
-- `backend/research/apify_client.py` — Apify actor runs + polling
-- `backend/research/organic_score.py` — view × retention scoring
-- `backend/research/rag.py` — embed_and_store, similarity search, weekly refresh
-- `backend/research/research_service.py` — ResearchBrief assembly (RAG + trending + memory → narrative)
+- `scripts/github_trending.py` — daily GitHub AI trending pull, writes to `Content-Hub-Vault-V2/04-Trends/github_trending.md`
+- `bin/run_github_trending.bat` — Windows Task Scheduler entry point
+- `skills/researcher.py` — primary research brief assembly
+- `skills/researcher_crawler.py` — repo deep-dive crawler
+- `skills/research_plan.py`, `skills/research_sources.py` — plan + source curation helpers
+- `notebooklm-py/` — programmatic NotebookLM access (one-shot extractions + ad-hoc deep research)
 
 **Key facts:**
-- Embedding model: `text-embedding-004` (Gemini), 768 dimensions
-- pgvector search via `match_embeddings` RPC in Supabase
-- Mock mode: `sb.rpc()` returns empty result — don't mistake mock silence for failure
+- Trend file at `Content-Hub-Vault-V2/04-Trends/github_trending.md` is step 1 of every `/researcher` run.
+- NotebookLM: one question at a time (batching causes failures); always go deep into cited sources, not just the surface response.
+- Per-repo deep dives land in `Content-Hub-Vault-V2/04-Trends/<owner>_<repo>/`.
 
-**Tools needed:** Read, Edit, Bash (to test embedding calls)
-
----
-
-## intelligence-agent
-**Role:** Learning system and suggestions specialist
-**When to use:** Work on the three learning loops (publication memory, voice learning, trend detection) or the daily suggestions engine.
-
-**Owns:**
-- `backend/intelligence/memory.py` — Loop A (publication memory) + Loop B (voice learning)
-- `backend/intelligence/triggers.py` — Loop C (trend spike detection)
-- `backend/intelligence/suggestions.py` — daily 3-suggestion generator
-- `backend/intelligence/rejection.py` — suggestion rejection tracking
-- `backend/scheduler/jobs.py` — APScheduler cron job registration
-
-**Learning loop cadence:**
-- Continuous: publication memory (on every publish)
-- Every-3-days at 6 AM: trend detection → content_triggers
-- Weekly Sunday 4 AM: voice learning (edit diffs → style profile)
-- Weekly Sunday 5:30 AM: batch publication memory refresh
-
-**Tools needed:** Read, Edit
+**Tools needed:** Read, Edit, Bash (`python scripts/github_trending.py`)
 
 ---
 
-## frontend-agent
-**Role:** Next.js frontend specialist
-**When to use:** Any UI work — pages, components, API wiring, styling.
+## webapp-agent
+**Role:** Design-doc webapp specialist (React + FastAPI shell)
+**When to use:** UI work on the webapp wrapper that surfaces the 7-stage pipeline — pages, stage workspaces, server endpoints.
 
 **Owns:**
-- `frontend/app/` — all pages
-- `frontend/components/` — Sidebar and UI components
-- `frontend/lib/api.ts` — API client (all fetch calls)
-- `frontend/lib/types.ts` — TypeScript types
+- `Design-doc/web/src/` — React frontend (JSX + components, including `StageWorkspace.jsx`)
+- `Design-doc/server/` — Python server layer (FastAPI; aiofiles + python-multipart)
+- Stage routing: each pipeline stage gets an InputZone + OutputZone + workspace tab
 
 **Key rules:**
-- Port 3003 (`npm run dev` in `frontend/`)
-- Dark theme: bg `#0F172A`, accent `#C9A96E`, borders `#334155`
-- All API calls go through `frontend/lib/api.ts` — never raw fetch in page components
-- Framer Motion for animations — single `<motion.div key={step}>` wrapper per animated section; don't nest motion divs or exits deadlock
-- `useEffect` deps must be accurate — don't put `router` in deps if the effect doesn't use router state
+- Stage outputs are read directly from the V2 vault folders (`04-Trends/`, `05-Hooks/`, etc.), not from a database.
+- Trends workspace is read-only (`OutputZone` always shows `MarkdownViewer`; `InputZone` shows read-only notice).
+- FastAPI + uvicorn + starlette in `requirements.txt` exist for this webapp — do not strip them.
 
-**Tools needed:** Read, Edit, Bash (npm run dev)
+**Tools needed:** Read, Edit, Bash (`npm run dev` / `uvicorn`)
 
 ---
 
-## db-agent
-**Role:** Supabase schema and RLS specialist
-**When to use:** Schema changes, new tables, RLS policy changes, migrations.
+## app-agent
+**Role:** Control room and entry-point specialist
+**When to use:** Work on the local launchers, vault index, or `.bat` shells.
 
 **Owns:**
-- `supabase/migrations/001_initial_schema.sql` — canonical schema
-- All Supabase MCP operations
+- `app/control_room.py` — main launcher dispatching to skills and scripts
+- `app/runner.py` — pipeline runner
+- `app/vault_index.py` — vault index helper
+- `bin/run_control_room.bat`, `bin/run_github_trending.bat` — Windows shells
+- `scripts/` — one-off scripts callable from control_room
 
 **Key rules:**
-- `workflows.user_id` and `content_items.user_id` are plain `uuid` — NO FK to auth.users (dropped to avoid FK violations with dummy user)
-- Service role key bypasses RLS — backend writes use service role
-- `trending_content` and `content_embeddings` have SELECT-only RLS policies (service role writes, frontend reads)
-- All other tables have ALL (CRUD) policies scoped to `auth.uid() = user_id`
-- pgvector extension must be enabled; `match_embeddings` RPC must exist
-- Supabase project: `fuvtjsivfngzrmyxeuug` (ap-southeast-1)
+- Path constants in `app/` and `scripts/` use `Path(__file__).resolve().parent.parent` to climb up to project root (these files live one level deep).
+- Subprocess calls in `control_room.py` reference `scripts/github_trending.py` — keep paths consistent if files move.
 
-**Tools needed:** Supabase MCP tools, Read, Edit
+**Tools needed:** Read, Edit, Bash
 
 ---
 
-## brand-agent
-**Role:** Brand config and visual identity specialist
-**When to use:** Brand config API, brand colours flowing into rendered content, watermark logic.
+## vault-agent
+**Role:** Vault knowledge graph specialist
+**When to use:** Session logs, sprint task updates, vault structure, graphify rebuilds, anything in `Content-Hub-Vault-V2/00-Management-V2/`.
 
 **Owns:**
-- `backend/brand/router.py` — GET/PUT brand config endpoints
-- `backend/brand/models.py` — BrandConfig Pydantic model
+- `Content-Hub-Vault-V2/00-Management-V2/Memory/` — persistent project context (`context.md`, etc.)
+- `Content-Hub-Vault-V2/00-Management-V2/Sessions/` — session logs (mandatory `[[WikiLinks]]` + semantic edges)
+- `Content-Hub-Vault-V2/00-Management-V2/Tasks/` — `Current_Sprint.md`, `Architecture_Building.md`, `Webapp_sprint.md`
+- `Content-Hub-Vault-V2/00-Management-V2/Plans/` — `Local_First_Skill_Engine_Plan.md`, this CLAUDE.md
+- `Content-Hub-Vault-V2/00-Management-V2/Orchestrations/` — state files for `/orchestrate` runs
+- `graphify-out/` — knowledge graph artefacts; regenerate via `/graphify --update`
+- `.claude/skills/*/SKILL.md` — slash-command entry points
 
-**Key contract:** Brand colours must flow through the pipeline:
-```
-brand_configs table → router.py fetches brand → storyboard.py uses secondary_color + primary_color
-→ renderer_slides.py injects bg_gradient + accent_color into HTML → PNG output
-```
-If slides look wrong (wrong colours, missing watermark), trace this chain from DB to render.
+**Key rules:**
+- Every significant task ends with a session log at `Sessions/YYYY-MM-DD_Short_Description.md` written BEFORE the final response (per [[CLAUDE.md]] § 7).
+- Logs MUST use explicit `[[WikiLinks]]` and semantic edges (`Implements:`, `References:`, `Modifies:`).
+- Rebuild graphify-out after structural changes — `GRAPH_REPORT.md` is read at every session start.
 
-**Tools needed:** Read, Edit
+**Tools needed:** Read, Edit, Write
+
+---
+
+## Routing notes for /orchestrate
+
+- Single-skill or single-file work → act directly, do not orchestrate.
+- Two-domain work (e.g. add a new pipeline stage + webapp tab + vault session log) → orchestrate across `pipeline-agent` + `webapp-agent` + `vault-agent`.
+- Source of truth for orchestrated execution: `Content-Hub-Vault-V2/00-Management-V2/Superpowers/orchestrated-execution.md` (overrides skill files if they conflict).

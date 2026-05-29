@@ -1,0 +1,41 @@
+{
+  "skill_name": "short-form",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I just finished reviewing and approving the cascade output for my AI agents video. The outline and research are already in the vault. Run /short-form.",
+      "expected_output": "Agent finds the most recent research+outline files, confirms with the user, then runs `python -m skills.short_form` with --research-file and --outline-file flags. Reports output directory, 4 files created, pastes the 30s hook line, and suggests /voice-cleanup next.",
+      "files": [],
+      "expectations": [
+        "The agent ran the python -m skills.short_form command with --research-file and --outline-file arguments",
+        "The agent reported the output directory path under Content-Hub-Vault-V2/09-Shorts/",
+        "The agent showed the opening line of the 30s script verbatim",
+        "The agent suggested /voice-cleanup as the next step"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Run /short-form for my 'AI Agents' video — the research and outline are in the vault from May 12.",
+      "expected_output": "Agent resolves the correct dated file paths for the AI Agents topic (2026-05-12 slug), runs the Python command with both --research-file and --outline-file, reports the 4 output files, and pastes the 30s hook.",
+      "files": [],
+      "expectations": [
+        "The agent resolved file paths containing '2026-05-12' and 'ai-agent' in the path",
+        "The agent ran python -m skills.short_form with both --research-file and --outline-file flags",
+        "The agent reported all 4 output files: 30s_script.md, 60s_script.md, 90s_script.md, README.md",
+        "The agent pasted the verbatim opening line of the 30s script as the hook preview"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I want short-form scripts from this YouTube video about Claude Code agents. I don't have a research file or outline for it yet. Here's the URL: https://www.youtube.com/watch?v=RpEblXjLxB0",
+      "expected_output": "Agent uses Mode B (YouTube fallback), runs `python -m skills.short_form <url>` without asking for research/outline files, reports the output directory and 4 files created, and pastes the 30s hook.",
+      "files": [],
+      "expectations": [
+        "The agent used Mode B and ran python -m skills.short_form with the YouTube URL as a positional argument",
+        "The agent did NOT ask for a research file or outline file (Mode B is the correct path here)",
+        "The agent reported the output directory path under Content-Hub-Vault-V2/09-Shorts/",
+        "The agent suggested /voice-cleanup as the next step"
+      ]
+    }
+  ]
+}

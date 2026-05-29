@@ -1,0 +1,14 @@
+{
+  "eval_id": 3,
+  "eval_name": "youtube-url",
+  "skill_version": "old",
+  "expectations": [
+    {"text": "routes-to-youtube-mode: Claude identifies YouTube fallback mode and does NOT look for local files", "passed": true, "evidence": "Step 1: 'No research or outline files referenced — Mode B (YouTube fallback) is triggered.' No local file search."},
+    {"text": "single-confirmation-with-url: Confirmation shows the YouTube URL", "passed": true, "evidence": "Step 2: 'Running cascade on: https://www.youtube.com/watch?v=dQw4w9WgXcQ — confirm?'"},
+    {"text": "correct-command-syntax: Command is python -m skills.cascade <url> with no --research-file or --outline-file", "passed": true, "evidence": "Step 3: 'python -m skills.cascade https://www.youtube.com/watch?v=dQw4w9WgXcQ'"},
+    {"text": "twitter-hook-preview: After-completion report previews the Twitter hook", "passed": true, "evidence": "Step 5: 'Twitter hook (first tweet): Just watched this classic music moment...'"},
+    {"text": "video-link-reminder: Report mentions replacing [VIDEO_LINK] placeholder", "passed": true, "evidence": "Step 5 next steps: 'Replace [VIDEO_LINK] placeholders with the actual URL'"}
+  ],
+  "pass_rate": 1.0,
+  "notes": "Old skill handles YouTube mode correctly. Confirmation is more terse than new skill — one line vs multi-line. Both work."
+}

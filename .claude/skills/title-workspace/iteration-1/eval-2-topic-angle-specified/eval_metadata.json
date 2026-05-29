@@ -1,0 +1,13 @@
+﻿{
+  "eval_id": 2,
+  "eval_name": "topic-angle-specified",
+  "prompt": "/title building a local RAG pipeline with pgvector and FastAPI — the mistakes I made scaling to 1M vectors",
+  "assertions": [
+    "The concept string is passed verbatim (or closely) to python -m skills.title without truncation",
+    "A vault file is created under Content-Hub-Vault-V2/07-Titles/",
+    "The response shows all 5 Tier-1 titles numbered in the chat",
+    "At least one Tier-1 or Tier-2 title reflects the 'mistakes' or 'lessons learned' angle",
+    "Titles are specific to the technology (pgvector, RAG, FastAPI) — not generic AI titles",
+    "Thumbnail text is included for each title in the vault file"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "eval_id": "eval-no-args-old_skill",
+  "timestamp": "2026-05-15T00:00:00Z",
+  "prompt": "I want to start making a video but I'm not sure what angle to take yet. Can you kick off researcher for me?",
+  "skill_version": "old_snapshot",
+  "behavior": "Requested niche parameter (missing from user message)",
+  "tool_calls": 0,
+  "python_commands_simulated": 0,
+  "steps": [
+    "Read SKILL.md to understand researcher execution flow",
+    "Identify that Step 1 requires a niche parameter",
+    "Determine that user message does not provide a niche",
+    "Craft response asking user for niche",
+    "Explain what researcher does and why we need the niche",
+    "Provide examples of valid niches"
+  ],
+  "total_steps": 6,
+  "outcome": "waiting_for_user_input",
+  "next_action": "User provides niche → list repos with python -m skills.researcher --list"
+}

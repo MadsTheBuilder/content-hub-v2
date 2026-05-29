@@ -1,0 +1,12 @@
+{
+  "eval_id": 3,
+  "eval_name": "style-constraint",
+  "prompt": "Redo the titles for the RAG pipeline concept but this time go more curiosity-gap, less literal. Skip numbered lists — I want more open-ended intrigue. The concept is still 'RAG pipeline with LangChain and pgvector'.",
+  "assertions": [
+    "The agent appends the style constraint to the concept string before calling python -m skills.title (e.g., concept + '— Style: curiosity-gap, no numbered lists')",
+    "The agent runs python -m skills.title without asking for confirmation",
+    "A vault file path under Content-Hub-Vault-V2/07-Titles/ is reported or a clear failure reason is given",
+    "The response lists 5 Tier-1 titles or documents failure clearly",
+    "At least one Tier-1 title is more curiosity-gap or open-ended than a literal numbered how-to (if titles were generated)"
+  ]
+}

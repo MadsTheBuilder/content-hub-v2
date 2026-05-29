@@ -16,6 +16,8 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
 from skills.utils.ai import draft, polish
+from skills.brief_loader import load_brief, apply_cli_overrides
+from skills.brief_args import add_brief_args
 
 logger = logging.getLogger(__name__)
 
@@ -38,30 +40,42 @@ def load_marketing_brain():
     return MARKETING_BRAIN_PATH.read_text(encoding="utf-8")
 
 
+def load_research(research_path):
+    if not research_path:
+        return ""
+    p = Path(research_path)
+    if not p.exists():
+        logger.warning("Research file not found at %s — continuing without it", research_path)
+        return ""
+    return p.read_text(encoding="utf-8")
+
+
 def make_slug(topic):
     slug = re.sub(r"[^\w\s-]", "", topic.lower())
     slug = re.sub(r"[\s_-]+", "-", slug).strip("-")
     return "-".join(slug.split("-")[:6])
 
 
-def build_prompt(template, topic, platform, audience, format_type, marketing_brain):
+def build_prompt(template, topic, platform, audience, format_type, marketing_brain, research):
     filled = template.format(
         topic=topic,
         platform=platform,
         audience=audience,
         format=format_type,
     )
+    if research:
+        filled += f"\n\n---\n\n## RESEARCH CONTEXT\n\n{research[:3000]}"
     if marketing_brain:
         filled += f"\n\n---\n\n## SUPPLEMENTAL KALLAWAY CONTEXT\n\n{marketing_brain[:3000]}"
     return filled
 
 
-async def run(topic, platform, audience, format_type, no_polish):
+async def run(topic, platform, audience, format_type, no_polish, research):
     template = load_prompt()
     marketing_brain = load_marketing_brain()
-    prompt = build_prompt(template, topic, platform, audience, format_type, marketing_brain)
+    prompt = build_prompt(template, topic, platform, audience, format_type, marketing_brain, research)
 
-    print("Drafting hooks (Ollama → Gemini)...")
+    print("Drafting hooks (NIM → Gemini)...")
     draft_result = await draft(prompt)
     if not draft_result["success"]:
         logger.error("Draft failed: %s", draft_result.get("error"))
@@ -70,7 +84,7 @@ async def run(topic, platform, audience, format_type, no_polish):
     hook_text = draft_result["text"]
 
     if not no_polish:
-        print("Polishing with Claude...")
+        print("Polishing with NIM → Gemini → Ollama → Claude cascade...")
         polish_prompt = (
             prompt
             + f"\n\nDRAFT TO POLISH:\n{hook_text}\n\n"
@@ -120,13 +134,21 @@ async def main():
     parser.add_argument("--format", dest="format_type", default="medium",
                         choices=["short", "medium", "long"],
                         help="Video format: short=30-60s, medium=5-8min, long=10-15min (default: medium)")
+    parser.add_argument("--research-file", default=None,
+                        help="Path to research markdown file (optional)")
     parser.add_argument("--no-polish", action="store_true",
                         help="Skip Claude polish pass (faster, cheaper — uses draft only)")
+    add_brief_args(parser)
     args = parser.parse_args()
+    brief = load_brief()
+    brief = apply_cli_overrides(brief, args)
+    if brief.get("audience"):
+        args.audience = brief["audience"]
 
     print(f"Hook writer: \"{args.topic}\" | {args.platform} | {args.format_type}")
 
-    hook_text = await run(args.topic, args.platform, args.audience, args.format_type, args.no_polish)
+    research = load_research(args.research_file)
+    hook_text = await run(args.topic, args.platform, args.audience, args.format_type, args.no_polish, research)
     output_path = save_output(args.topic, args.platform, args.audience, args.format_type, hook_text)
 
     print(f"\n{'='*60}")

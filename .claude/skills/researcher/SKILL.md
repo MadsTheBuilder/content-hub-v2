@@ -1,47 +1,89 @@
-# /researcher
+---
+name: researcher
+description: >-
+  Step 1 of 8 in the content production pipeline (/researcher → /ideation → /hook → /outline →
+  /title → /cascade → /short-form → /voice-cleanup). Runs deep content-gap research on GitHub
+  trending repos via NotebookLM and outputs a dated research brief to Content-Hub-Vault-V2/10-Research/.
+  Use this skill whenever the user types /researcher, says "research a topic", "find content gaps",
+  "what should I make a video about", "check trending repos", "run research on [topic]", "I want
+  to start a new video", or asks what to research next. Also trigger when the user wants to kick
+  off the production pipeline from scratch — /researcher is always the entry point. Always
+  suggest /ideation as the next step after the brief is reviewed.
+---
 
-Run isolated content gap research on each trending repo. Reads trend URLs from the vault, creates one NotebookLM notebook per repo (no overlap), runs web research per notebook, queries for content gaps, then compiles all findings into one brief.
+# /researcher — Content Gap Research
 
-## Trigger
-User types `/researcher` with a niche.
+Step 1 of the production pipeline. Produces a research brief with a recommended video angle per repo, saved to `Content-Hub-Vault-V2/10-Research/`. The brief feeds into `/ideation` to generate ranked video ideas.
 
-## Execution Steps
+## Interaction Flow
 
-1. Get niche from user (inline with command or ask if not provided). Example: `AI agents`, `local LLMs`, `open-source tools`.
-2. Confirm before running: "Running researcher on niche: [niche] — confirm?"
-3. Wait for confirmation.
-4. Run: `python -m skills.researcher --niche "[niche]"`
-   - For deeper research: `python -m skills.researcher --niche "[niche]" --mode deep`
-5. Report: output file path + the "Recommended Video Angle" from each repo section in the brief.
+1. **Get niche** — inline with `/researcher <niche>` or ask if not provided.
+   Example niches: `AI agents`, `local LLMs`, `open-source tools`
 
-## Inputs
+2. **List available repos** so the user can pick:
+   ```
+   python -m skills.researcher --list
+   ```
+   Show the numbered list to the user.
 
-- `niche` — required. The topic label used to name the brief. Quoted string.
-- `--mode fast|deep` — optional. Default `deep` (~5 min per repo, broader web crawl). Use `fast` only for quick sanity checks.
-- `--max-sources N` — optional. How many trend repo URLs to research. Default 8.
+3. **Ask which repos** to research. Wait for the user to specify.
+
+4. **Confirm before running**:
+   > "Running researcher on: [repo1, repo2] — niche: [niche] — confirm?"
+
+5. **Wait for confirmation**, then run:
+   ```
+   python -m skills.researcher --niche "[niche]" --repos owner/repo1 owner/repo2
+   ```
+   Add `--mode fast` only if the user explicitly wants a quick sanity check.
+
+6. **Report results**:
+   - Full path to the brief file
+   - The "Recommended Video Angle" from each repo's section
+   - Notebook IDs listed in the frontmatter (for NotebookLM follow-up)
+
+## CLI Reference
+
+| Flag | Required | Description |
+|------|----------|-------------|
+| `--niche` | Yes | Topic label for the output file, e.g. `"AI agents"` |
+| `--repos` | Yes | One or more `owner/repo` slugs (space-separated) |
+| `--mode fast\|deep` | No | Default `deep` (~8 min/repo). `fast` for quick checks only |
+| `--list` | — | List repos from trending file and exit (no research run) |
+
+Never omit `--repos`. Never auto-select repos without the user's explicit choice.
 
 ## Output
 
-`Content-Hub-Vault-V2/10-Research/YYYY-MM-DD_<niche-slug>_brief.md` containing one section per repo:
-- Repo URL and notebook ID (for manual follow-up in NotebookLM)
-- Discovered sources count
-- Content gap analysis from `prompts/researcher.md`
+`Content-Hub-Vault-V2/10-Research/YYYY-MM-DD_<niche-slug>_brief.md`
 
-## After Completion
+Each repo section contains:
+- Repo URL and NotebookLM notebook ID
+- Synthesized 5-section brief (What it does / Who it's for / How it works / When to use / Watch out for)
+- Recommended Video Angle — the key field for `/hook`
+- Raw Q&A (collapsed) for deeper inspection
 
-Report:
-- Full path to the brief file
-- The "Recommended Video Angle" from each repo's section
-- Notebook IDs listed in the frontmatter (for opening individual notebooks in NotebookLM)
+## Source Quality Guardrails (built into the pipeline)
+
+- Sources are filtered post-research: only GitHub URLs and title/URL matches to the repo are kept
+- `chat.configure()` anchors NotebookLM to the specific repo before any questions are asked
+- If no relevant sources survive filtering, a WARNING is printed; answers are flagged as unreliable
 
 ## Prerequisites
 
-- `notebooklm login` must have been run (auth stored at `~/.notebooklm/storage_state.json`)
-- `Content-Hub-Vault-V2/04-Trends/github_trending.md` must exist and contain GitHub repo URLs
+- `notebooklm login` must have run (auth at `~/.notebooklm/storage_state.json`)
+- `Content-Hub-Vault-V2/04-Trends/github_trending.md` must exist with GitHub repo URLs
 
-## Notes
+## Timing
 
-- Each repo gets its own isolated NotebookLM notebook — no cross-contamination between repos.
-- Notebooks are kept after the run. Find them at notebooklm.google.com via the notebook_ids in the brief frontmatter.
-- Deep mode runs per-repo. With post-import indexing wait (75s) and a 5-min generation window, budget ~8 min per repo. Use `--max-sources 3` for a focused run (~24 min).
-- After reviewing the brief, the next command is `/hook topic="<chosen angle>"`.
+- Deep mode: ~8 min per repo (web research + 75s indexing + 11 questions + synthesis)
+- Fast mode: ~3–4 min per repo (lighter research, fewer sources)
+- Each repo gets its own isolated NotebookLM notebook — no cross-contamination
+
+## After Completion → Next Step
+
+After reviewing the brief, the next command is:
+```
+/ideation <niche>
+```
+Always surface this suggestion when presenting results.

@@ -1,0 +1,27 @@
+{
+  "eval_name": "Eval 2 — Bare Topic (with_skill)",
+  "skill": "researcher",
+  "timestamp": "2026-05-15T00:00:00Z",
+  "user_prompt": "/researcher AI agents",
+  "skill_invoked": true,
+  "command_executed": "python -m skills.researcher --list",
+  "command_success": true,
+  "repos_listed": 9,
+  "response_follows_skill_protocol": true,
+  "protocol_steps_executed": [
+    "Get niche — extracted 'AI agents' from inline prompt",
+    "List available repos — ran --list and displayed numbered list",
+    "Ask which repos to research — prompted user for explicit selection",
+    "Flagged relevant repos — called out likely candidates (#8, #4, #1)"
+  ],
+  "response_quality": {
+    "clarity": "high",
+    "follows_instructions": true,
+    "asks_for_confirmation": false,
+    "notes": "Response does not ask for confirmation before running; waits for user to select repos first, which is correct per SKILL.md step 3"
+  },
+  "next_step_suggested": false,
+  "next_step_notes": "/hook suggestion will come after user selects repos and research completes",
+  "eval_passing": true,
+  "eval_notes": "Skill successfully triggered on bare topic, niche extracted, repos listed, user prompted for selection. Protocol flow correct. Ready for user to specify repos."
+}

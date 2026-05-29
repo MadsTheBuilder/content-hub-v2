@@ -1,0 +1,67 @@
+{
+  "expectations": [
+    {
+      "text": "The agent used Mode B and ran python -m skills.short_form with the YouTube URL as a positional argument",
+      "passed": true,
+      "evidence": "Command Run: 'python -m skills.short_form https://www.youtube.com/watch?v=RpEblXjLxB0' — URL passed as positional argument, no --research-file or --outline-file flags"
+    },
+    {
+      "text": "The agent did NOT ask for a research file or outline file (Mode B is the correct path here)",
+      "passed": true,
+      "evidence": "Transcript goes directly from reading SKILL.md to running Mode B command. Steps 1-3 are: Read SKILL.md, Locate Python Module, Inspect Module — no request for research/outline files."
+    },
+    {
+      "text": "The agent reported the output directory path under Content-Hub-Vault-V2/09-Shorts/",
+      "passed": false,
+      "evidence": "Python exited with code 1 ('Video unavailable'). No output directory was created. Final Response explains the failure but does not report an output path."
+    },
+    {
+      "text": "The agent suggested /voice-cleanup as the next step",
+      "passed": false,
+      "evidence": "Final Response focuses on remediation ('Provide a valid, publicly accessible YouTube URL. Re-run...') — no mention of /voice-cleanup. Expected since the command itself failed."
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 2,
+    "total": 4,
+    "pass_rate": 0.5
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 2, "Bash": 2, "Glob": 1, "Write": 1},
+    "total_tool_calls": 6,
+    "total_steps": 3,
+    "errors_encountered": 1,
+    "output_chars": 3100
+  },
+  "timing": {
+    "executor_duration_seconds": 385.6,
+    "total_duration_seconds": 385.6
+  },
+  "claims": [
+    {
+      "claim": "Mode B was correctly identified without prompting the user for research/outline",
+      "type": "process",
+      "verified": true,
+      "evidence": "Skill read confirms: 'Applicable Mode: Mode B (YouTube URL fallback, no research/outline provided)'"
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": ["Video unavailability makes this eval non-representative of Mode B success path"],
+    "needs_review": ["Consider replacing eval URL with a known-good public video for future iterations"],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "The agent reported the output directory path under Content-Hub-Vault-V2/09-Shorts/",
+        "reason": "This assertion cannot pass when the test URL is invalid. Should use a publicly accessible video URL, or split into a separate eval for the failure-handling path."
+      },
+      {
+        "assertion": "The agent suggested /voice-cleanup as the next step",
+        "reason": "This is hard to evaluate when the command fails. Consider restricting this assertion to success-path evals."
+      }
+    ],
+    "overall": "Assertions 3 and 4 are untestable with an invalid URL. Assertions 1 and 2 are strong discriminating tests for Mode B path selection."
+  }
+}

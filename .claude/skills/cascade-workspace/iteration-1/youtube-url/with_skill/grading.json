@@ -1,0 +1,14 @@
+{
+  "eval_id": 3,
+  "eval_name": "youtube-url",
+  "skill_version": "new",
+  "expectations": [
+    {"text": "routes-to-youtube-mode: Claude identifies YouTube fallback mode and does NOT look for local files", "passed": true, "evidence": "Step 1 explicitly: 'Input contains a YouTube URL — YouTube URL fallback mode triggers.' No local file search attempted."},
+    {"text": "single-confirmation-with-url: Confirmation shows the YouTube URL", "passed": true, "evidence": "Step 2: 'Running cascade on: https://www.youtube.com/watch?v=dQw4w9WgXcQ ... Go?'"},
+    {"text": "correct-command-syntax: Command is python -m skills.cascade <url> with no --research-file or --outline-file", "passed": true, "evidence": "Step 4: 'python -m skills.cascade https://www.youtube.com/watch?v=dQw4w9WgXcQ'"},
+    {"text": "twitter-hook-preview: After-completion report previews the Twitter hook", "passed": true, "evidence": "Step 5 report shows Twitter hook preview line."},
+    {"text": "video-link-reminder: Report mentions replacing [VIDEO_LINK] placeholder", "passed": true, "evidence": "Step 5: 'Replace [VIDEO_LINK] in twitter_thread.md with: https://www.youtube.com/watch?v=dQw4w9WgXcQ'"}
+  ],
+  "pass_rate": 1.0,
+  "notes": "New skill correctly routes to YouTube mode, confirms with URL, and even provides the actual URL to use when replacing [VIDEO_LINK] — more actionable than old skill."
+}

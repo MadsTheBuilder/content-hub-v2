@@ -1,0 +1,6 @@
+{
+  "total_tokens": 49713,
+  "duration_ms": 297383,
+  "total_duration_seconds": 297.4,
+  "notes": "First attempt timed out at 371s (stream idle, 50 tokens). This reflects the successful retry run."
+}

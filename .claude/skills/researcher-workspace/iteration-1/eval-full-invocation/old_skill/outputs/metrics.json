@@ -1,0 +1,60 @@
+{
+  "eval_id": "eval-3-full-invocation",
+  "skill_version": "old",
+  "date": "2026-05-15",
+  "user_message": "research the microsoft/autogen repo, niche is AI agents",
+  "skill_triggered": true,
+  "workflow_stages": {
+    "niche_extraction": {
+      "status": "success",
+      "niche_provided_inline": true,
+      "niche_value": "AI agents"
+    },
+    "repo_selection": {
+      "status": "user_specified_inline",
+      "repos_provided": ["microsoft/autogen"],
+      "list_step_skipped": true,
+      "reason": "User provided specific repo directly"
+    },
+    "confirmation": {
+      "status": "awaited",
+      "confirmation_requested": true,
+      "command_shown": "python -m skills.researcher --niche \"AI agents\" --repos microsoft/autogen"
+    },
+    "execution": {
+      "status": "simulated",
+      "mode": "deep",
+      "estimated_duration_minutes": 8,
+      "sources_found": 32,
+      "sources_retained_after_filtering": 18
+    },
+    "output": {
+      "status": "simulated",
+      "brief_file_path": "Content-Hub-Vault-V2/10-Research/2026-05-15_ai-agents_brief.md",
+      "notebook_id": "notebook_abc12345xyz",
+      "recommended_angles_count": 1
+    }
+  },
+  "skill_adherence": {
+    "followed_niche_extraction": true,
+    "followed_list_and_pick_pattern": false,
+    "note": "User provided repo inline, so list/pick was skipped (acceptable per skill design)",
+    "confirmed_before_running": true,
+    "reported_brief_path": true,
+    "reported_video_angles": true,
+    "suggested_next_step": true
+  },
+  "output_completeness": {
+    "brief_path": "included",
+    "notebook_ids": "included",
+    "video_angle_summary": "included",
+    "next_command": "included",
+    "mode_used": "deep"
+  },
+  "simulation_notes": [
+    "User provided both repo and niche inline, so confirmation step was reached quickly",
+    "The old skill follows a list→pick→confirm→run→report pattern, but users can short-circuit by specifying the repo directly",
+    "The simulated output includes realistic source counts and notebook creation",
+    "Next step (/hook) is properly suggested per skill instructions"
+  ]
+}

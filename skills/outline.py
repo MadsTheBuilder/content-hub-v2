@@ -16,6 +16,8 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
 from skills.utils.ai import draft, polish
+from skills.brief_loader import load_brief, apply_cli_overrides
+from skills.brief_args import add_brief_args
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +73,7 @@ async def run(topic, hook, target_length, platform, no_polish):
     marketing_brain = load_marketing_brain()
     prompt = build_prompt(template, topic, hook, target_length, platform, marketing_brain)
 
-    print("Drafting outline (Ollama → Gemini)...")
+    print("Drafting outline (NIM → Gemini)...")
     draft_result = await draft(prompt)
     if not draft_result["success"]:
         logger.error("Draft failed: %s", draft_result.get("error"))
@@ -80,7 +82,7 @@ async def run(topic, hook, target_length, platform, no_polish):
     outline_text = draft_result["text"]
 
     if not no_polish:
-        print("Polishing with Claude...")
+        print("Polishing with NIM → Gemini → Ollama → Claude cascade...")
         polish_prompt = (
             prompt
             + f"\n\nDRAFT OUTLINE:\n{outline_text}\n\n"
@@ -133,7 +135,12 @@ async def main():
                         help="Target platform (default: yt-long)")
     parser.add_argument("--no-polish", action="store_true",
                         help="Skip Claude polish pass (faster, cheaper — uses draft only)")
+    add_brief_args(parser)
     args = parser.parse_args()
+    brief = load_brief()
+    brief = apply_cli_overrides(brief, args)
+    if brief.get("target_length_minutes"):
+        args.length = brief["target_length_minutes"]
 
     print(f"Outline writer: \"{args.topic}\" | {args.platform} | {args.length} min")
 

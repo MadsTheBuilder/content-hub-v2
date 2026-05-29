@@ -1,0 +1,12 @@
+{
+  "eval_id": 3,
+  "eval_name": "regenerate-with-different-structure",
+  "prompt": "The last outline was way too heavy on the technical stuff in Stage 4 and Stage 5 felt generic. Can we redo the outline for 'Why developers fail at AI' at 6 minutes? Make Stage 5 more personal and specific.",
+  "assertions": [
+    "The response uses --length 6 in the command (6-minute length extracted from natural language)",
+    "The response acknowledges or references the user's feedback about Stage 4 being too technical and Stage 5 being generic",
+    "The response scans Content-Hub-Vault-V2/05-Hooks/ for any existing hook for the topic",
+    "The response does NOT ask what length to use (6 minutes was explicitly stated)",
+    "The response mentions Stage 5 specifically in its preview or next-step guidance (not just Stage 2 by default)"
+  ]
+}

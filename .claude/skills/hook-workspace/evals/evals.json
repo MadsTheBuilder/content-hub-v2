@@ -1,0 +1,46 @@
+{
+  "skill_name": "hook",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I just ran /researcher on 'Why most creators quit before 1000 subscribers' and got a research brief. Ready to write hooks now. /hook",
+      "expected_output": "The skill identifies the topic from context (or asks if unclear), confirms platform/format defaults, runs the Python command, reports the vault path, previews the starred recommended hook's Spoken Line, and suggests running /outline next with the hook-path flag.",
+      "files": [],
+      "expectations": [
+        "The skill confirms the topic before running (either picked from context or asked)",
+        "The confirmation message includes platform and format defaults",
+        "The skill invokes python -m skills.hook with the topic argument",
+        "After completion, the vault file path is reported (Content-Hub-Vault-V2/05-Hooks/...)",
+        "The recommended hook's Spoken Line is previewed",
+        "The next-step prompt suggests /outline with the --hook-path flag"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "/hook \"The one editing trick that 3x'd my watch time\" --platform yt-shorts --format short --audience \"beginner YouTubers aged 18-30\"",
+      "expected_output": "The skill parses all explicit flags (platform=yt-shorts, format=short, custom audience), confirms the command before running, invokes the Python script with all flags correctly, and delivers the vault output with the recommended hook.",
+      "files": [],
+      "expectations": [
+        "The confirmation message echoes back the correct topic",
+        "The confirmation message shows platform=yt-shorts and format=short",
+        "The Python command includes --platform yt-shorts and --format short",
+        "The Python command includes the custom --audience value",
+        "After completion, the vault file path is reported",
+        "The recommended hook's Spoken Line is previewed"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Those hooks feel too safe and generic. Regenerate with more of a shock/pain-first angle, skip the polish pass to keep it fast. /hook \"Why your AI content gets zero traction\" --no-polish",
+      "expected_output": "The skill handles the re-run request (possibly acknowledging the regeneration intent), adds --no-polish to the command, runs again, and delivers a new vault file. Ideally surfaces which Kallaway patterns lean toward shock/pain (patterns 9 and 10).",
+      "files": [],
+      "expectations": [
+        "The skill runs with --no-polish flag in the Python command",
+        "The confirmation message notes the --no-polish / fast mode",
+        "A new vault output file is reported (different path or acknowledged as re-run)",
+        "The recommended hook's Spoken Line is previewed",
+        "The next-step prompt suggests /outline"
+      ]
+    }
+  ]
+}

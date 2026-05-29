@@ -1,0 +1,75 @@
+{
+  "expectations": [
+    {
+      "text": "The response scans Content-Hub-Vault-V2/05-Hooks/ for a file matching the 'AI agents for non-coders' topic",
+      "passed": true,
+      "evidence": "Step 2 explicitly shows vault scan: found 2026-05-12_ai-agents.md as the closest match."
+    },
+    {
+      "text": "The response identifies that hook 2 specifically was requested and uses or references that hook number",
+      "passed": true,
+      "evidence": "Step 2: 'Hook 2 (starred): Pain Point Agitation (Expected Value) pattern' — hook number identified and used."
+    },
+    {
+      "text": "The response checks Content-Hub-Vault-V2/10-Research/ for a matching research brief",
+      "passed": true,
+      "evidence": "Step 3 explicitly searches 10-Research/ and finds 2026-05-12_ai-agents_brief.md."
+    },
+    {
+      "text": "The response does NOT ask what topic to outline (topic was already given in the message)",
+      "passed": true,
+      "evidence": "Step 1 extracts topic directly from message without asking. No clarification question issued."
+    },
+    {
+      "text": "The response includes a python -m skills.outline command with --hook-path parameter",
+      "passed": true,
+      "evidence": "Step 5: 'python -m skills.outline \"AI agents for non-coders\" --hook-path \"Content-Hub-Vault-V2/05-Hooks/2026-05-12_ai-agents.md\" --length 8 --platform yt-long'"
+    },
+    {
+      "text": "The response suggests /cascade as the next step after outline review",
+      "passed": false,
+      "evidence": "Next-step prompt is: 'Review the outline for accuracy. Prep any screen shares or demos listed. Then film — the outline is your shooting script.' No /cascade mentioned."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 1,
+    "total": 6,
+    "pass_rate": 0.833
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 3, "Glob": 2, "Grep": 1},
+    "total_tool_calls": 6,
+    "total_steps": 6,
+    "errors_encountered": 0,
+    "output_chars": 7236,
+    "transcript_chars": 7236
+  },
+  "timing": {
+    "executor_duration_seconds": 58.1,
+    "total_duration_seconds": 58.1
+  },
+  "claims": [
+    {
+      "claim": "Old skill proactively scans vault for hook and research files",
+      "type": "process",
+      "verified": true,
+      "evidence": "Steps 2 and 3 both perform vault scans — this is inferred behavior, not explicitly instructed in old SKILL.md."
+    },
+    {
+      "claim": "Old skill handles hook number specification (hook 2)",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Correctly identifies hook 2 from the hook file as the starred recommendation."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "The response suggests /cascade as the next step after outline review",
+        "reason": "This is a strong discriminating assertion — the old skill always ends with 'Then film', the new skill should always end with /cascade. Good differentiator."
+      }
+    ],
+    "overall": "Assertion set is solid. The research brief check (assertion 3) may not discriminate as well as expected — old skill also checked research in this eval. Eval 2 will be the better test."
+  }
+}

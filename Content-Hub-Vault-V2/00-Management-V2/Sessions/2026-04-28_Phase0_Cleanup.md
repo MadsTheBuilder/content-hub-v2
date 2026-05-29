@@ -5,7 +5,7 @@ type: session_summary
 ---
 # Session: Phase 0 — V2 Cleanup & Foundation
 
-Implements: [[Current_Sprint]] Phase 0
+Implements: [[Architecture_Building]] Phase 0
 References: [[Local_First_Skill_Engine_Plan]] | [[context]]
 
 ## What Was Done
@@ -17,7 +17,7 @@ References: [[Local_First_Skill_Engine_Plan]] | [[context]]
 - Created V2 content folder structure with `.gitkeep` files: `prompts/`, `Content-Hub-Vault/01-Knowledge/`, `05-Hooks/`, `06-Outlines/`, `07-Titles/`, `08-Distribution/`, `09-Shorts/`, `10-Research/`
 - Updated root [[CLAUDE.md]] to V2 local-first framing — §6 Session Start Protocol, §7 session log path, §9 orchestrations path, §10 Project Knowledge table all now point to `00-Management-V2/` paths
 - Initialized git repo at V2 root; created `.gitignore`; made initial commit `814161b` ("Strip SaaS layers; restructure as local-first skill engine") — 1,106 files staged
-- Marked Phase 0 `✅ Complete` in [[Current_Sprint]]
+- Marked Phase 0 `✅ Complete` in [[Architecture_Building]]
 - Used `/orchestrate` → 6-phase multi-agent workflow → 3 groups of parallel agents
 
 ## Skipped (Already Gone Before Session)

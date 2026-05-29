@@ -1,0 +1,135 @@
+{
+  "evaluation_metadata": {
+    "skill_name": "outline",
+    "pipeline_step": 3,
+    "evaluation_date": "2026-05-15",
+    "user_prompt_tokens": 47,
+    "execution_type": "regeneration_with_structural_feedback"
+  },
+  "skill_execution": {
+    "steps_executed": 7,
+    "steps_passed": 7,
+    "steps_failed": 0,
+    "execution_success_rate": 1.0
+  },
+  "vault_lookups": {
+    "hook_files_scanned": 5,
+    "hook_matches": 0,
+    "research_files_scanned": 18,
+    "research_matches": 0,
+    "outline_files_examined": 4,
+    "existing_outline_for_topic": false
+  },
+  "user_parameters": {
+    "topic": "Why developers fail at AI",
+    "topic_slug": "why-developers-fail-at-ai",
+    "target_length_minutes": 6,
+    "platform": "yt-long",
+    "length_parameter_specified": true,
+    "length_is_non_default": true,
+    "default_length_minutes": 8
+  },
+  "regeneration_feedback": {
+    "feedback_provided": true,
+    "feedback_items": 2,
+    "stage_4_feedback": "way too heavy on the technical stuff",
+    "stage_4_directive": "reduce technical depth, focus on practical failure modes",
+    "stage_5_feedback": "felt generic",
+    "stage_5_directive": "make more personal and specific with anecdotes"
+  },
+  "command_construction": {
+    "command": "python -m skills.outline \"Why developers fail at AI\" --length 6 --platform yt-long",
+    "hook_path_included": false,
+    "research_path_included": false,
+    "no_polish_flag": false,
+    "parameters_count": 3
+  },
+  "expected_output": {
+    "output_file_path": "Content-Hub-Vault-V2/06-Outlines/2026-05-15_why-developers-fail-at-ai.md",
+    "dopamine_ladder_stages": 6,
+    "stage_durations": {
+      "stage_1_stimulation_seconds": 30,
+      "stage_2_captivation_seconds": 60,
+      "stage_3_anticipation_seconds": 90,
+      "stage_4_validation_seconds": 90,
+      "stage_5_affection_seconds": 45,
+      "stage_6_revelation_seconds": 45
+    },
+    "total_duration_seconds": 360,
+    "total_duration_minutes": 6.0,
+    "sections_with_dopamine_goal": 6,
+    "sections_with_talking_points": 6,
+    "sections_with_visual_notes": 6,
+    "sections_with_transition": 6,
+    "head_fakes_expected": 2
+  },
+  "architectural_elements": {
+    "visual_markers_required": [
+      "[B-ROLL]",
+      "[SHOW SCREEN]",
+      "[TEXT OVERLAY]"
+    ],
+    "visual_markers_per_section": ">=1",
+    "head_fake_occurrences": 2,
+    "stage_4_characteristics": {
+      "reduced_technical_depth": true,
+      "emphasis_on_relatable_patterns": true,
+      "focus_practical_consequences": true
+    },
+    "stage_5_characteristics": {
+      "personal_anecdotes": true,
+      "specific_case_studies": true,
+      "emotional_resonance": true,
+      "avoids_generic_advice": true
+    }
+  },
+  "pipeline_integration": {
+    "next_step": "cascade",
+    "next_step_command": "/cascade",
+    "next_step_description": "Generate blog post, LinkedIn post, and Twitter thread from outline"
+  },
+  "skill_adherence": {
+    "step_1_get_topic": {
+      "passed": true,
+      "evidence": "Topic 'Why developers fail at AI' extracted directly from user message"
+    },
+    "step_2_locate_hook": {
+      "passed": true,
+      "evidence": "Scanned 5 hook files; no match found; proceeded without hook as per spec"
+    },
+    "step_3_locate_research": {
+      "passed": true,
+      "evidence": "Scanned 18 research files; no direct match; proceeded without research as per spec"
+    },
+    "step_4_confirm_parameters": {
+      "passed": true,
+      "evidence": "Length (6 min) explicit; platform default; no clarification needed"
+    },
+    "step_5_run_command": {
+      "passed": true,
+      "evidence": "Command correctly constructed with parameters and structural guidance"
+    },
+    "step_6_report": {
+      "passed": true,
+      "evidence": "Full path, runtime estimate, Stage 2 preview, next step provided"
+    },
+    "step_7_suggest_cascade": {
+      "passed": true,
+      "evidence": "/cascade recommended as next pipeline step"
+    }
+  },
+  "edge_cases_identified": {
+    "no_matching_outline_in_vault": true,
+    "no_hook_file": true,
+    "no_research_brief": true,
+    "non_default_duration": true,
+    "regeneration_context": "User referenced 'last outline' but no matching vault file found; treated as stylistic guidance"
+  },
+  "quality_metrics": {
+    "vault_scans_performed": 3,
+    "edge_cases_handled": 4,
+    "clarification_questions_needed": 0,
+    "assumptions_made": 1,
+    "assumption_details": "User's 'last outline' comment treated as general feedback rather than vault file reference"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "eval_name": "Eval 3 — Full Invocation (with_skill)",
+  "eval_type": "full_invocation",
+  "uses_skill": true,
+  "timestamp": "2026-05-15T00:00:00Z",
+  "skill_name": "researcher",
+  "skill_path": "c:\\Users\\madhu\\Claude cowork\\Content Hub V2\\.claude\\skills\\researcher\\SKILL.md",
+  "test_case": {
+    "user_input": "research the microsoft/autogen repo, niche is AI agents",
+    "input_type": "inline_niche_and_repo",
+    "niche_provided": true,
+    "repo_provided": true
+  },
+  "interaction_flow_coverage": {
+    "step_1_niche_extraction": "pass",
+    "step_2_list_available_repos": "skipped_not_required",
+    "step_3_ask_which_repos": "skipped_user_provided",
+    "step_4_confirm_before_running": "executed",
+    "step_5_wait_for_confirmation": "simulated",
+    "step_6_report_results": "executed"
+  },
+  "response_structure": {
+    "confirmation_message": true,
+    "cli_command_shown": true,
+    "command_format_correct": true,
+    "repo_slug_format": "microsoft/autogen",
+    "niche_format": "AI agents",
+    "flags_used": ["--niche", "--repos"],
+    "output_path_predicted": "Content-Hub-Vault-V2/10-Research/2026-05-15_ai-agents_brief.md"
+  },
+  "output_simulation": {
+    "brief_sections_included": 5,
+    "recommended_angle_included": true,
+    "notebook_id_included": true,
+    "next_step_suggested": true,
+    "next_step_command": "/hook"
+  },
+  "skill_adherence": {
+    "follows_interaction_flow": true,
+    "asks_for_confirmation": true,
+    "shows_cli_command": true,
+    "reports_output_path": true,
+    "extracts_recommended_angle": true,
+    "suggests_next_step": true,
+    "mentions_timing": true
+  },
+  "pass_criteria": {
+    "displays_confirmation": "PASS",
+    "command_syntax_correct": "PASS",
+    "output_format_correct": "PASS",
+    "next_step_guidance": "PASS",
+    "overall": "PASS"
+  }
+}

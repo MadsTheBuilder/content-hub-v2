@@ -4,6 +4,11 @@
 
 ---
 
+## Repo Context
+{repo_context}
+
+---
+
 ## System Context
 
 You are conducting deep research on a trending topic or technology. Your job is NOT to summarize what already exists. Your job is to find what is missing, misunderstood, underdocumented, or actively wrong in the existing coverage.
@@ -49,6 +54,12 @@ The output of this research will be used to create original video content. A gen
 - What are the use cases that have been proven to work well in production?
 - What use cases have not been covered by any existing content but have clear demand?
 - What industry or domain is using this in a way that has not been written about yet?
+
+### 7.5. Competitive Landscape
+- What are the 2–3 closest existing alternatives or prior approaches to this technology or tool?
+- For each alternative: what does this do better, worse, or differently in concrete terms?
+- What is the single sharpest distinction a technically-informed viewer would not already know?
+- Is there a specific benchmark, paper, or test result that quantifies the difference?
 
 ### 8. Content Gap — Where to Stand Out
 - What angle would make a video genuinely different from everything that already exists?
@@ -125,8 +136,17 @@ Return findings structured as:
 ### Flagged Reddit Claims (Unverified)
 [List any Reddit-sourced claims that need verification before use]
 
+### Competitive Landscape
+[2–3 named alternatives with concrete better/worse/different comparisons. One sharpest distinction.]
+
 ### Recommended Video Angle
 [The one angle that doesn't exist yet and clearly should — with rationale]
+
+### Content Angle Battery
+[Answer each in 1–2 sentences:]
+1. Most counterintuitive claim: [what a viewer would not expect]
+2. Emotional hook: [fear / excitement / skepticism / vindication — justified in one sentence]
+3. Non-technical founder summary: [what they need to know in 30 seconds]
 ```
 
 ---

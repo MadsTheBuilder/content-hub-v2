@@ -1,0 +1,54 @@
+{
+  "expectations": [
+    {
+      "text": "The agent resolved file paths containing '2026-05-12' and 'ai-agent' in the path",
+      "passed": true,
+      "evidence": "Step 2: 'Found: Content-Hub-Vault-V2/10-Research/2026-05-12_ai_agents/research.md'. Step 3: 'Found: Content-Hub-Vault-V2/06-Outlines/2026-05-12_ai-agents.md'"
+    },
+    {
+      "text": "The agent ran python -m skills.short_form with both --research-file and --outline-file flags",
+      "passed": true,
+      "evidence": "Command Run: 'python -m skills.short_form --research-file \"Content-Hub-Vault-V2/10-Research/2026-05-12_ai_agents/research.md\" --outline-file \"Content-Hub-Vault-V2/06-Outlines/2026-05-12_ai-agents.md\" --title \"AI Agents\"'"
+    },
+    {
+      "text": "The agent reported all 4 output files: 30s_script.md, 60s_script.md, 90s_script.md, README.md",
+      "passed": true,
+      "evidence": "Step 5: 'Confirmed all 4 files were created: 30s_script.md (777 bytes), 60s_script.md (1,224 bytes), 90s_script.md (1,730 bytes), README.md (379 bytes)'"
+    },
+    {
+      "text": "The agent pasted the verbatim opening line of the 30s script as the hook preview",
+      "passed": true,
+      "evidence": "Final Response: '\"AI agents aren\\'t just AI models - they\\'re compound systems where a large language model is in charge of control logic, allowing them to reason, act, and use memory.\"'"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 1, "Glob": 2, "PowerShell": 11, "Bash": 1},
+    "total_tool_calls": 15,
+    "total_steps": 7,
+    "errors_encountered": 0,
+    "output_chars": 3600
+  },
+  "timing": {
+    "executor_duration_seconds": 605.9,
+    "total_duration_seconds": 605.9
+  },
+  "claims": [
+    {
+      "claim": "The skill correctly suggested /voice-cleanup as next step",
+      "type": "process",
+      "verified": true,
+      "evidence": "Final Response: 'Next Step: Run /voice-cleanup to process audio for any of the three scripts.'"
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "expectations": [
+    {
+      "text": "The Python command includes the --no-polish flag",
+      "passed": true,
+      "evidence": "Transcript Step 2 command: 'python -m skills.hook \"Why your AI content gets zero traction\" --platform yt-long --audience \"AI builders and content creators\" --format medium --no-polish'"
+    },
+    {
+      "text": "The confirmation message explicitly notes fast/draft mode (no-polish)",
+      "passed": false,
+      "evidence": "Transcript confirmation (Step 1): 'Writing 5 hooks for: Why your AI content gets zero traction — yt-long · medium. Running now.' — no mention of --no-polish or draft mode. Old skill's Step 3 template does not include flag acknowledgment in the confirmation."
+    },
+    {
+      "text": "A new vault output file is reported (different path or acknowledged as re-run)",
+      "passed": true,
+      "evidence": "Transcript: 'Hooks written to Content-Hub-Vault-V2/05-Hooks/2026-05-15_why-your-ai-content-gets-zero.md'. Python ran successfully via Gemini 2.5 Flash fallback."
+    },
+    {
+      "text": "The ⭐ recommended hook's Spoken Line is previewed in the final response",
+      "passed": true,
+      "evidence": "result.md and transcript: Hook 1 ⭐ — Pain Point Agitation. Spoken Line: 'Your AI content gets zero traction.'"
+    },
+    {
+      "text": "The next-step prompt suggests /outline",
+      "passed": true,
+      "evidence": "result.md Next Step: '/outline topic=\"Why your AI content gets zero traction\" --hook-path \"...\"'"
+    },
+    {
+      "text": "At least one generated hook uses Kallaway pattern 9 (Pain Point Agitation) or pattern 10 (Shock Value)",
+      "passed": true,
+      "evidence": "Hook 1 is Pain Point Agitation (Pattern 9) — explicitly labeled and marked ⭐ in result.md."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 1,
+    "total": 6,
+    "pass_rate": 0.833
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 3, "Write": 2, "Bash": 1},
+    "total_tool_calls": 6,
+    "total_steps": 5,
+    "errors_encountered": 1,
+    "output_chars": 3200,
+    "transcript_chars": 3100
+  },
+  "timing": {
+    "executor_duration_seconds": 45.0,
+    "total_duration_seconds": 45.0
+  },
+  "claims": [
+    {
+      "claim": "NIM failed, Gemini fallback succeeded",
+      "type": "process",
+      "verified": true,
+      "evidence": "Transcript: 'WARNING: NIM meta/llama-3.1-70b-instruct failed... INFO: AI generation succeeded via gemini/gemini-2.5-flash'"
+    },
+    {
+      "claim": "No-polish correctly skipped Claude polish pass",
+      "type": "process",
+      "verified": true,
+      "evidence": "Transcript: 'With --no-polish, the script skipped the Claude API polish pass. Used Gemini draft directly.'"
+    },
+    {
+      "claim": "Old skill does not acknowledge --no-polish in the confirmation step",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Confirmation template in old skill Step 3 has no mechanism to echo flags back to user. Only the command in Step 4 carries the flag."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": ["NIM failure required Gemini fallback — handled automatically by skills/utils/ai.py"]
+  }
+}

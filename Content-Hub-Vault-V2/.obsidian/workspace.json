@@ -4,17 +4,35 @@
     "type": "split",
     "children": [
       {
-        "id": "9b2a39deab40eb1c",
+        "id": "0a94bacdf9b2b2ac",
         "type": "tabs",
         "children": [
           {
-            "id": "f21227bae15443af",
+            "id": "c480e732d3ee4a7c",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "00-Management-V2/Tasks/Current_Sprint.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Current_Sprint"
+            }
+          },
+          {
+            "id": "991c5860d9f98d4b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "00-Management-V2/Sessions/2026-05-24_phase4-wire-stages.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2026-05-24_phase4-wire-stages"
             }
           }
         ]
@@ -36,7 +54,7 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "byModifiedTime",
+                "sortOrder": "byCreatedTime",
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
@@ -74,7 +92,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 467.5
+    "width": 337.5
   },
   "right": {
     "id": "e04bd61a44cce5d0",
@@ -90,7 +108,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "2026-04-09.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -100,7 +117,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for 2026-04-09"
+              "title": "Backlinks"
             }
           },
           {
@@ -109,12 +126,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "2026-04-09.md",
+                "file": "09-Shorts/2026-04-30_social-media-isnt-hard-its-misunderstood/30s_script.md",
                 "linksCollapsed": false,
-                "unlinkedCollapsed": true
+                "unlinkedCollapsed": false
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from 2026-04-09"
+              "title": "Outgoing links from 30s_script"
             }
           },
           {
@@ -152,20 +169,21 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2026-04-09.md",
+                "file": "00-Management-V2/Sessions/2026-05-21_Video_Audit_ContentHub_Demo.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of 2026-04-09"
+              "title": "Outline of 2026-05-21_Video_Audit_ContentHub_Demo"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
-    "width": 300,
+    "width": 298.5,
     "collapsed": true
   },
   "left-ribbon": {
@@ -176,40 +194,51 @@
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
-      "bases:Create new base": false
+      "bases:Create new base": false,
+      "obsidian-local-images-plus:Local Images Plus  0.16.4\r\nLocalize attachments (plugin folder)": false,
+      "obsidian-excalidraw-plugin:New drawing": false
     }
   },
-  "active": "f21227bae15443af",
+  "active": "669c8b72dbde43d7",
   "lastOpenFiles": [
-    "00-Management/Sessions/2026-05-07_Auto_Commit_System_Build.md",
-    "00-Management-V2/Sessions/2026-05-07_Vault_Tracking_Config_Validation.md",
-    "00-Management-V2/Sessions/2026-05-07_Scheduler_Activation.md",
-    "00-Management/Orchestrations/2026-05-07_source-control-auto-commit.md",
-    "Exoskeleton/trends.md",
-    "00-Management-V2/Tasks/Current_Sprint.md",
-    "00-Management-V2/Tasks/Current_Sprint.md.tmp.9692.dc8dce0bfadb",
-    "00-Management-V2/Tasks/Current_Sprint.md.tmp.9692.f3cdef0d2c02",
-    "00-Management-V2/Tasks/Current_Sprint.md.tmp.9692.432a4f4503eb",
-    "06-Outlines/2026-05-06_why-ruflo-is-a-must-use.md",
-    "07-Titles/2026-05-07_how-i-built-a-rag-pipeline-that-actually-works.md",
-    "00-Management-V2/Sessions/2026-05-07_Phase3c_Title_Skill.md",
-    "00-Management-V2/Sessions/2026-05-07_Competitor_YouTube_Scrape.md",
-    "00-Management-V2/Sessions/2026-05-07_Phase0a_Twitter_Scout.md",
-    "00-Management-V2/Sessions/2026-05-07_Phase0a_Twitter_Data_Layer.md",
-    "00-Management-V2/Orchestrations/2026-05-07_phase3c-title-skill.md",
-    "00-Management-V2/Orchestrations/2026-05-07_phase0a-twitter-scout.md",
-    "00-Management-V2/Orchestrations/2026-05-07_phase0a-twitter-data-layer.md",
-    "10-Research/2026-05-06_ruflo/slides_ruflo_focused.pdf",
-    "05-Hooks/2026-05-06_the-github-repo-that-gives-claude.md",
-    "10-Research/2026-05-06_ruflo/slides_images/Untitled.md",
-    "10-Research/2026-05-06_ruflo/infographic.png",
-    "10-Research/2026-05-06_ruflo_skills_agents_architecture.md",
-    "10-Research/2026-05-06_ruflo/report.md",
-    "10-Research/2026-05-06_ruflo/mindmap.md",
+    "00-Management-V2/Sessions/2026-05-28_Command-Center-Dashboard.md",
+    "00-Management-V2/Sessions/2026-05-28_Self-Improvement-Loop-Execution.md",
+    "00-Management-V2/brief.md",
+    "00-Management-V2/Sessions/2026-05-28_Agent-A1-Pipeline-Results-Foundation.md",
+    "00-Management-V2/pipeline_results.tsv",
+    "00-Management-V2/Tasks/Self-Improvement-Loop-Tasks.md",
     "01-Knowledge/marketing_brain.md",
-    "00-Management-V2/Sessions/2026-05-06_Phase3a_3b_Hook_Outline_Skills.md",
-    "00-Management-V2/Orchestrations/2026-05-06_phase3a-3b-hook-outline-skills.md",
-    "10-Research/2026-05-06_ruflo/slides.pdf",
+    "00-Management-V2/Sessions/2026-05-28_Self-Improvement-Loop-Plan.md",
+    "00-Management-V2/Plans/The-Self-Improvement-Loop.md",
+    "06-Outlines/2026-05-21_your-coding-agent-already-has-a.md",
+    "00-Management-V2/Sessions/2026-05-15_Hook-Skill-Creator-Improvement-Loop.md",
+    "00-Management-V2/Sessions/2026-05-15_Outline-Skill-Creator-Improvement-Loop.md",
+    "00-Management-V2/Tasks/Architecture_Building.md",
+    "00-Management-V2/Plans/Local_First_Skill_Engine_Plan.md",
+    "00-Management-V2/Program-Architecture/README.md",
+    "00-Management-V2/Plans/Content_Hub_Web_Design_Spec.md",
+    "00-Management-V2/Tasks/TODO_vault_output_folder_structure.md",
+    "00-Management-V2/Program-Architecture/systems-deck.html",
+    "00-Management-V2/Sessions/2026-05-28_Vault_Graph_Audit.md",
+    "00-Management-V2/Sessions/2026-05-28_Space_Audit.md",
+    "00-Management-V2/Tasks/Current_Sprint.md.tmp.28676.000b2608c1a7",
+    "00-Management-V2/Sessions/2026-05-28_Graph_Embedded_In_Deck.md",
+    "00-Management-V2/Sessions/2026-05-28_Graph_Embedded_In_Deck.md.tmp.28676.002d288788b9",
+    "00-Management-V2/Sessions/2026-05-27_Design_Doc_Theme_And_Graph.md",
+    "08-Distribution/2026-05-21_your-coding-agent-already-has-a-ui-desig/twitter_thread.md",
+    "08-Distribution/2026-05-21_your-coding-agent-already-has-a-ui-desig/instagram_post.md",
+    "08-Distribution/2026-05-07_is-openmythos-legit-i-checked-every-clai/blog_post_cleaned.md",
+    "08-Distribution/2026-05-07_is-openmythos-legit-i-checked-every-clai/blog_post.md",
+    "08-Distribution/2026-05-07_is-openmythos-legit-i-checked-every-clai/twitter_thread_cleaned.md",
+    "08-Distribution/2026-05-07_is-openmythos-legit-i-checked-every-clai/twitter_thread.md",
+    "00-Management-V2/Sessions/2026-05-26_8GB_Shed_Cleanup.md.tmp.13876.b8489ed42a42",
+    "Untitled.base",
+    "00-Management-V2/Sessions/2026-05-26_8GB_Shed_Cleanup.md.tmp.13876.73f0927c306d",
+    "04-Trends/Open-Less_openless",
+    "04-Trends/opensquilla_opensquilla",
+    "04-Trends/raiyanyahya_how-to-train-your-gpt",
+    "10-Research/2026-05-07_openmythos/infographic.png",
+    "10-Research/2026-05-06_ruflo/infographic.png",
     "10-Research/2026-05-06_ruflo/slides_images/slide_10.png",
     "10-Research/2026-05-06_ruflo/slides_images/slide_08.png",
     "10-Research/2026-05-06_ruflo/slides_images/slide_09.png",
@@ -217,16 +246,7 @@
     "10-Research/2026-05-06_ruflo/slides_images/slide_12.png",
     "10-Research/2026-05-06_ruflo/slides_images/slide_13.png",
     "10-Research/2026-05-06_ruflo/slides_images/slide_14.png",
-    "00-Management-V2/Plans/CLAUDE.md",
-    "00-Management-V2/Plans/Chase_AI_System_Breakdown.md",
-    "00-Management-V2/Plans/Local_First_Skill_Engine_Plan.md",
     "10-Research/2026-05-06_ruflo/slides_images/slide_07.png",
-    "10-Research/2026-05-06_ruflo/slides_images/slide_06.png",
-    "10-Research/2026-05-06_ruflo/slides_images",
-    "10-Research/2026-05-06_ruflo/slides_ruflo_focused.pdf.tmp",
-    "10-Research/2026-05-06_ruflo/mind_map.json",
-    "10-Research/2026-05-06_ruflo/slides.pdf.tmp",
-    "10-Research/2026-05-06_ruflo/mindmap.json",
     "Untitled.canvas"
   ]
 }

@@ -1,0 +1,64 @@
+{
+  "expectations": [
+    {
+      "text": "The response does NOT ask for length or platform confirmation (both were already specified or are default)",
+      "passed": true,
+      "evidence": "Step 3: 'Parameter confirmation: All parameters provided explicitly (topic + hook path + length). No ambiguity detected, no confirmation dialog required.'"
+    },
+    {
+      "text": "The response includes a python -m skills.outline command with --hook-path and --length 12",
+      "passed": true,
+      "evidence": "Step 4: 'python -m skills.outline \"How to stop wasting time on AI tools that don't stick\" --hook-path \"Content-Hub-Vault-V2/05-Hooks/2026-05-10_ai-tools-that-dont-stick.md\" --length 12 --platform yt-long' — passes hook-path through even though file doesn't exist, letting Python handle the fallback."
+    },
+    {
+      "text": "The response checks Content-Hub-Vault-V2/10-Research/ for a research brief even though hook was explicit",
+      "passed": false,
+      "evidence": "No Step 3 or research brief lookup exists in the transcript. Old skill jumps from hook check (Step 2) directly to parameter confirmation (Step 3). Research vault is never checked."
+    },
+    {
+      "text": "The response previews Stage 2 (Captivation) section in its report",
+      "passed": true,
+      "evidence": "Step 5 'Simulated Output' includes: 'Example Stage 2 (Captivation) preview from outline structure' with full talking points."
+    },
+    {
+      "text": "The response suggests /cascade as the next step",
+      "passed": true,
+      "evidence": "Step 7: 'we can cascade it into short-form clips with /cascade, or title this video with /title.'"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 1,
+    "total": 5,
+    "pass_rate": 0.80
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 2, "Glob": 3, "Bash": 6, "PowerShell": 1},
+    "total_tool_calls": 12,
+    "total_steps": 7,
+    "errors_encountered": 0,
+    "output_chars": 7586,
+    "transcript_chars": 7586
+  },
+  "timing": {
+    "executor_duration_seconds": 80.8,
+    "total_duration_seconds": 80.8
+  },
+  "claims": [
+    {
+      "claim": "Old skill passes --hook-path to Python even when file doesn't exist",
+      "type": "process",
+      "verified": true,
+      "evidence": "Command includes --hook-path with nonexistent file path; Python's load_hook() handles the fallback internally."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "The response checks Content-Hub-Vault-V2/10-Research/ for a research brief even though hook was explicit",
+        "reason": "This is the most discriminating assertion in this eval — old skill never performs this step. New skill's explicit Step 3 for research lookup is the key behavioral difference."
+      }
+    ],
+    "overall": "Research brief check is the key differentiator for this eval. All other assertions pass for both versions."
+  }
+}

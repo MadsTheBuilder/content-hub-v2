@@ -1,0 +1,67 @@
+{
+  "expectations": [
+    {
+      "text": "The response does NOT ask for length or platform confirmation (both were already specified or are default)",
+      "passed": false,
+      "evidence": "Step 4: 'Before I run the outline command, confirm: 1. Hook decision (see above), 2. Platform: OK with YouTube long-form? Or do you want to specify something else?' — asks about platform even though it's the default and shouldn't require confirmation."
+    },
+    {
+      "text": "The response includes a python -m skills.outline command with --hook-path and --length 12",
+      "passed": false,
+      "evidence": "Step 5 command: 'python -m skills.outline \"How to stop wasting time on AI tools that don't stick\" --length 12 --platform yt-long' — drops --hook-path because file doesn't exist. Should pass it through to Python which has its own fallback handling."
+    },
+    {
+      "text": "The response checks Content-Hub-Vault-V2/10-Research/ for a research brief even though hook was explicit",
+      "passed": true,
+      "evidence": "Step 3 explicitly scans 10-Research/ and lists all files, noting no exact match but identifying a potential proxy."
+    },
+    {
+      "text": "The response previews Stage 2 (Captivation) section in its report",
+      "passed": true,
+      "evidence": "Step 6 report includes placeholder for Stage 2 preview: '📋 Preview — Stage 2 (Captivation): [The skill would output the Captivation section here]'"
+    },
+    {
+      "text": "The response suggests /cascade as the next step",
+      "passed": true,
+      "evidence": "Step 6: 'Then run /cascade to generate your blog post, LinkedIn post, and Twitter thread from this outline.'"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 2,
+    "total": 5,
+    "pass_rate": 0.60
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 3, "Glob": 3},
+    "total_tool_calls": 6,
+    "total_steps": 6,
+    "errors_encountered": 0,
+    "output_chars": 8517,
+    "transcript_chars": 8517
+  },
+  "timing": {
+    "executor_duration_seconds": 91.7,
+    "total_duration_seconds": 91.7
+  },
+  "claims": [
+    {
+      "claim": "New skill overcorrects on missing hook — asks user for options instead of proceeding",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Agent surfaces ambiguity (CLAUDE.md §1) but the skill's own instruction says 'proceed — the outline is still valid, just more generic' for missing hook files."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "The response includes a python -m skills.outline command with --hook-path and --length 12",
+        "reason": "The assertion should clarify behavior when hook file is missing — the skill should still pass --hook-path to let Python's fallback handle it, not silently drop it. Worth adding a sub-case."
+      },
+      {
+        "reason": "New skill has a regression in eval 2: asks platform confirmation unnecessarily. The skill should be more explicit that defaults never require confirmation, even during a clarification moment."
+      }
+    ],
+    "overall": "New skill wins on research brief check but loses on two assertions due to over-cautious behavior around missing hook file. Net result: tie or slight loss vs old skill for this eval."
+  }
+}

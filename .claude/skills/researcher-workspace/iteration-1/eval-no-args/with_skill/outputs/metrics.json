@@ -1,0 +1,18 @@
+{
+  "eval_name": "eval-no-args-with_skill",
+  "prompt": "I want to start making a video but I'm not sure what angle to take yet. Can you kick off researcher for me?",
+  "tool_calls": 0,
+  "steps": 1,
+  "behavior": "ask-for-niche",
+  "notes": "User provided no niche argument. SKILL.md Step 1 is 'Get niche — inline with /researcher <niche> or ask if not provided'. Responded by asking for niche inline, with examples, before proceeding to --list or --repos. Matches SKILL.md flow exactly.",
+  "next_expected_input": "user provides niche (e.g., 'AI agents')",
+  "next_steps": [
+    "User responds with niche",
+    "Run: python -m skills.researcher --list (after niche is provided)",
+    "Show numbered repo list to user",
+    "User selects repos",
+    "Confirm before running: python -m skills.researcher --niche '[niche]' --repos owner/repo1 owner/repo2",
+    "Report results with brief file path and recommended angles",
+    "Suggest /hook as next step"
+  ]
+}

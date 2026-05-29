@@ -1,0 +1,22 @@
+{
+  "tool_calls": {
+    "Read": 4,
+    "Glob": 0,
+    "Bash": 8,
+    "Monitor": 1,
+    "Write": 2
+  },
+  "total_tool_calls": 15,
+  "total_steps": 6,
+  "errors_encountered": 0,
+  "success": true,
+  "command_status": "SUCCEEDED",
+  "output_files_created": 4,
+  "output_directory": "Content-Hub-Vault-V2/09-Shorts/2026-05-12_ai-agents/",
+  "execution_time_seconds": 45,
+  "provider_fallback_sequence": [
+    "NIM (meta/llama-3.1-70b-instruct) - FAILED",
+    "Gemini-2.5-flash - SUCCEEDED",
+    "NIM (Nvidia endpoint) - SUCCEEDED"
+  ]
+}

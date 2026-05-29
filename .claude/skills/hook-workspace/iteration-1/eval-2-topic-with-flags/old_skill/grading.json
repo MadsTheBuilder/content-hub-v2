@@ -1,0 +1,76 @@
+{
+  "expectations": [
+    {
+      "text": "The confirmation message echoes back the correct topic 'The one editing trick that 3x'd my watch time'",
+      "passed": true,
+      "evidence": "Transcript confirmation: 'Writing 5 hooks for: The one editing trick that 3x'd my watch time — yt-shorts · short. Running now.'"
+    },
+    {
+      "text": "The confirmation message explicitly shows platform=yt-shorts and format=short (not defaults)",
+      "passed": true,
+      "evidence": "Transcript confirms 'yt-shorts · short' in confirmation message."
+    },
+    {
+      "text": "The Python command includes --platform yt-shorts",
+      "passed": true,
+      "evidence": "Transcript command: 'python -m skills.hook \"The one editing trick...\" --platform yt-shorts --audience \"beginner YouTubers aged 18-30\" --format short'"
+    },
+    {
+      "text": "The Python command includes --format short",
+      "passed": true,
+      "evidence": "Command includes '--format short'"
+    },
+    {
+      "text": "The Python command includes the custom --audience value 'beginner YouTubers aged 18-30'",
+      "passed": true,
+      "evidence": "Command includes '--audience \"beginner YouTubers aged 18-30\"'"
+    },
+    {
+      "text": "The output reports a vault file path under Content-Hub-Vault-V2/05-Hooks/",
+      "passed": true,
+      "evidence": "result.md: 'File Location: Content-Hub-Vault-V2/05-Hooks/2026-05-15_editing-trick-watch-time.md'"
+    },
+    {
+      "text": "The ⭐ recommended hook's Spoken Line is previewed in the final response",
+      "passed": true,
+      "evidence": "result.md: ⭐ Hook 2 — Speed to Value, Spoken Line: 'This editing cut boosts watch time by 300%.'"
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 0,
+    "total": 7,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 3, "Write": 2, "Bash": 0},
+    "total_tool_calls": 5,
+    "total_steps": 5,
+    "errors_encountered": 0,
+    "output_chars": 3400,
+    "transcript_chars": 1100
+  },
+  "timing": {
+    "executor_duration_seconds": 77.4,
+    "total_duration_seconds": 77.4
+  },
+  "claims": [
+    {
+      "claim": "All three flag overrides parsed correctly",
+      "type": "process",
+      "verified": true,
+      "evidence": "Transcript shows flags table with all three from user input."
+    },
+    {
+      "claim": "Hooks tailored for yt-shorts short format",
+      "type": "quality",
+      "verified": true,
+      "evidence": "result.md Generation Parameters show yt-shorts · short format. Hook content is punchy and compressed."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": ["Python script not executed — hooks generated from prompts/hook.md directly"]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "eval_id": 3,
+  "eval_name": "regenerate-no-polish",
+  "prompt": "Those hooks feel too safe and generic. Regenerate with more of a shock/pain-first angle, skip the polish pass to keep it fast. /hook \"Why your AI content gets zero traction\" --no-polish",
+  "assertions": [
+    "The Python command includes the --no-polish flag",
+    "The confirmation message explicitly notes fast/draft mode (no-polish)",
+    "The output reports a vault file path under Content-Hub-Vault-V2/05-Hooks/",
+    "The ⭐ recommended hook's Spoken Line is previewed in the final response",
+    "The response suggests /outline as the next step",
+    "At least one generated hook uses Kallaway pattern 9 (Pain Point Agitation) or pattern 10 (Shock Value)"
+  ]
+}

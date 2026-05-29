@@ -1,0 +1,84 @@
+{
+  "expectations": [
+    {
+      "text": "The skill confirms the topic 'Why most creators quit before 1000 subscribers' before running without asking the user to re-state it",
+      "passed": true,
+      "evidence": "Topic was present in the user message. Old skill Step 1: 'Get the topic from the user's message.' Topic was identified without asking."
+    },
+    {
+      "text": "The confirmation message includes the default platform (yt-long) and format (medium)",
+      "passed": true,
+      "evidence": "Transcript confirmation: 'Writing 5 hooks for: Why most creators quit before 1000 subscribers — yt-long · medium. Running now.'"
+    },
+    {
+      "text": "The skill constructs a python -m skills.hook command with the topic as an argument",
+      "passed": true,
+      "evidence": "Transcript Step 4: 'python -m skills.hook \"Why most creators quit before 1000 subscribers\" --platform yt-long --audience \"AI builders and content creators\" --format medium'"
+    },
+    {
+      "text": "The output reports a vault file path under Content-Hub-Vault-V2/05-Hooks/",
+      "passed": true,
+      "evidence": "result.md: 'File written: Content-Hub-Vault-V2/05-Hooks/2026-05-15_why-most-creators-quit-before.md'"
+    },
+    {
+      "text": "The ⭐ recommended hook's Spoken Line is previewed in the final response",
+      "passed": true,
+      "evidence": "result.md Recommended Hook Preview: ⭐ Hook 1: 'If most creators quit before 1000 subscribers, here is exactly what stops the ones who don't.'"
+    },
+    {
+      "text": "The response suggests /outline as the next step with a --hook-path argument",
+      "passed": true,
+      "evidence": "result.md Next Step: '/outline topic=\"Why most creators quit before 1000 subscribers\" --hook-path \"Content-Hub-Vault-V2/05-Hooks/...\". Old skill After Completion section includes this template."
+    },
+    {
+      "text": "The skill response explicitly references the pipeline position or the researcher-to-hook transition (e.g. step 2, or researcher → hook → outline)",
+      "passed": false,
+      "evidence": "Transcript and result.md show no pipeline position reference. Old skill has no pipeline section, no frontmatter, no step-2-of-7 label. Confirmation is plain: 'Writing 5 hooks for: ... — yt-long · medium. Running now.'"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 1,
+    "total": 7,
+    "pass_rate": 0.857
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 2, "Write": 2, "Bash": 0},
+    "total_tool_calls": 4,
+    "total_steps": 5,
+    "errors_encountered": 0,
+    "output_chars": 2800,
+    "transcript_chars": 1600
+  },
+  "timing": {
+    "executor_duration_seconds": 85.0,
+    "total_duration_seconds": 85.0
+  },
+  "claims": [
+    {
+      "claim": "Old skill picks up /researcher context",
+      "type": "process",
+      "verified": false,
+      "evidence": "Topic was identified because it was in the message — not because the skill detected /researcher context. Old skill has no instruction for researcher handoff."
+    },
+    {
+      "claim": "Pipeline position surfaced in response",
+      "type": "quality",
+      "verified": false,
+      "evidence": "No pipeline reference anywhere in transcript or result.md. Old skill has no Step 2 of 7 language."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": ["Assertion 7 is the key discriminator — old skill passes eval 1 only because topic happened to be in the message, not because of researcher-context awareness"],
+    "workarounds": ["Python script not executed — hooks generated directly using prompts/hook.md content"]
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "The topic being present in the message means assertion 1 passes for both skills, but the real test is whether the skill would handle a bare /hook with no topic (relying purely on /researcher context). Consider adding an eval where the user types just '/hook' with no topic, to truly test context-awareness."
+      }
+    ],
+    "overall": "Assertions discriminate well on assertion 7. Assertions 1-6 are necessary but non-discriminating between versions."
+  }
+}

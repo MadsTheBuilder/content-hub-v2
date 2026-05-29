@@ -1,0 +1,11 @@
+{
+  "eval_id": 1,
+  "eval_name": "no-args-after-cascade",
+  "prompt": "I just finished reviewing and approving the cascade output for my AI agents video. The outline and research are already in the vault. Run /short-form.",
+  "assertions": [
+    "The agent ran the python -m skills.short_form command with --research-file and --outline-file arguments",
+    "The agent reported the output directory path under Content-Hub-Vault-V2/09-Shorts/",
+    "The agent showed the opening line of the 30s script verbatim",
+    "The agent suggested /voice-cleanup as the next step"
+  ]
+}

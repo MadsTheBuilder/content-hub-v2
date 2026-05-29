@@ -1,0 +1,12 @@
+{
+  "eval_id": 1,
+  "eval_name": "no-args-after-outline",
+  "prompt": "I just finished approving the outline for my 'Building a RAG pipeline with LangChain and pgvector' video — the one that covers chunking strategies, embedding models, and retrieval ranking. Write the titles now.",
+  "assertions": [
+    "The agent extracts the video concept from the user's message without asking for confirmation first",
+    "The agent runs python -m skills.title with a quoted concept string derived from the message context",
+    "The concept string passed to Python references the RAG pipeline / LangChain / pgvector topic",
+    "The transcript documents whether a vault file was created or explains the failure clearly",
+    "The transcript or response mentions a suggested next step (cascade or short-form)"
+  ]
+}

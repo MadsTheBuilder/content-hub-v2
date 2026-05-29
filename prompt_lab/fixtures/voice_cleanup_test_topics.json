@@ -1,0 +1,20 @@
+{
+  "skill": "voice_cleanup",
+  "purpose": "Frozen test inputs for /prompt-lab autoresearch loop. Hold constant across iterations so score deltas reflect prompt quality, not input variance.",
+  "raw_drafts": [
+    "Let's dive into the fascinating world of extended thinking. In today's fast-paced world of AI, this is a crucial innovation that leverages cutting-edge research. Remember, the key here is to understand that this allows us to solve problems more seamlessly and robustly.",
+    "Furthermore, it's worth noting that async/await in Rust brings some important considerations to the table. Moreover, we need to ensure that we're leveraging best practices. By optimizing our Future allocations, we can streamline performance and unleash true potential in our systems.",
+    "In order to truly understand local-first databases, we must delve into the paradigm shift that CRDTs represent. This is a game-changer. Additionally, it's important to keep in mind that this revolutionizes how we think about data synchronization in our applications.",
+    "At the end of the day, context switching is a crucial bottleneck. Let me dive right in and explain the research. Furthermore, the key thing to understand is that each interruption creates a cascading effect. In conclusion, we need to ensure robust systems for focus.",
+    "What's up everyone! In this video, we're going to tackle multi-agent orchestration. Without further ado, guys, let me break down the architecture. Remember to smash that like button and subscribe for more content. Make sure to check out the related videos and don't forget to enable notifications.",
+    "So here's the thing about benchmarking models. In today's digital world, leveraging the right evaluation framework is crucial. It's not just about scoring, but rather about unlocking insights. Furthermore, as we navigate this landscape, we need to ensure comprehensive testing protocols.",
+    "The economics of local versus cloud infrastructure represent a significant paradigm shift in our industry. Moreover, it's worth nothing that optimizing this decision requires understanding multiple variables. In conclusion, we must leverage careful analysis to streamline costs.",
+    "Hey guys, and welcome to the fitness channel! In today's episode, we're diving into habit formation without further ado. Let's dive deep into the science. Make sure to like and subscribe to join our community. The key thing to remember here is that willpower is not the answer, and as we navigate fitness trends today, optionality-based systems revolutionize how we approach training."
+  ],
+  "model_settings": {
+    "temperature": 0.7,
+    "max_tokens": 2000,
+    "seed": 42
+  },
+  "notes": "8 raw drafts with embedded banned phrases from voice_cleanup.md canonical list. Each paragraph contains 2-4 banned phrases: 'Let's dive', 'In today's fast-paced', 'crucial', 'leverage', 'cutting-edge', 'Remember', 'allows us to', 'seamless', 'robust', 'Furthermore', 'moreover', 'ensure', 'optimize', 'streamline', 'unleash', 'delve', 'paradigm shift', 'game-changer', 'important', 'crucial', 'at the end of the day', 'in conclusion', 'what's up everyone', 'guys', 'without further ado', 'smash that like button', 'make sure to subscribe', 'don't forget', 'as we navigate', 'worth noting'. Tests whether voice_cleanup identifies and removes these phrases while preserving content integrity."
+}

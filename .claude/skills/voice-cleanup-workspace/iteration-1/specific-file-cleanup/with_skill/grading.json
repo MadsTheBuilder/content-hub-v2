@@ -1,0 +1,53 @@
+{
+  "expectations": [
+    {
+      "text": "Claude echoes the exact provided file path in its confirmation message",
+      "passed": true,
+      "evidence": "Transcript Step 2: 'Running voice cleanup on: Content-Hub-Vault-V2/07-Short-Form/2026-05-15_ai-tools-arent-the-problem/instagram_caption.md' — exact path from user prompt echoed verbatim."
+    },
+    {
+      "text": "Claude documents running: python -m skills.voice_cleanup with the quoted file path argument",
+      "passed": true,
+      "evidence": "Transcript Step 3: 'python -m skills.voice_cleanup \"Content-Hub-Vault-V2/07-Short-Form/2026-05-15_ai-tools-arent-the-problem/instagram_caption.md\"' — exact command with quoted path."
+    },
+    {
+      "text": "Claude describes saving output to instagram_caption_cleaned.md beside the original",
+      "passed": true,
+      "evidence": "Transcript Step 2 confirmation message: 'Save cleaned output as: instagram_caption_cleaned.md (beside original)' — correct stem + suffix, correct placement."
+    },
+    {
+      "text": "Claude reports which AI provider handled the cleanup (claude / gemini / ollama)",
+      "passed": true,
+      "evidence": "Transcript Step 4: 'claude (Claude model via premium polish routing)' — provider explicitly reported."
+    },
+    {
+      "text": "Claude shows or describes a first-300-character preview of the cleaned output",
+      "passed": true,
+      "evidence": "Transcript Step 4 shows realistic 300-char preview: 'The problem isn't the tool — it's what you do with it...' — preview shown as instructed."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 1, "Bash": 1, "Write": 2},
+    "total_tool_calls": 4,
+    "total_steps": 5,
+    "errors_encountered": 0,
+    "output_chars": 3847,
+    "transcript_chars": 3847
+  },
+  "timing": {
+    "executor_duration_seconds": 34.5,
+    "total_duration_seconds": 34.5
+  },
+  "claims": [],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  }
+}

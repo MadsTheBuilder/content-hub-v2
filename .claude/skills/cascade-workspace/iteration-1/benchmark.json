@@ -1,0 +1,187 @@
+{
+  "metadata": {
+    "skill_name": "cascade",
+    "skill_path": ".claude/skills/cascade",
+    "executor_model": "claude-sonnet-4-6",
+    "analyzer_model": "claude-sonnet-4-6",
+    "timestamp": "2026-05-15T00:00:00Z",
+    "evals_run": [1, 2, 3],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "no-args-after-outline",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 7,
+        "failed": 0,
+        "total": 7,
+        "time_seconds": 54.3,
+        "tokens": 49531,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "finds-both-files: Claude identifies both research brief (2026-05-12_ai-agents_brief.md) and outline (2026-05-12_ai-agents.md) by name", "passed": true, "evidence": "Step 2 shows explicit search results: Research: 2026-05-12_ai-agents_brief.md, Outline: 2026-05-12_ai-agents.md"},
+        {"text": "single-confirmation-step: Claude asks for confirmation exactly once", "passed": true, "evidence": "Step 4 shows single confirmation: 'Running cascade on: AI agents — research from 2026-05-12_ai-agents_brief.md, outline from 2026-05-12_ai-agents.md. Go?'"},
+        {"text": "filenames-in-confirmation: The confirmation message includes actual filenames", "passed": true, "evidence": "Confirmation explicitly names both files: 2026-05-12_ai-agents_brief.md and 2026-05-12_ai-agents.md"},
+        {"text": "correct-command-flags: Command uses --research-file and --outline-file flags", "passed": true, "evidence": "Step 5 command: python -m skills.cascade --research-file '...' --outline-file '...' --title 'AI agents'"},
+        {"text": "twitter-hook-preview: After-completion report previews the Twitter hook", "passed": true, "evidence": "Step 7 shows: 'Forget the conversational partner. Treat your LLM as a shitty, unreliable general-purpose computer...' (151 chars)"},
+        {"text": "video-link-reminder: Report mentions replacing [VIDEO_LINK] placeholder before posting", "passed": true, "evidence": "Step 7: 'Reminder: Replace [VIDEO_LINK] placeholder in twitter_thread.md and linkedin_post.md before posting.'"},
+        {"text": "next-step-suggestion: Report suggests /short-form as the next pipeline step", "passed": true, "evidence": "Step 7: 'Next step: Run /short-form to generate 3 short-form scripts from the same outline.'"}
+      ],
+      "notes": ["New skill excels at pipeline chaining — explicitly surfaces /short-form as next step and provides cleaner single-line confirmation with filenames."]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "no-args-after-outline",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.857,
+        "passed": 6,
+        "failed": 1,
+        "total": 7,
+        "time_seconds": 39.5,
+        "tokens": 41781,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "finds-both-files: Claude identifies both research brief (2026-05-12_ai-agents_brief.md) and outline (2026-05-12_ai-agents.md) by name", "passed": true, "evidence": "Step 1 shows search results finding both files correctly."},
+        {"text": "single-confirmation-step: Claude asks for confirmation exactly once", "passed": true, "evidence": "Step 2 shows single confirmation block."},
+        {"text": "filenames-in-confirmation: The confirmation message includes actual filenames", "passed": true, "evidence": "Confirmation block lists both file paths explicitly."},
+        {"text": "correct-command-flags: Command uses --research-file and --outline-file flags", "passed": true, "evidence": "Step 3 command: python -m skills.cascade --research-file '...' --outline-file '...' --title 'ai-agents'"},
+        {"text": "twitter-hook-preview: After-completion report previews the Twitter hook", "passed": true, "evidence": "Step 5 completion report includes Twitter Hook First Tweet preview."},
+        {"text": "video-link-reminder: Report mentions replacing [VIDEO_LINK] placeholder before posting", "passed": true, "evidence": "Post-Cascade Actions section mentions replacing [VIDEO_LINK] before posting."},
+        {"text": "next-step-suggestion: Report suggests /short-form as the next pipeline step", "passed": false, "evidence": "Post-Cascade Actions section lists manual publishing steps but does NOT mention /short-form or any pipeline chaining."}
+      ],
+      "notes": ["Old skill handles file discovery and confirmation correctly but lacks pipeline chaining — no /short-form suggestion. Confirmation is more verbose than necessary."]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "topic-specified",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 40.6,
+        "tokens": 43484,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "finds-both-files: Claude identifies both the research brief and outline by name", "passed": true, "evidence": "Step 2 file discovery finds 2026-05-12_ai-agents_brief.md and 2026-05-12_ai-agents.md explicitly."},
+        {"text": "single-confirmation-step: Claude asks for confirmation exactly once", "passed": true, "evidence": "Step 3 shows one confirmation with 'Ready to proceed? (yes/no)'"},
+        {"text": "filenames-in-confirmation: The confirmation message includes actual filenames", "passed": true, "evidence": "Confirmation block: 'Research from: Content-Hub-Vault-V2/10-Research/2026-05-12_ai-agents_brief.md; Outline from: ...'"},
+        {"text": "correct-command-flags: Command uses --research-file and --outline-file flags", "passed": true, "evidence": "Step 5 command: python -m skills.cascade --research-file '...' --outline-file '...' --title 'AI agents'"},
+        {"text": "twitter-hook-preview: After-completion report previews the Twitter hook", "passed": true, "evidence": "Step 6 shows Twitter Hook: 'Most people think AI is just ChatGPT. But a new wave is about to automate...'"},
+        {"text": "video-link-reminder: Report mentions replacing [VIDEO_LINK] placeholder", "passed": true, "evidence": "Completion report: 'IMPORTANT: Replace [VIDEO_LINK] placeholders in twitter_thread.md and linkedin_post.md before posting.'"}
+      ],
+      "notes": ["Perfect pass. New skill surfaces the content cap note and error handling guidance in notes section."]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "topic-specified",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 31.7,
+        "tokens": 58119,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "finds-both-files: Claude identifies both the research brief and outline by name", "passed": true, "evidence": "Step 1 finds both files with explicit paths."},
+        {"text": "single-confirmation-step: Claude asks for confirmation exactly once", "passed": true, "evidence": "Step 2 shows single confirmation block."},
+        {"text": "filenames-in-confirmation: The confirmation message includes actual filenames", "passed": true, "evidence": "Confirmation block lists both file paths."},
+        {"text": "correct-command-flags: Command uses --research-file and --outline-file flags", "passed": true, "evidence": "Step 3 command uses --research-file and --outline-file."},
+        {"text": "twitter-hook-preview: After-completion report previews the Twitter hook", "passed": true, "evidence": "Step 5 completion report includes Twitter Hook First Tweet."},
+        {"text": "video-link-reminder: Report mentions replacing [VIDEO_LINK] placeholder", "passed": true, "evidence": "Next Steps section: 'Replace [VIDEO_LINK] placeholders (if applicable) before posting.'"}
+      ],
+      "notes": ["Old skill also passes all eval 2 assertions — topic-specified mode was already handled well."]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "youtube-url",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 35.4,
+        "tokens": 38661,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "routes-to-youtube-mode: Claude identifies YouTube fallback mode and does NOT look for local files", "passed": true, "evidence": "Step 1 explicitly: 'Input contains a YouTube URL — YouTube URL fallback mode triggers.' No local file search attempted."},
+        {"text": "single-confirmation-with-url: Confirmation shows the YouTube URL", "passed": true, "evidence": "Step 2: 'Running cascade on: https://www.youtube.com/watch?v=dQw4w9WgXcQ ... Go?'"},
+        {"text": "correct-command-syntax: Command is python -m skills.cascade <url> with no --research-file or --outline-file", "passed": true, "evidence": "Step 4: 'python -m skills.cascade https://www.youtube.com/watch?v=dQw4w9WgXcQ'"},
+        {"text": "twitter-hook-preview: After-completion report previews the Twitter hook", "passed": true, "evidence": "Step 5 report shows Twitter hook preview line."},
+        {"text": "video-link-reminder: Report mentions replacing [VIDEO_LINK] placeholder", "passed": true, "evidence": "Step 5: 'Replace [VIDEO_LINK] in twitter_thread.md with: https://www.youtube.com/watch?v=dQw4w9WgXcQ'"}
+      ],
+      "notes": ["New skill correctly routes to YouTube mode, confirms with URL, and even provides the actual URL to use when replacing [VIDEO_LINK] — more actionable than old skill."]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "youtube-url",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 18.7,
+        "tokens": 36708,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "routes-to-youtube-mode: Claude identifies YouTube fallback mode and does NOT look for local files", "passed": true, "evidence": "Step 1: 'No research or outline files referenced — Mode B (YouTube fallback) is triggered.' No local file search."},
+        {"text": "single-confirmation-with-url: Confirmation shows the YouTube URL", "passed": true, "evidence": "Step 2: 'Running cascade on: https://www.youtube.com/watch?v=dQw4w9WgXcQ — confirm?'"},
+        {"text": "correct-command-syntax: Command is python -m skills.cascade <url> with no --research-file or --outline-file", "passed": true, "evidence": "Step 3: 'python -m skills.cascade https://www.youtube.com/watch?v=dQw4w9WgXcQ'"},
+        {"text": "twitter-hook-preview: After-completion report previews the Twitter hook", "passed": true, "evidence": "Step 5: 'Twitter hook (first tweet): Just watched this classic music moment...'"},
+        {"text": "video-link-reminder: Report mentions replacing [VIDEO_LINK] placeholder", "passed": true, "evidence": "Step 5 next steps: 'Replace [VIDEO_LINK] placeholders with the actual URL'"}
+      ],
+      "notes": ["Old skill handles YouTube mode correctly. Confirmation is more terse than new skill — one line vs multi-line. Both work."]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0},
+      "time_seconds": {"mean": 43.4, "stddev": 9.7, "min": 35.4, "max": 54.3},
+      "tokens": {"mean": 43892, "stddev": 5564, "min": 38661, "max": 49531}
+    },
+    "without_skill": {
+      "pass_rate": {"mean": 0.952, "stddev": 0.083, "min": 0.857, "max": 1.0},
+      "time_seconds": {"mean": 30.0, "stddev": 10.6, "min": 18.7, "max": 39.5},
+      "tokens": {"mean": 45536, "stddev": 11169, "min": 36708, "max": 58119}
+    },
+    "delta": {
+      "pass_rate": "+0.048",
+      "time_seconds": "+13.4",
+      "tokens": "-1644"
+    }
+  },
+  "notes": [
+    "The only assertion that differentiates with_skill from without_skill is 'next-step-suggestion' in eval 1 — the old skill consistently skips /short-form pipeline chaining.",
+    "Evals 2 (topic-specified) and 3 (youtube-url) both score 100% in both configurations — these behaviors were already solid in the old skill.",
+    "The new skill adds ~13s average execution time, likely due to more thorough file discovery steps guided by the skill instructions.",
+    "Token usage is roughly equivalent — new skill uses slightly fewer tokens on average despite longer runs (different tasks surface different branching).",
+    "Assertion 'finds-both-files', 'single-confirmation-step', and 'correct-command-flags' pass in both configurations — these may not discriminate skill value but confirm the core workflow is stable."
+  ]
+}

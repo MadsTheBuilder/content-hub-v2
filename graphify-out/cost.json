@@ -14,5 +14,7 @@
     }
   ],
   "total_input_tokens": 76009,
-  "total_output_tokens": 0
+  "total_output_tokens": 0,
+  "input": 150,
+  "output": 280
 }

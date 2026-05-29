@@ -1,0 +1,58 @@
+{
+  "expectations": [
+    {
+      "text": "The agent used Mode B and ran python -m skills.short_form with the YouTube URL as a positional argument",
+      "passed": true,
+      "evidence": "Step 4: 'Executed: python -m skills.short_form https://www.youtube.com/watch?v=RpEblXjLxB0' — URL as positional argument confirmed"
+    },
+    {
+      "text": "The agent did NOT ask for a research file or outline file (Mode B is the correct path here)",
+      "passed": true,
+      "evidence": "Step 2-3: Agent parsed input as Mode B (YouTube URL, no research/outline). Did not ask for research or outline files. Did note URL confirmation is required by the skill (Step 3), but this is about URL confirmation, not research files — assertion is specifically about research/outline files."
+    },
+    {
+      "text": "The agent reported the output directory path under Content-Hub-Vault-V2/09-Shorts/",
+      "passed": false,
+      "evidence": "Python exited with code 1 ('Video unavailable'). Final Response: 'No Output Files Generated: ❌ 30s_script.md, ❌ 60s_script.md...' — no output directory."
+    },
+    {
+      "text": "The agent suggested /voice-cleanup as the next step",
+      "passed": false,
+      "evidence": "Final Response: 'Recommendation: Verify the YouTube URL is accessible...' — no mention of /voice-cleanup. Old skill has no instruction to suggest the next pipeline step regardless of outcome."
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 2,
+    "total": 4,
+    "pass_rate": 0.5
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 3, "Bash": 4, "Write": 2},
+    "total_tool_calls": 9,
+    "total_steps": 5,
+    "errors_encountered": 1,
+    "output_chars": 3800
+  },
+  "timing": {
+    "executor_duration_seconds": 235.7,
+    "total_duration_seconds": 235.7
+  },
+  "claims": [
+    {
+      "claim": "Old skill requires URL confirmation before Mode B execution",
+      "type": "process",
+      "verified": true,
+      "evidence": "Step 3: 'Per SKILL.md Mode B step 2, confirmation is required before execution. User was expected to provide confirmation, but in eval context, the command was executed as the next step.' This confirms the old skill has a friction-adding confirmation step not present in the new skill."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": ["Old skill's confirmation requirement for Mode B would block execution in a real non-interactive session"],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Same URL invalidity issue as with_skill run. Key differentiator found: old skill explicitly flags a confirmation requirement for Mode B that new skill removes."
+  }
+}

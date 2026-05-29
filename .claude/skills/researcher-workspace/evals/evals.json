@@ -1,0 +1,43 @@
+{
+  "skill_name": "researcher",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I want to start making a video but I'm not sure what angle to take yet. Can you kick off researcher for me?",
+      "expected_output": "Claude asks for the niche/topic since none was provided, then explains it will list available repos for the user to pick from before running anything. Should NOT auto-select repos or auto-run the pipeline.",
+      "files": [],
+      "expectations": [
+        "Claude asks the user to provide a niche or topic before proceeding",
+        "Claude does NOT auto-select repos or run the pipeline without user input",
+        "Claude explains or references the researcher skill as Step 1 of the pipeline",
+        "Claude mentions /hook as the next step after the brief is reviewed"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "/researcher AI agents",
+      "expected_output": "Claude uses the researcher skill, runs python -m skills.researcher --list to show available repos, then asks the user which repos to research. Does not skip the repo-selection step.",
+      "files": [],
+      "expectations": [
+        "Claude attempts to run `python -m skills.researcher --list` to show available repos",
+        "Claude asks the user to select which repos to research before running",
+        "Claude identifies the niche as 'AI agents' from the command argument",
+        "Claude shows the correct command syntax including --niche and --repos flags",
+        "Claude does not run the research pipeline without user confirmation of repo selection"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "research the microsoft/autogen repo, niche is AI agents",
+      "expected_output": "Claude follows the full confirmation flow: confirms the repo and niche, asks for approval, then shows the exact command it will run. After (simulated) completion, reports the brief file path and recommends /hook as the next step.",
+      "files": [],
+      "expectations": [
+        "Claude confirms the repo (microsoft/autogen) and niche (AI agents) with the user before running",
+        "Claude shows the correct command: `python -m skills.researcher --niche \"AI agents\" --repos microsoft/autogen`",
+        "Claude mentions the output file path pattern: Content-Hub-Vault-V2/10-Research/YYYY-MM-DD_ai-agents_brief.md",
+        "Claude mentions /hook as the next step after reviewing the brief",
+        "Claude explains what the brief contains (Recommended Video Angle, synthesized sections)"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "expectations": [
+    {
+      "text": "The response uses --length 6 in the command (6-minute length extracted from natural language)",
+      "passed": true,
+      "evidence": "Step 4: 'Command ready for Python command: python -m skills.outline \"Why developers fail at AI\" --length 6 --platform yt-long'"
+    },
+    {
+      "text": "The response acknowledges or references the user's feedback about Stage 4 being too technical and Stage 5 being generic",
+      "passed": true,
+      "evidence": "Step 3 'Regeneration context': 'Stage 4 (Validation): Currently too technical → Needs simplification + practical focus. Stage 5 (Affection): Currently too generic → Needs personal anecdote + specific emotional stakes.'"
+    },
+    {
+      "text": "The response scans Content-Hub-Vault-V2/05-Hooks/ for any existing hook for the topic",
+      "passed": true,
+      "evidence": "Step 2 'Hook File Search': 'Search pattern: Content-Hub-Vault-V2/05-Hooks/*why-developers-fail* — Result: ✗ No matching hook file found'"
+    },
+    {
+      "text": "The response does NOT ask what length to use (6 minutes was explicitly stated)",
+      "passed": true,
+      "evidence": "No clarification question asked. Step 3 confirms: 'Target length: 6 minutes (user explicitly stated at 6 minutes)'"
+    },
+    {
+      "text": "The response mentions Stage 5 specifically in its preview or next-step guidance (not just Stage 2 by default)",
+      "passed": true,
+      "evidence": "Next-step prompt: 'Stage 5 should land with a personal anecdote that feels earned.' Explicit Stage 5 guidance in the post-outline instruction."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.00
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 1, "Glob": 4},
+    "total_tool_calls": 5,
+    "total_steps": 7,
+    "errors_encountered": 0,
+    "output_chars": 8622,
+    "transcript_chars": 8622
+  },
+  "timing": {
+    "executor_duration_seconds": 73.3,
+    "total_duration_seconds": 73.3
+  },
+  "claims": [
+    {
+      "claim": "Old skill notes need for --feedback parameter in the outline command",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Recommendation section: 'Add a --feedback parameter: python -m skills.outline \"Why developers fail at AI\" --length 6 --feedback \"Stage 4 too technical...\"'"
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Perfect score for old skill on this eval. Both skills handle regeneration well. Assertions are not discriminating enough for this case — both versions would pass. Consider adding assertions that check /cascade vs generic film suggestion."
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "total_tokens": 36,
+  "duration_ms": 114219,
+  "total_duration_seconds": 45.0,
+  "note": "Subagent ran Python script (NIM failed → Gemini fallback), then hit rate limit before saving result.md. Timing excludes rate-limit wait."
+}

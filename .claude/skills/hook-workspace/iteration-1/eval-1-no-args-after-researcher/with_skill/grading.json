@@ -1,0 +1,76 @@
+{
+  "expectations": [
+    {
+      "text": "The skill confirms the topic 'Why most creators quit before 1000 subscribers' before running without asking the user to re-state it",
+      "passed": true,
+      "evidence": "Transcript shows: topic extracted from /researcher context + user message without prompting. Confirmation: 'Writing 5 hooks for: Why most creators quit before 1000 subscribers — yt-long · medium.'"
+    },
+    {
+      "text": "The confirmation message includes the default platform (yt-long) and format (medium)",
+      "passed": true,
+      "evidence": "Confirmation message in transcript Step 3: 'Writing 5 hooks for: ... — yt-long · medium. Running now.'"
+    },
+    {
+      "text": "The skill constructs a python -m skills.hook command with the topic as an argument",
+      "passed": true,
+      "evidence": "Transcript Step 4: 'python -m skills.hook \"Why most creators quit before 1000 subscribers\" --platform yt-long --audience \"AI builders and content creators\" --format medium'"
+    },
+    {
+      "text": "The output reports a vault file path under Content-Hub-Vault-V2/05-Hooks/",
+      "passed": true,
+      "evidence": "result.md: 'File written: Content-Hub-Vault-V2/05-Hooks/2026-05-15_why-most-creators-quit-before.md'"
+    },
+    {
+      "text": "The ⭐ recommended hook's Spoken Line is previewed in the final response",
+      "passed": true,
+      "evidence": "result.md Recommended Hook Preview section: ⭐ Hook 1 Spoken Line: 'If most creators quit before 1000 subscribers, here is exactly what stops the ones who don't.'"
+    },
+    {
+      "text": "The response suggests /outline as the next step with a --hook-path argument",
+      "passed": true,
+      "evidence": "result.md Next Step: '/outline topic=\"Why most creators quit before 1000 subscribers\" --hook-path \"Content-Hub-Vault-V2/05-Hooks/2026-05-15_why-most-creators-quit-before.md\"'"
+    },
+    {
+      "text": "The skill response explicitly references the pipeline position or the researcher-to-hook transition (e.g. step 2, or researcher → hook → outline)",
+      "passed": true,
+      "evidence": "result.md confirmation line: '(Step 2 of 7 — continuing from /researcher)'. Transcript also notes: 'New skill explicitly includes step 2 of 7 pipeline label.'"
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 0,
+    "total": 7,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 2, "Write": 2, "Bash": 0},
+    "total_tool_calls": 4,
+    "total_steps": 5,
+    "errors_encountered": 0,
+    "output_chars": 3200,
+    "transcript_chars": 1800
+  },
+  "timing": {
+    "executor_duration_seconds": 90.0,
+    "total_duration_seconds": 90.0
+  },
+  "claims": [
+    {
+      "claim": "New skill picks up /researcher topic without asking",
+      "type": "process",
+      "verified": true,
+      "evidence": "Transcript explicitly states decision: 'No need to ask — topic is clear from /researcher context.' New skill Step 1 instructs: 'check whether /researcher was just run and use that topic.'"
+    },
+    {
+      "claim": "Pipeline position (Step 2 of 7) is surfaced in the response",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Confirmation in result.md includes '(Step 2 of 7 — continuing from /researcher)'"
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": ["Python script not executed — hooks generated directly using prompts/hook.md content"]
+  }
+}

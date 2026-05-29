@@ -11,3 +11,16 @@ build/
 *.egg-info/
 .DS_Store
 archive/
+
+# Virtual environments
+.venv/
+
+# Runtime state / agent scaffolding (not source)
+.agents/
+.claude-flow/
+.hive-mind/
+.swarm/
+.claude/scheduled_tasks.lock
+
+# Graphify cache (large, reproducible)
+graphify-out/cache/

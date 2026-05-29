@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Content Hub V2 — Systems Architecture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+  <style>
+    :root {
+      /* Surfaces */
+      --bg:        #0D0F12;
+      --surface:   #13161B;
+      --surface-2: #1A1E26;
+      --border:    #252932;
+      --border-active: #3A4152;
+
+      /* Text */
+      --text:      #F0F2F5;
+      --text-muted:#7A8394;
+      --text-dim:  #4A5366;
+
+      /* Brand accent — blue */
+      --accent:    #5B8DEF;
+      --accent-dim:color-mix(in oklab, #5B8DEF 12%, transparent);
+
+      /* Semantic colors */
+      --green:     #3DD68C;
+      --green-dim: color-mix(in oklab, #3DD68C 13%, transparent);
+      --blue:      #06B6D4;
+      --blue-dim:  color-mix(in oklab, #06B6D4 13%, transparent);
+      --amber:     #F5A623;
+      --amber-dim: color-mix(in oklab, #F5A623 13%, transparent);
+      --red:       #E5534B;
+      --red-dim:   color-mix(in oklab, #E5534B 13%, transparent);
+      --purple:    #A855F7;
+      --purple-dim:color-mix(in oklab, #A855F7 13%, transparent);
+
+      /* Radii */
+      --r-card:   12px;
+      --r-button:  6px;
+      --r-pill:    4px;
+
+      /* Typography */
+      --font-ui:   "Inter", system-ui, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+      /* Per-slide accent — driven by JS on navigation */
+      --page-accent: #5B8DEF;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: 18px; }
+
+    body {
+      width: 100%; height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-ui);
+      overflow: hidden;
+    }
+
+    /* ── Deck ── */
+    .deck {
+      position: relative;
+      width: 100vw;
+      height: calc(100vh - 56px);
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      padding: 2.8rem 5rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      opacity: 0;
+      transform: translateX(56px);
+      transition: opacity 0.42s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.42s cubic-bezier(0.16,1,0.3,1);
+      pointer-events: none;
+      overflow-y: auto;
+      /* Ambient per-slide gradient using --page-accent */
+      background:
+        radial-gradient(65% 55% at 10% 0%,
+          color-mix(in oklab, var(--page-accent) 14%, transparent) 0%, transparent 55%),
+        radial-gradient(50% 55% at 88% 90%,
+          color-mix(in oklab, var(--page-accent)  9%, transparent) 0%, transparent 50%),
+        var(--bg);
+    }
+    .slide.active { opacity: 1; transform: translateX(0); pointer-events: all; }
+    .slide.exit   { opacity: 0; transform: translateX(-56px); }
+
+    .ghost {
+      position: absolute;
+      right: 3rem; bottom: 1rem;
+      font-family: var(--font-ui);
+      font-size: 18vw; font-weight: 100; line-height: 1;
+      color: var(--text); opacity: 0.03;
+      pointer-events: none; user-select: none;
+      letter-spacing: -0.04em;
+    }
+
+    /* ── Section label + headings ── */
+    .label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 0.75rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .label::before { content:''; display:block; width:2rem; height:1px; background:var(--accent); }
+
+    .title {
+      font-family: var(--font-ui);
+      font-size: clamp(2.2rem, 4vw, 3.2rem); font-weight: 700;
+      line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 0.3rem;
+    }
+    .title em { font-style: normal; color: var(--page-accent); }
+
+    .sub {
+      font-family: var(--font-mono);
+      font-size: 0.82rem; color: var(--text-muted);
+      letter-spacing: 0.05em; margin-bottom: 1.75rem;
+    }
+
+    /* ═══════════════════════════
+       SLIDE 1 — COVER
+    ═══════════════════════════ */
+    .cover-badge {
+      display: inline-flex; align-items: center;
+      background: var(--accent-dim);
+      border: 1px solid color-mix(in oklab, var(--accent) 30%, transparent);
+      border-radius: var(--r-pill); padding: 0.35rem 0.9rem;
+      font-family: var(--font-mono); font-size: 0.72rem;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+
+    .cover-title {
+      font-family: var(--font-ui);
+      font-size: clamp(3.5rem, 7vw, 5.5rem); font-weight: 700;
+      line-height: 1.0; letter-spacing: -0.04em;
+    }
+    .cover-title em { font-style: normal; color: var(--accent); }
+
+    .cover-stats { display: flex; gap: 2.5rem; margin-top: 2rem; }
+    .cs { display: flex; flex-direction: column; gap: 0.25rem; }
+    .cs-n {
+      font-family: var(--font-ui);
+      font-size: 2.8rem; font-weight: 700; color: var(--accent); line-height: 1;
+    }
+    .cs-l {
+      font-family: var(--font-mono); font-size: 0.7rem;
+      text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted);
+    }
+
+    .cover-hint {
+      position: absolute; bottom: 2rem; left: 5rem;
+      font-family: var(--font-mono); font-size: 0.7rem;
+      color: var(--text-dim); letter-spacing: 0.1em;
+    }
+
+    /* ═══════════════════════════
+       SLIDE 2 — ARCHITECTURE
+    ═══════════════════════════ */
+    .layer-stack { display: flex; flex-direction: column; gap: 0.55rem; max-width: 860px; }
+
+    .layer {
+      display: grid; grid-template-columns: 150px 1fr;
+      border: 1px solid var(--border); border-radius: var(--r-button); overflow: hidden;
+    }
+    .l-name {
+      background: var(--surface-2); padding: 0.85rem 1.1rem;
+      font-family: var(--font-mono); font-size: 0.72rem;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      display: flex; align-items: center; border-right: 2px solid;
+    }
+    .l-body {
+      background: var(--surface); padding: 0.85rem 1.25rem;
+      font-family: var(--font-mono); font-size: 0.78rem;
+      color: var(--text-muted); display: flex; align-items: center;
+      gap: 0.6rem; flex-wrap: wrap;
+    }
+    .tag {
+      padding: 0.22rem 0.6rem; border-radius: var(--r-pill);
+      font-size: 0.72rem; letter-spacing: 0.04em;
+    }
+
+    .layer.lh .l-name { border-color: var(--accent);  color: var(--accent);  }
+    .layer.lh .tag    { background: var(--accent-dim); color: var(--accent);  }
+    .layer.ls .l-name { border-color: var(--purple);   color: var(--purple);  }
+    .layer.ls .tag    { background: var(--purple-dim); color: var(--purple);  }
+    .layer.lp .l-name { border-color: var(--amber);    color: var(--amber);   }
+    .layer.lp .tag    { background: var(--amber-dim);  color: var(--amber);   }
+    .layer.la .l-name { border-color: var(--blue);     color: var(--blue);    }
+    .layer.la .tag    { background: var(--blue-dim);   color: var(--blue);    }
+    .layer.lv .l-name { border-color: var(--green);    color: var(--green);   }
+    .layer.lv .tag    { background: var(--green-dim);  color: var(--green);   }
+
+    /* ═══════════════════════════
+       SLIDE 3 — PIPELINE
+    ═══════════════════════════ */
+    .pipe-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 0.8rem; max-width: 900px;
+    }
+    .pipe-step {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-card);
+      padding: 1rem 1.1rem; display: grid; grid-template-columns: 2.2rem 1fr;
+      gap: 0.75rem; align-items: start; transition: border-color 0.18s;
+    }
+    .pipe-step:hover { border-color: color-mix(in oklab, var(--accent) 40%, transparent); }
+    .pn { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 500; color: var(--accent); opacity: 0.55; line-height: 1; }
+    .pk { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text); margin-bottom: 0.25rem; }
+    .po { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); }
+
+    .pipe-note {
+      margin-top: 1.25rem; font-family: var(--font-mono); font-size: 0.76rem;
+      color: var(--text-muted); display: flex; align-items: center; gap: 0.6rem;
+    }
+    .pipe-note::before { content: '↑'; color: var(--amber); }
+
+    /* ═══════════════════════════
+       SLIDE 4 — DETERMINISTIC
+    ═══════════════════════════ */
+    .card-grid {
+      display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; max-width: 900px;
+    }
+    .card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-card);
+      padding: 1.4rem 1.4rem 1.2rem; position: relative; overflow: hidden;
+    }
+    .card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+    .card.g::before { background: var(--green); }
+    .card.a::before { background: var(--amber); }
+    .card.b::before { background: var(--blue);  }
+    .card.c::before { background: var(--accent);}
+
+    .cbadge {
+      display:inline-block; padding:0.22rem 0.6rem; border-radius: var(--r-pill);
+      font-family: var(--font-mono); font-size:0.7rem; text-transform:uppercase;
+      letter-spacing:0.08em; margin-bottom:0.7rem;
+    }
+    .card.g .cbadge { background:var(--green-dim);  color:var(--green);  }
+    .card.a .cbadge { background:var(--amber-dim);  color:var(--amber);  }
+    .card.b .cbadge { background:var(--blue-dim);   color:var(--blue);   }
+    .card.c .cbadge { background:var(--accent-dim); color:var(--accent); }
+
+    .ctitle { font-family: var(--font-ui); font-size:1.2rem; font-weight:600; margin-bottom:0.25rem; }
+    .cfile  { font-family: var(--font-mono); font-size:0.7rem; color:var(--text-dim); margin-bottom:0.75rem; }
+    .cdesc  { font-family: var(--font-ui); font-size:0.9rem; line-height:1.65; color:var(--text-muted); }
+
+    /* ═══════════════════════════
+       SLIDE 5 — AI CASCADE
+    ═══════════════════════════ */
+    .cascade-wrap {
+      display: grid; grid-template-columns: 280px auto 1fr;
+      gap: 2rem; align-items: start; max-width: 900px;
+    }
+    .cn-block { display: flex; flex-direction: column; }
+    .cn {
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 1rem 1.25rem;
+    }
+    .cn + .cn { border-top: none; }
+    .cn:first-child { border-radius: var(--r-card) var(--r-card) 0 0; }
+    .cn:last-child  { border-radius: 0 0 var(--r-card) var(--r-card); }
+    .cn.p1 { border-left: 2px solid var(--accent); }
+    .cn.p2 { border-left: 2px solid var(--blue);   }
+    .cn.p3 { border-left: 2px solid var(--green);  }
+    .cn .cn-lbl  { font-family: var(--font-mono); font-size:0.7rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.25rem; }
+    .cn .cn-name { font-family: var(--font-ui); font-size:1.2rem; font-weight:600; line-height:1; }
+    .cn .cn-note { font-family: var(--font-mono); font-size:0.7rem; color:var(--text-dim); margin-top:0.2rem; }
+
+    /* .cn is reused by .cov-item spans — reset block styles there */
+    .cov-item .cn { background:transparent; border:none; padding:0; border-radius:0; }
+
+    .cascade-mid {
+      display:flex; align-items:center; justify-content:center;
+      font-family: var(--font-mono); font-size:0.7rem; color:var(--text-dim);
+      writing-mode:vertical-rl; padding: 0 0.5rem; align-self:center;
+    }
+
+    .wcard-list { display:flex; flex-direction:column; gap:0.75rem; }
+    .wcard {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-card); padding:1rem 1.25rem;
+    }
+    .wcard .wt { font-family: var(--font-mono); font-size:0.82rem; color:var(--accent); margin-bottom:0.35rem; }
+    .wcard .wd { font-family: var(--font-ui); font-size:0.9rem; color:var(--text-muted); line-height:1.6; }
+    .wcard.dropped { border-left:2px solid var(--red); opacity:0.5; }
+    .wcard.dropped .wt { color:var(--red); }
+
+    /* ═══════════════════════════
+       SLIDE 6 — GUARDRAILS
+    ═══════════════════════════ */
+    .gr-grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; max-width:940px;
+    }
+    .grc {
+      background:var(--surface); border:1px solid var(--border); border-radius:var(--r-card);
+      padding:1.3rem 1.2rem; display:flex; flex-direction:column; gap:0.75rem;
+    }
+    .gr-badge {
+      width:2.2rem; height:2.2rem; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-family: var(--font-mono); font-size:0.78rem; font-weight:500;
+    }
+    .grc.ga .gr-badge { background:var(--amber-dim); color:var(--amber); }
+    .grc.gg .gr-badge { background:var(--green-dim); color:var(--green); }
+    .grc.gb .gr-badge { background:var(--blue-dim);  color:var(--blue);  }
+    .gr-title { font-family: var(--font-ui); font-size:1.15rem; font-weight:600; line-height:1.2; }
+    .gr-file  { font-family: var(--font-mono); font-size:0.7rem; color:var(--text-dim); }
+    .gr-items { list-style:none; display:flex; flex-direction:column; gap:0.4rem; }
+    .gr-items li { font-family: var(--font-mono); font-size:0.75rem; color:var(--text-muted); display:flex; gap:0.5rem; line-height:1.5; }
+    .gr-items li::before { content:'→'; flex-shrink:0; opacity:0.45; }
+    .pill-row { display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.2rem; }
+    .pill { font-family: var(--font-mono); font-size:0.7rem; padding:0.22rem 0.55rem; border-radius:var(--r-pill); }
+    .pill.ok  { background:var(--green-dim); color:var(--green); }
+    .pill.no  { background:var(--red-dim);   color:var(--red);   }
+    .pill.neu { background:var(--surface-2); color:var(--text-muted); border:1px solid var(--border); }
+
+    /* ═══════════════════════════
+       SLIDE 7 — BLOCKING GATES
+    ═══════════════════════════ */
+    .gate-list { display:flex; flex-direction:column; gap:1rem; max-width:820px; }
+    .gate {
+      display:grid; grid-template-columns:130px 1fr;
+      border:1px solid var(--border); border-radius:var(--r-card); overflow:hidden;
+    }
+    .gate-cmd {
+      background:var(--red-dim); border-right:2px solid var(--red);
+      padding:1.25rem 1rem; display:flex; flex-direction:column; justify-content:center; gap:0.25rem;
+    }
+    .gate-cmd .gc { font-family: var(--font-mono); font-size:0.9rem; color:var(--red); }
+    .gate-cmd .gt { font-family: var(--font-mono); font-size:0.65rem; color:var(--red); opacity:0.6; text-transform:uppercase; letter-spacing:0.1em; }
+    .gate-body { background:var(--surface); padding:1.25rem 1.6rem; }
+    .gate-q { font-family: var(--font-ui); font-size:1.1rem; font-weight:500; font-style:italic; margin-bottom:0.4rem; line-height:1.4; }
+    .gate-r { font-family: var(--font-mono); font-size:0.76rem; color:var(--text-muted); line-height:1.55; }
+
+    /* ═══════════════════════════
+       SLIDE 8 — EVAL SYSTEM
+    ═══════════════════════════ */
+    .eval-layout { display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; max-width:880px; }
+    .eval-node {
+      background:var(--surface); border:1px solid var(--border);
+      border-left:2px solid var(--blue); border-radius:0 var(--r-card) var(--r-card) 0;
+      padding:0.9rem 1.1rem;
+    }
+    .eval-node .en { font-family: var(--font-mono); font-size:0.78rem; color:var(--blue); margin-bottom:0.3rem; }
+    .eval-node .ed { font-family: var(--font-ui); font-size:0.88rem; color:var(--text-muted); line-height:1.6; }
+    .connector { display:flex; align-items:center; justify-content:center; height:1.6rem; }
+    .connector::after { content:'↓'; font-family: var(--font-mono); font-size:0.75rem; color:var(--text-dim); }
+    .cov-list { display:flex; flex-direction:column; gap:0.45rem; }
+    .cov-item {
+      display:grid; grid-template-columns:1fr auto; gap:1rem;
+      padding:0.55rem 0.85rem; background:var(--surface);
+      border:1px solid var(--border); border-radius:var(--r-card);
+      font-family: var(--font-mono); font-size:0.78rem;
+    }
+    .cov-item .cn { color:var(--text); }
+    .cov-item .cc { color:var(--blue); }
+
+    /* ═══════════════════════════
+       SLIDE 9 — VAULT
+    ═══════════════════════════ */
+    .vault-layout { display:grid; grid-template-columns:1fr 1fr; gap:3rem; max-width:900px; align-items:start; }
+    .tree { font-family: var(--font-mono); font-size:0.82rem; line-height:2.0; color:var(--text-muted); }
+    .tree .tr { color:var(--text); font-size:0.88rem; }
+    .tree .hi { color:var(--accent); }
+    .tree .pe { color:var(--amber); }
+    .tree .cm { color:var(--text-dim); margin-left:0.5rem; font-size:0.72rem; }
+    .vault-notes { display:flex; flex-direction:column; gap:1rem; }
+    .vn-item { display:flex; gap:0.75rem; align-items:flex-start; }
+    .vn-dot { width:0.5rem; height:0.5rem; border-radius:50%; flex-shrink:0; margin-top:0.35rem; }
+    .vn-label { font-family: var(--font-mono); font-size:0.78rem; color:var(--text); margin-bottom:0.2rem; }
+    .vn-desc  { font-family: var(--font-ui); font-size:0.88rem; color:var(--text-muted); line-height:1.6; }
+
+    /* ═══════════════════════════
+       SLIDE 10 — FLOW
+    ═══════════════════════════ */
+    .flow-cols { display:grid; grid-template-columns:1fr 1fr; gap:0; max-width:880px; }
+    .flow-col { display:flex; flex-direction:column; position:relative; }
+    .flow-col::before {
+      content:''; position:absolute; left:1.25rem; top:1.3rem; bottom:1.3rem;
+      width:1px; background:linear-gradient(to bottom, transparent, var(--accent) 30%, var(--accent) 70%, transparent);
+      opacity:0.3;
+    }
+    .flow-step { display:grid; grid-template-columns:2.5rem 1fr; gap:1rem; padding:0.65rem 0; align-items:center; }
+    .fd {
+      width:2.5rem; height:2.5rem; border-radius:50%; background:var(--surface);
+      border:1px solid var(--border); display:flex; align-items:center; justify-content:center;
+      font-family: var(--font-mono); font-size:0.65rem; color:var(--text-muted);
+      z-index:1; position:relative; flex-shrink:0;
+    }
+    .flow-step.human .fd { background:var(--accent-dim); border-color:color-mix(in oklab, var(--accent) 35%, transparent); color:var(--accent); }
+    .fc .fk { font-family: var(--font-mono); font-size:0.82rem; color:var(--text); margin-bottom:0.12rem; }
+    .fc .fo { font-family: var(--font-mono); font-size:0.7rem; color:var(--text-dim); }
+
+    /* ═══════════════════════════
+       NAV BAR
+    ═══════════════════════════ */
+    .nav-bar {
+      position:fixed; bottom:0; left:0; right:0; height:56px;
+      background:var(--surface); border-top:1px solid var(--border);
+      display:flex; align-items:center; padding:0 2.25rem; gap:1.25rem; z-index:100;
+    }
+    #counter { font-family: var(--font-mono); font-size:0.78rem; color:var(--text-muted); letter-spacing:0.08em; flex-shrink:0; min-width:4rem; }
+    .prog-track { flex:1; height:2px; background:var(--border); border-radius:1px; overflow:hidden; }
+    .prog-fill   { height:100%; background:var(--accent); border-radius:1px; transition:width 0.4s cubic-bezier(0.16,1,0.3,1); }
+    .nbtn {
+      background:transparent; border:1px solid var(--border); color:var(--text-muted);
+      font-family: var(--font-mono); font-size:0.78rem; padding:0.35rem 0.9rem;
+      border-radius:var(--r-button); cursor:pointer; transition:all 0.14s; letter-spacing:0.04em;
+    }
+    .nbtn:hover { border-color:var(--accent); color:var(--accent); }
+    .nbtn:disabled { opacity:0.3; cursor:default; }
+    .nbtn:disabled:hover { border-color:var(--border); color:var(--text-muted); }
+
+    /* ═══════════════════════════
+       SLIDE 11 — SYSTEM GRAPH
+    ═══════════════════════════ */
+    .slide.s-graph { padding:0; overflow:hidden; justify-content:flex-start; }
+    .graph-hdr {
+      position:absolute; top:0; left:0; right:0; height:42px;
+      background:var(--surface); border-bottom:1px solid var(--border);
+      display:flex; align-items:center; padding:0 1.25rem; gap:0.85rem; z-index:10;
+    }
+    .graph-hdr-title { font-family:var(--font-mono); font-size:0.72rem; color:var(--text-muted); letter-spacing:0.08em; }
+    .graph-hdr-title em { color:var(--accent); font-style:normal; }
+    .graph-hdr-sep { width:1px; height:14px; background:var(--border); flex-shrink:0; }
+    .graph-hdr-meta { font-family:var(--font-mono); font-size:0.68rem; color:var(--text-dim); }
+    .graph-hdr-meta b { color:var(--text-muted); font-weight:500; }
+    .graph-hdr-hint { margin-left:auto; font-family:var(--font-mono); font-size:0.68rem; color:var(--text-dim); letter-spacing:0.04em; }
+    .g-legend {
+      position:absolute; top:58px; left:1.25rem;
+      background:var(--surface); border:1px solid var(--border); border-radius:var(--r-card);
+      padding:0.75rem 0.9rem; z-index:10; min-width:148px;
+    }
+    .g-legend-hd { font-family:var(--font-mono); font-size:0.6rem; text-transform:uppercase; letter-spacing:0.14em; color:var(--text-dim); margin-bottom:0.45rem; }
+    .g-leg-item { display:flex; align-items:center; gap:0.5rem; padding:0.22rem 0; cursor:pointer; user-select:none; transition:opacity 0.15s; }
+    .g-leg-item.off { opacity:0.28; }
+    .g-leg-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+    .g-leg-label { font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted); }
+    .g-info {
+      position:absolute; top:58px; right:1.25rem;
+      background:var(--surface); border:1px solid var(--border); border-radius:var(--r-card);
+      padding:1rem 1.1rem; width:234px; z-index:10;
+      opacity:0; transform:translateX(6px); transition:opacity 0.2s, transform 0.2s; pointer-events:none;
+    }
+    .g-info.show { opacity:1; transform:none; pointer-events:all; }
+    .g-info-type { font-family:var(--font-mono); font-size:0.6rem; text-transform:uppercase; letter-spacing:0.14em; margin-bottom:0.35rem; }
+    .g-info-name { font-family:var(--font-ui); font-size:0.95rem; font-weight:600; margin-bottom:0.45rem; line-height:1.25; }
+    .g-info-desc { font-family:var(--font-ui); font-size:0.8rem; color:var(--text-muted); line-height:1.55; }
+    .g-info-conns { margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid var(--border); }
+    .g-info-conns-hd { font-family:var(--font-mono); font-size:0.6rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--text-dim); margin-bottom:0.35rem; }
+    .g-conn-row { font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted); display:flex; align-items:center; gap:0.35rem; padding:0.15rem 0; }
+    .g-controls { position:absolute; bottom:1rem; left:1.25rem; display:flex; gap:0.4rem; z-index:10; }
+    .g-ctrl {
+      background:var(--surface); border:1px solid var(--border); border-radius:var(--r-button);
+      padding:0.28rem 0.65rem; font-family:var(--font-mono); font-size:0.68rem;
+      color:var(--text-muted); cursor:pointer; transition:all 0.14s; letter-spacing:0.04em;
+    }
+    .g-ctrl:hover { border-color:var(--accent); color:var(--accent); }
+    #gSvg { position:absolute; top:42px; left:0; right:0; bottom:0; width:100%; display:block; }
+  </style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- ─── 01 COVER ─── -->
+  <section class="slide active" id="s1" data-accent="#5B8DEF">
+    <div class="ghost">01</div>
+    <div class="cover-badge">v2 · local-first · 2026</div>
+    <h1 class="cover-title">Content Hub<br><em>V2</em></h1>
+    <p style="font-family:var(--font-mono);font-size:0.88rem;color:var(--text-muted);letter-spacing:0.06em;margin-top:0.75rem;">Systems Architecture Deck</p>
+    <div class="cover-stats">
+      <div class="cs"><span class="cs-n">9</span><span class="cs-l">Pipeline Steps</span></div>
+      <div class="cs"><span class="cs-n">7</span><span class="cs-l">Slash Skills</span></div>
+      <div class="cs"><span class="cs-n">3</span><span class="cs-l">Guardrail Types</span></div>
+      <div class="cs"><span class="cs-n">3</span><span class="cs-l">AI Providers</span></div>
+    </div>
+    <p class="cover-hint">space · → · ← to navigate &nbsp;·&nbsp; Home / End to jump</p>
+  </section>
+
+  <!-- ─── 02 ARCHITECTURE ─── -->
+  <section class="slide" id="s2" data-accent="#06B6D4">
+    <div class="ghost">02</div>
+    <div class="label">Architecture</div>
+    <h2 class="title">The <em>Full Stack</em></h2>
+    <p class="sub">Five layers — human intent to vault output</p>
+    <div class="layer-stack">
+      <div class="layer lh">
+        <div class="l-name">Human</div>
+        <div class="l-body">
+          <span class="tag">idea selection</span>
+          <span class="tag">hook approval</span>
+          <span class="tag">repo selection</span>
+          <span class="tag">outline review</span>
+        </div>
+      </div>
+      <div class="layer ls">
+        <div class="l-name">Skill</div>
+        <div class="l-body">
+          <span class="tag">/researcher</span>
+          <span class="tag">/ideation</span>
+          <span class="tag">/hook</span>
+          <span class="tag">/outline</span>
+          <span class="tag">/cascade</span>
+          <span class="tag">/voice-cleanup</span>
+          <span class="tag">/short-form</span>
+        </div>
+      </div>
+      <div class="layer lp">
+        <div class="l-name">Python</div>
+        <div class="l-body">
+          <span class="tag">skills/*.py</span>
+          <span class="tag">pipeline.py</span>
+          <span class="tag">utils/ai.py</span>
+          <span class="tag">research_plan.py</span>
+          <span class="tag">research_sources.py</span>
+        </div>
+      </div>
+      <div class="layer la">
+        <div class="l-name">AI Cascade</div>
+        <div class="l-body">
+          <span class="tag">Claude CLI</span>
+          <span class="tag">NIM (NVIDIA)</span>
+          <span class="tag">Ollama (local)</span>
+        </div>
+      </div>
+      <div class="layer lv">
+        <div class="l-name">Vault</div>
+        <div class="l-body">
+          <span class="tag">10-Research/</span>
+          <span class="tag">05-Hooks/</span>
+          <span class="tag">06-Outlines/</span>
+          <span class="tag">08-Distribution/</span>
+          <span class="tag">Obsidian .md</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 03 PIPELINE ─── -->
+  <section class="slide" id="s3" data-accent="#3DD68C">
+    <div class="ghost">03</div>
+    <div class="label">Orchestration</div>
+    <h2 class="title">The <em>Pipeline</em></h2>
+    <p class="sub">skills/pipeline.py — 9-step exit-code-gated sequencer</p>
+    <div class="pipe-grid">
+      <div class="pipe-step"><div class="pn">1</div><div><div class="pk">/researcher</div><div class="po">→ 10-Research/brief.md</div></div></div>
+      <div class="pipe-step"><div class="pn">2</div><div><div class="pk">/ideation</div><div class="po">→ 02-Ideas/</div></div></div>
+      <div class="pipe-step"><div class="pn">3</div><div><div class="pk">/hook</div><div class="po">→ 05-Hooks/</div></div></div>
+      <div class="pipe-step"><div class="pn">4</div><div><div class="pk">/outline</div><div class="po">→ 06-Outlines/</div></div></div>
+      <div class="pipe-step"><div class="pn">5</div><div><div class="pk">/title</div><div class="po">→ 07-Titles/</div></div></div>
+      <div class="pipe-step"><div class="pn">6</div><div><div class="pk">/cascade</div><div class="po">→ 08-Distribution/raw/</div></div></div>
+      <div class="pipe-step"><div class="pn">7</div><div><div class="pk">/voice-cleanup</div><div class="po">→ 08-Distribution/cleaned/</div></div></div>
+      <div class="pipe-step"><div class="pn">8</div><div><div class="pk">/short-form</div><div class="po">→ 09-Short-Form/</div></div></div>
+      <div class="pipe-step"><div class="pn">9</div><div><div class="pk">/yt-pipeline</div><div class="po">→ 11-YT-Pipeline/</div></div></div>
+    </div>
+    <p class="pipe-note">Non-zero exit from any step halts the entire pipeline</p>
+  </section>
+
+  <!-- ─── 04 DETERMINISTIC ─── -->
+  <section class="slide" id="s4" data-accent="#14B8A6">
+    <div class="ghost">04</div>
+    <div class="label">No LLMs Involved</div>
+    <h2 class="title"><em>Deterministic</em> Systems</h2>
+    <p class="sub">Pure logic — same input always produces the same output</p>
+    <div class="card-grid">
+      <div class="card g">
+        <div class="cbadge">GitHub Scraper</div>
+        <div class="ctitle">GitHub Trending</div>
+        <div class="cfile">scripts/github_trending.py</div>
+        <div class="cdesc">Queries GitHub Search API across 3 AI topics (llm, ai, machine-learning). Merges results, deduplicates by repo ID, sorts by star count. Writes daily pulse to 04-Trends/ with velocity scores.</div>
+      </div>
+      <div class="card a">
+        <div class="cbadge">Source Filter</div>
+        <div class="ctitle">Primary Source Filter</div>
+        <div class="cfile">skills/research_sources.py</div>
+        <div class="cdesc">Regex allowlist/blocklist on every URL entering the pipeline. Scrapes YouTube video descriptions via yt-dlp. Fires a Claude/NIM backstop if fewer than 5 credible sources are found.</div>
+      </div>
+      <div class="card b">
+        <div class="cbadge">Vault Index</div>
+        <div class="ctitle">Vault Index</div>
+        <div class="cfile">app/vault_index.py</div>
+        <div class="cdesc">Sorted file listings for Control Room dropdowns. Reads research briefs, ideas, hooks, and outlines from vault folders. Returns newest-first lists via mtime sorting — no LLM at all.</div>
+      </div>
+      <div class="card c">
+        <div class="cbadge">Doc Crawler</div>
+        <div class="ctitle">Researcher Crawler</div>
+        <div class="cfile">skills/researcher_crawler.py</div>
+        <div class="cdesc">GitHub API crawler that discovers primary documentation for a repo. Traverses the file tree, scores candidates by relevance heuristics, returns a ranked DocCandidate list for research input.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 05 AI CASCADE ─── -->
+  <section class="slide" id="s5" data-accent="#5B8DEF">
+    <div class="ghost">05</div>
+    <div class="label">Probabilistic Layer</div>
+    <h2 class="title">The AI <em>Cascade</em></h2>
+    <p class="sub">skills/utils/ai.py — ordered fallback across three providers</p>
+    <div class="cascade-wrap">
+      <div class="cn-block">
+        <div class="cn p1">
+          <div class="cn-lbl">01 · primary</div>
+          <div class="cn-name">Claude CLI</div>
+          <div class="cn-note">Pro plan auth · subprocess</div>
+        </div>
+        <div class="cn p2">
+          <div class="cn-lbl">02 · fallback</div>
+          <div class="cn-name">NIM</div>
+          <div class="cn-note">NVIDIA inference · REST API</div>
+        </div>
+        <div class="cn p3">
+          <div class="cn-lbl">03 · local fallback</div>
+          <div class="cn-name">Ollama</div>
+          <div class="cn-note">localhost:11434 · free · slower</div>
+        </div>
+      </div>
+      <div class="cascade-mid">tries each in order until one succeeds</div>
+      <div class="wcard-list">
+        <div class="wcard">
+          <div class="wt">draft()</div>
+          <div class="wd">Rough pass through full cascade. Structural output — outlines, questions, scaffolding. Lower creative temperature.</div>
+        </div>
+        <div class="wcard">
+          <div class="wt">polish()</div>
+          <div class="wd">Premium pass. Same cascade order. Richer prompt. Final voice, hooks, titles. Output replaces the draft in vault on success.</div>
+        </div>
+        <div class="wcard dropped">
+          <div class="wt">Gemini — removed</div>
+          <div class="wd">Dropped 2026-05-19. Persistent 503 errors. Claude now occupies all former Gemini slots.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 06 GUARDRAILS ─── -->
+  <section class="slide" id="s6" data-accent="#F5A623">
+    <div class="ghost">06</div>
+    <div class="label">Quality Gates</div>
+    <h2 class="title">Research <em>Guardrails</em></h2>
+    <p class="sub">Three runtime controls baked into the research pipeline</p>
+    <div class="gr-grid">
+      <div class="grc ga">
+        <div class="gr-badge">01</div>
+        <div class="gr-title">Source Filter</div>
+        <div class="gr-file">skills/research_sources.py</div>
+        <ul class="gr-items">
+          <li>Scrapes YT video descriptions with yt-dlp</li>
+          <li>Allowlist: arxiv, GitHub, official docs, PDFs</li>
+          <li>Blocklist: Reddit, Twitter, Medium, Substack</li>
+          <li>If &lt;5 sources → Claude/NIM backstop fires</li>
+        </ul>
+        <div class="pill-row">
+          <span class="pill ok">arxiv</span>
+          <span class="pill ok">github</span>
+          <span class="pill ok">docs</span>
+          <span class="pill no">reddit</span>
+          <span class="pill no">medium</span>
+        </div>
+      </div>
+      <div class="grc gg">
+        <div class="gr-badge">02</div>
+        <div class="gr-title">Question Budget</div>
+        <div class="gr-file">skills/research_plan.py</div>
+        <ul class="gr-items">
+          <li>Default cap: 12 questions per research run</li>
+          <li>Dedup: &gt;60% word overlap = question skipped</li>
+          <li>Adaptive follow-ups: 0–2 generated per answer</li>
+          <li>Stats emitted: asked / deduped / followups / remaining</li>
+        </ul>
+        <div class="pill-row">
+          <span class="pill neu">budget = 12</span>
+          <span class="pill neu">overlap &gt; 60% → skip</span>
+        </div>
+      </div>
+      <div class="grc gb">
+        <div class="gr-badge">03</div>
+        <div class="gr-title">NIM Judge</div>
+        <div class="gr-file">skills/helpers/nim_picker.py</div>
+        <ul class="gr-items">
+          <li>LLM-as-judge step before research begins</li>
+          <li>Asks NIM: which report structure matches goal?</li>
+          <li>Goal: "explainer" or "technical"</li>
+          <li>Returns None → halts code path if no match</li>
+        </ul>
+        <div class="pill-row">
+          <span class="pill neu">explainer</span>
+          <span class="pill neu">technical</span>
+          <span class="pill no">NONE → halt</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 07 BLOCKING GATES ─── -->
+  <section class="slide" id="s7" data-accent="#E5534B">
+    <div class="ghost">07</div>
+    <div class="label">Human in the Loop</div>
+    <h2 class="title"><em>BLOCKING</em> Gates</h2>
+    <p class="sub">Three hard stops — pipeline cannot advance without a human decision</p>
+    <div class="gate-list">
+      <div class="gate">
+        <div class="gate-cmd"><div class="gc">/researcher</div><div class="gt">blocking</div></div>
+        <div class="gate-body">
+          <div class="gate-q">"Which repos do you want to research?"</div>
+          <div class="gate-r">Lists repos from GitHub Trending. "Never auto-select repos without the user's explicit choice." Pipeline does not run until repos are confirmed.</div>
+        </div>
+      </div>
+      <div class="gate">
+        <div class="gate-cmd"><div class="gc">/ideation</div><div class="gt">blocking</div></div>
+        <div class="gate-body">
+          <div class="gate-q">"Which idea do you want to pursue? Reply with a number (1–9)."</div>
+          <div class="gate-r">Surfaces 9 generated video angles. Will not suggest /hook or advance in any direction until a number is explicitly provided.</div>
+        </div>
+      </div>
+      <div class="gate">
+        <div class="gate-cmd"><div class="gc">/hook</div><div class="gt">blocking</div></div>
+        <div class="gate-body">
+          <div class="gate-q">"Which hook do you want to run with?"</div>
+          <div class="gate-r">Shows 5 hooks as numbered Spoken Lines (Kallaway patterns). "Do not suggest /outline until you have the answer." Enforced by SKILL.md instruction.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 08 EVAL SYSTEM ─── -->
+  <section class="slide" id="s8" data-accent="#A855F7">
+    <div class="ghost">08</div>
+    <div class="label">Quality Assurance</div>
+    <h2 class="title">The <em>Eval</em> System</h2>
+    <p class="sub">Behavioral test suites — one per skill, scored in-browser</p>
+    <div class="eval-layout">
+      <div>
+        <div style="display:flex;flex-direction:column;">
+          <div class="eval-node">
+            <div class="en">evals/evals.json</div>
+            <div class="ed">Array of test cases. Each has a prompt, expected output description, and a list of assertions to score.</div>
+          </div>
+          <div class="connector"></div>
+          <div class="eval-node">
+            <div class="en">iteration-N/eval-*/eval_metadata.json</div>
+            <div class="ed">Individual test input + assertions. Claude runs the skill; a human scores each assertion pass/fail.</div>
+          </div>
+          <div class="connector"></div>
+          <div class="eval-node">
+            <div class="en">iteration-N/eval_review.html</div>
+            <div class="ed">Browser-based scoring dashboard. Export to XLSX. Shows pass rate across all assertions and runs.</div>
+          </div>
+        </div>
+        <div style="margin-top:1.1rem;font-family:var(--font-mono);font-size:0.76rem;color:var(--text-muted);line-height:1.8;">
+          Assertions check:<br>
+          → Did it find the right files by name?<br>
+          → Single confirmation only — not multiple?<br>
+          → Filenames shown in the confirmation?<br>
+          → Correct CLI flags used?<br>
+          → Next pipeline step suggested?
+        </div>
+      </div>
+      <div>
+        <div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:0.75rem;">Skill Coverage</div>
+        <div class="cov-list">
+          <div class="cov-item"><span class="cn">/cascade</span><span class="cc">3 evals</span></div>
+          <div class="cov-item"><span class="cn">/researcher</span><span class="cc">3 evals</span></div>
+          <div class="cov-item"><span class="cn">/hook</span><span class="cc">3 evals</span></div>
+          <div class="cov-item"><span class="cn">/outline</span><span class="cc">3 evals</span></div>
+          <div class="cov-item"><span class="cn">/voice-cleanup</span><span class="cc">3 evals</span></div>
+          <div class="cov-item"><span class="cn">/title</span><span class="cc">6 evals</span></div>
+          <div class="cov-item"><span class="cn">/short-form</span><span class="cc">3 evals</span></div>
+          <div class="cov-item"><span class="cn">/orchestrate</span><span class="cc">3 evals</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 09 VAULT ─── -->
+  <section class="slide" id="s9" data-accent="#3DD68C">
+    <div class="ghost">09</div>
+    <div class="label">Output Layer</div>
+    <h2 class="title">The <em>Vault</em></h2>
+    <p class="sub">Obsidian-compatible markdown workspace — all skill output lands here</p>
+    <div class="vault-layout">
+      <div class="tree">
+        <div class="tr">Content-Hub-Vault-V2/</div>
+        <div style="padding-left:1.2rem">
+          <div>00-Management-V2/ <span class="cm">← sessions · tasks · memory</span></div>
+          <div>02-Ideas/ <span class="cm">← /ideation output</span></div>
+          <div>04-Trends/ <span class="cm">← GitHub daily pulse</span></div>
+          <div>05-Hooks/ <span class="cm">← /hook output</span></div>
+          <div>06-Outlines/ <span class="cm">← /outline output</span></div>
+          <div>07-Titles/ <span class="cm">← /title output</span></div>
+          <div class="hi">08-Distribution/</div>
+          <div style="padding-left:1.2rem">
+            <div>YYYY-MM-DD_&lt;slug&gt;/</div>
+            <div style="padding-left:1.2rem">
+              <div class="pe">raw/ <span class="cm">← cascade (refactor pending)</span></div>
+              <div class="pe">cleaned/ <span class="cm">← voice-cleanup (refactor pending)</span></div>
+            </div>
+          </div>
+          <div>09-Short-Form/ <span class="cm">← /short-form output</span></div>
+          <div>10-Research/ <span class="cm">← research briefs</span></div>
+          <div>11-YT-Pipeline/ <span class="cm">← yt pipeline output</span></div>
+        </div>
+      </div>
+      <div class="vault-notes">
+        <div class="vn-item">
+          <div class="vn-dot" style="background:var(--accent)"></div>
+          <div>
+            <div class="vn-label">08-Distribution — pending refactor</div>
+            <div class="vn-desc">Raw and cleaned files currently share one folder. TODO: separate into raw/ and cleaned/ subfolders so the publish-ready file is immediately obvious in Obsidian.</div>
+          </div>
+        </div>
+        <div class="vn-item">
+          <div class="vn-dot" style="background:var(--green)"></div>
+          <div>
+            <div class="vn-label">Knowledge graph</div>
+            <div class="vn-desc">Every session log uses [[WikiLinks]] to build a queryable graph. 13,054 nodes · 37,982 edges (last rebuild 2026-05-14).</div>
+          </div>
+        </div>
+        <div class="vn-item">
+          <div class="vn-dot" style="background:var(--blue)"></div>
+          <div>
+            <div class="vn-label">Naming convention</div>
+            <div class="vn-desc">All skill outputs follow YYYY-MM-DD_&lt;slug&gt; pattern. Slug from topic via regex — lowercase, hyphens, max 40 chars, filesystem-safe.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 10 END-TO-END FLOW ─── -->
+  <section class="slide" id="s10" data-accent="#06B6D4">
+    <div class="ghost">10</div>
+    <div class="label">End to End</div>
+    <h2 class="title">Topic <em>→</em> Content</h2>
+    <p class="sub">The full journey from idea to publish-ready distribution</p>
+    <div class="flow-cols">
+      <div class="flow-col">
+        <div class="flow-step human">
+          <div class="fd">YOU</div>
+          <div class="fc"><div class="fk">topic: "AI Agents"</div><div class="fo">starting point</div></div>
+        </div>
+        <div class="flow-step">
+          <div class="fd">01</div>
+          <div class="fc"><div class="fk">/researcher</div><div class="fo">research brief + primary sources</div></div>
+        </div>
+        <div class="flow-step human">
+          <div class="fd">GATE</div>
+          <div class="fc"><div class="fk">pick repos to research</div><div class="fo">blocking — explicit selection required</div></div>
+        </div>
+        <div class="flow-step">
+          <div class="fd">02</div>
+          <div class="fc"><div class="fk">/ideation</div><div class="fo">9 video angles generated</div></div>
+        </div>
+        <div class="flow-step human">
+          <div class="fd">GATE</div>
+          <div class="fc"><div class="fk">pick an angle (1–9)</div><div class="fo">blocking — number required</div></div>
+        </div>
+        <div class="flow-step">
+          <div class="fd">03</div>
+          <div class="fc"><div class="fk">/hook</div><div class="fo">5 hooks via Kallaway patterns</div></div>
+        </div>
+      </div>
+      <div class="flow-col">
+        <div class="flow-step human">
+          <div class="fd">GATE</div>
+          <div class="fc"><div class="fk">pick a hook</div><div class="fo">blocking — selection required</div></div>
+        </div>
+        <div class="flow-step">
+          <div class="fd">04</div>
+          <div class="fc"><div class="fk">/outline</div><div class="fo">Dopamine Ladder structure · 2-pass LLM</div></div>
+        </div>
+        <div class="flow-step">
+          <div class="fd">05</div>
+          <div class="fc"><div class="fk">/title</div><div class="fo">10 title options · 2-pass LLM</div></div>
+        </div>
+        <div class="flow-step">
+          <div class="fd">06</div>
+          <div class="fc"><div class="fk">/cascade</div><div class="fo">4 distribution formats → raw/</div></div>
+        </div>
+        <div class="flow-step">
+          <div class="fd">07</div>
+          <div class="fc"><div class="fk">/voice-cleanup</div><div class="fo">voice-matched rewrites → cleaned/</div></div>
+        </div>
+        <div class="flow-step">
+          <div class="fd">08</div>
+          <div class="fc"><div class="fk">/short-form</div><div class="fo">Instagram · TikTok · YT Shorts</div></div>
+        </div>
+        <div class="flow-step human">
+          <div class="fd">END</div>
+          <div class="fc"><div class="fk">publish-ready content in vault</div><div class="fo">replace [VIDEO_LINK] and ship</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 11 SYSTEM GRAPH ─── -->
+  <section class="slide s-graph" id="s11" data-accent="#5B8DEF">
+    <div class="graph-hdr">
+      <span class="graph-hdr-title">Content Hub <em>V2</em> · System Graph</span>
+      <div class="graph-hdr-sep"></div>
+      <span class="graph-hdr-meta"><b>29</b> nodes &nbsp;·&nbsp; <b>40</b> edges</span>
+      <span class="graph-hdr-hint">drag · scroll to zoom · click node to explore</span>
+    </div>
+    <aside class="g-legend" id="gLegend">
+      <div class="g-legend-hd">Node Types</div>
+      <div class="g-leg-item" data-gtype="human">        <div class="g-leg-dot" style="background:#F0F2F5"></div><span class="g-leg-label">Human</span></div>
+      <div class="g-leg-item" data-gtype="skill">        <div class="g-leg-dot" style="background:#5B8DEF"></div><span class="g-leg-label">Skill</span></div>
+      <div class="g-leg-item" data-gtype="python">       <div class="g-leg-dot" style="background:#F5A623"></div><span class="g-leg-label">Python</span></div>
+      <div class="g-leg-item" data-gtype="deterministic"><div class="g-leg-dot" style="background:#A855F7"></div><span class="g-leg-label">Deterministic</span></div>
+      <div class="g-leg-item" data-gtype="ai">           <div class="g-leg-dot" style="background:#06B6D4"></div><span class="g-leg-label">AI Provider</span></div>
+      <div class="g-leg-item" data-gtype="vault">        <div class="g-leg-dot" style="background:#3DD68C"></div><span class="g-leg-label">Vault</span></div>
+    </aside>
+    <div class="g-info" id="gInfo">
+      <div class="g-info-type"  id="gIType"></div>
+      <div class="g-info-name"  id="gIName"></div>
+      <div class="g-info-desc"  id="gIDesc"></div>
+      <div class="g-info-conns">
+        <div class="g-info-conns-hd">Connections</div>
+        <div id="gIConnList"></div>
+      </div>
+    </div>
+    <div class="g-controls">
+      <button class="g-ctrl" id="gBtnReset">reset zoom</button>
+      <button class="g-ctrl" id="gBtnClear">clear focus</button>
+    </div>
+    <svg id="gSvg"></svg>
+  </section>
+
+</div><!-- /deck -->
+
+<nav class="nav-bar">
+  <span id="counter">01 / 10</span>
+  <div class="prog-track"><div class="prog-fill" id="prog" style="width:10%"></div></div>
+  <button class="nbtn" id="prev" disabled>← prev</button>
+  <button class="nbtn" id="next">next →</button>
+</nav>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total  = slides.length;
+  let cur = 0;
+  let graphInited = false;
+
+  function updateAccent(n) {
+    const accent = slides[n].dataset.accent || '#5B8DEF';
+    document.documentElement.style.setProperty('--page-accent', accent);
+  }
+
+  function go(n) {
+    if (n < 0 || n >= total) return;
+    slides[cur].classList.remove('active');
+    slides[cur].classList.add('exit');
+    const old = cur;
+    setTimeout(() => slides[old].classList.remove('exit'), 480);
+    cur = n;
+    slides[cur].classList.add('active');
+    if (slides[cur].id === 's11' && !graphInited) { graphInited = true; requestAnimationFrame(() => requestAnimationFrame(initGraph)); }
+    updateAccent(cur);
+    document.getElementById('counter').textContent =
+      String(cur+1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+    document.getElementById('prog').style.width = ((cur+1)/total*100) + '%';
+    document.getElementById('prev').disabled = cur === 0;
+    document.getElementById('next').disabled = cur === total-1;
+  }
+
+  document.getElementById('prev').addEventListener('click', () => go(cur-1));
+  document.getElementById('next').addEventListener('click', () => go(cur+1));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(cur+1); }
+    if (e.key === 'ArrowLeft')                    { e.preventDefault(); go(cur-1); }
+    if (e.key === 'Home')                          go(0);
+    if (e.key === 'End')                           go(total-1);
+  });
+
+  // Set initial accent for slide 0
+  updateAccent(0);
+
+  // ── Graph (slide 11) — lazy init ─────────────────────────────────────────────
+  function initGraph() {
+    const GTC = { human:'#F0F2F5', skill:'#5B8DEF', python:'#F5A623', deterministic:'#A855F7', ai:'#06B6D4', vault:'#3DD68C' };
+    const GTL = { human:'Human', skill:'Skill', python:'Python helper', deterministic:'Deterministic', ai:'AI Provider', vault:'Vault folder' };
+    const GNR = { human:22, skill:18, python:13, deterministic:13, ai:15, vault:11 };
+    const GLC = { flow:'#5B8DEF', human:'#F0F2F5', uses:'#F5A623', calls:'#06B6D4', writes:'#3DD68C', reads:'#7A8394' };
+    const GLO = { flow:0.65, human:0.35, uses:0.28, calls:0.35, writes:0.28, reads:0.18 };
+    const GLW = { flow:2, human:1.5, uses:1, calls:1.5, writes:1, reads:1 };
+
+    const gNodes = [
+      { id:'human',            label:'You',                  type:'human',         info:'Content creator — selects repos, picks angles, approves hooks. Three blocking gates require explicit input before the pipeline proceeds.' },
+      { id:'researcher',       label:'/researcher',          type:'skill',         info:'Step 1 — deep content-gap research via NotebookLM + GitHub Trending. Outputs a dated research brief to 10-Research/.' },
+      { id:'ideation',         label:'/ideation',            type:'skill',         info:'Step 2 — generates 9 ranked video angles with gap analysis, competitive reasoning, and audience desire mapping.' },
+      { id:'hook',             label:'/hook',                type:'skill',         info:'Step 3 — 5 Kallaway-trained hook variations. Blocking gate: human must pick one before /outline can run.' },
+      { id:'outline',          label:'/outline',             type:'skill',         info:'Step 4 — Dopamine Ladder script outline built from approved hook + research brief. 2-pass LLM.' },
+      { id:'title',            label:'/title',               type:'skill',         info:'Step 5 — 10 title options per run. CTR-optimised via 2-pass LLM.' },
+      { id:'cascade',          label:'/cascade',             type:'skill',         info:'Step 6 — 4 distribution formats (blog, Twitter thread, LinkedIn, newsletter) written to 08-Distribution/raw/.' },
+      { id:'voice_cleanup',    label:'/voice-cleanup',       type:'skill',         info:'Step 7 — voice-matched rewrite of raw drafts. Output lands in 08-Distribution/cleaned/ as publish candidates.' },
+      { id:'short_form',       label:'/short-form',          type:'skill',         info:'Step 8 — Instagram, TikTok, and YouTube Shorts scripts derived from the main outline.' },
+      { id:'ai_util',          label:'utils/ai.py',          type:'python',        info:'Ordered AI cascade — Claude CLI → NIM → Ollama. Returns first successful response. All 7 skills route through this.' },
+      { id:'pipeline',         label:'pipeline.py',          type:'python',        info:'9-step exit-code-gated sequencer. Non-zero exit from any step halts the entire pipeline.' },
+      { id:'research_sources', label:'research_sources.py',  type:'python',        info:'Guardrail 1 — URL allowlist/blocklist. Scrapes YT video descriptions via yt-dlp. Fires Claude/NIM backstop if <5 credible sources found.' },
+      { id:'research_plan',    label:'research_plan.py',     type:'python',        info:'Guardrail 2 — question budget (12 cap), dedup >60% word overlap = skip, adaptive 0–2 follow-ups per answer.' },
+      { id:'nim_picker',       label:'nim_picker.py',        type:'python',        info:'Guardrail 3 — LLM-as-judge step. Classifies goal as explainer or technical. Returns None → halts code path if no match.' },
+      { id:'vault_index',      label:'vault_index.py',       type:'python',        info:'Deterministic vault listings for Control Room dropdowns. Sorted newest-first by mtime. No LLM involved.' },
+      { id:'github_trending',  label:'github_trending.py',   type:'deterministic', info:'Daily AI repo pulse — queries GitHub Search API across 3 topics, deduplicates, writes star velocity scores to 04-Trends/.' },
+      { id:'researcher_crawler',label:'researcher_crawler.py',type:'deterministic',info:'GitHub doc discovery — traverses repo file trees, scores candidates by relevance heuristics, returns ranked DocCandidate list.' },
+      { id:'claude_cli',       label:'Claude CLI',           type:'ai',            info:'Primary AI provider — Pro plan auth via subprocess. Occupies all former Gemini slots since 2026-05-19.' },
+      { id:'nim_api',          label:'NIM / NVIDIA',         type:'ai',            info:'Fallback provider — NVIDIA inference via REST API. Used as LLM-as-judge in nim_picker.py independently of the main cascade.' },
+      { id:'ollama',           label:'Ollama',               type:'ai',            info:'Local fallback — localhost:11434, free, slower. Handles first-draft structural work.' },
+      { id:'vault_trends',     label:'04-Trends/',           type:'vault',         info:'GitHub daily trending pulse. Written by github_trending.py, read by /researcher as signal input.' },
+      { id:'vault_research',   label:'10-Research/',         type:'vault',         info:'Research briefs with primary sources. Primary input for /ideation.' },
+      { id:'vault_ideas',      label:'02-Ideas/',            type:'vault',         info:'Video angle candidates. Human picks one numbered idea before /hook can run.' },
+      { id:'vault_hooks',      label:'05-Hooks/',            type:'vault',         info:'Hook variations (5 per run). Human picks one Spoken Line before /outline can run.' },
+      { id:'vault_outlines',   label:'06-Outlines/',         type:'vault',         info:'Dopamine Ladder script outlines. Input for /cascade.' },
+      { id:'vault_titles',     label:'07-Titles/',           type:'vault',         info:'Title option lists. 10 titles per run.' },
+      { id:'vault_raw',        label:'08-Dist/raw/',         type:'vault',         info:'Raw AI draft distribution files (blog, Twitter, LinkedIn, newsletter).' },
+      { id:'vault_cleaned',    label:'08-Dist/cleaned/',     type:'vault',         info:'Voice-cleaned, publish-ready distribution files.' },
+      { id:'vault_short',      label:'09-Short-Form/',       type:'vault',         info:'Short-form content scripts (Instagram, TikTok, YT Shorts).' },
+    ];
+
+    const gLinks = [
+      { source:'researcher',    target:'ideation',        type:'flow'   },
+      { source:'ideation',      target:'hook',            type:'flow'   },
+      { source:'hook',          target:'outline',         type:'flow'   },
+      { source:'outline',       target:'title',           type:'flow'   },
+      { source:'title',         target:'cascade',         type:'flow'   },
+      { source:'cascade',       target:'voice_cleanup',   type:'flow'   },
+      { source:'voice_cleanup', target:'short_form',      type:'flow'   },
+      { source:'human',         target:'researcher',      type:'human'  },
+      { source:'human',         target:'ideation',        type:'human'  },
+      { source:'human',         target:'hook',            type:'human'  },
+      { source:'human',         target:'outline',         type:'human'  },
+      { source:'researcher',    target:'research_sources',type:'uses'   },
+      { source:'researcher',    target:'research_plan',   type:'uses'   },
+      { source:'researcher',    target:'researcher_crawler',type:'uses' },
+      { source:'researcher',    target:'nim_picker',      type:'uses'   },
+      { source:'ideation',      target:'ai_util',         type:'uses'   },
+      { source:'hook',          target:'ai_util',         type:'uses'   },
+      { source:'outline',       target:'ai_util',         type:'uses'   },
+      { source:'title',         target:'ai_util',         type:'uses'   },
+      { source:'cascade',       target:'ai_util',         type:'uses'   },
+      { source:'voice_cleanup', target:'ai_util',         type:'uses'   },
+      { source:'short_form',    target:'ai_util',         type:'uses'   },
+      { source:'pipeline',      target:'researcher',      type:'uses'   },
+      { source:'ai_util',       target:'claude_cli',      type:'calls'  },
+      { source:'ai_util',       target:'nim_api',         type:'calls'  },
+      { source:'ai_util',       target:'ollama',          type:'calls'  },
+      { source:'github_trending',  target:'vault_trends', type:'writes' },
+      { source:'vault_trends',     target:'researcher',   type:'reads'  },
+      { source:'vault_index',      target:'vault_research',type:'reads' },
+      { source:'vault_index',      target:'vault_ideas',  type:'reads'  },
+      { source:'vault_index',      target:'vault_hooks',  type:'reads'  },
+      { source:'vault_index',      target:'vault_outlines',type:'reads' },
+      { source:'researcher',    target:'vault_research',  type:'writes' },
+      { source:'ideation',      target:'vault_ideas',     type:'writes' },
+      { source:'hook',          target:'vault_hooks',     type:'writes' },
+      { source:'outline',       target:'vault_outlines',  type:'writes' },
+      { source:'title',         target:'vault_titles',    type:'writes' },
+      { source:'cascade',       target:'vault_raw',       type:'writes' },
+      { source:'voice_cleanup', target:'vault_cleaned',   type:'writes' },
+      { source:'short_form',    target:'vault_short',     type:'writes' },
+    ];
+
+    // SVG clientHeight is unreliable (returns 0 or 150 default); derive from window.
+    const W = window.innerWidth;
+    const H = window.innerHeight - 98; // 56px nav-bar + 42px graph-hdr
+
+    const gNodeMap = Object.fromEntries(gNodes.map(n => [n.id, n]));
+
+    const svg = d3.select('#gSvg').attr('width', W).attr('height', H);
+
+    svg.append('radialGradient').attr('id','gBgGlow').attr('cx','50%').attr('cy','50%').attr('r','55%')
+      .selectAll('stop').data([{offset:'0%',color:'#5B8DEF',op:0.04},{offset:'100%',color:'#0D0F12',op:0}]).join('stop')
+        .attr('offset',d=>d.offset).attr('stop-color',d=>d.color).attr('stop-opacity',d=>d.op);
+    svg.append('rect').attr('width',W).attr('height',H).attr('fill','url(#gBgGlow)');
+
+    const zoomG = svg.append('g');
+    const gZoom = d3.zoom().scaleExtent([0.12,5]).on('zoom',e=>zoomG.attr('transform',e.transform));
+    svg.call(gZoom);
+
+    const defs = svg.append('defs');
+    ['flow','human','uses','calls','writes','reads'].forEach(t=>{
+      defs.append('marker').attr('id',`garr-${t}`).attr('markerWidth',6).attr('markerHeight',6)
+        .attr('refX',5).attr('refY',3).attr('orient','auto')
+        .append('path').attr('d','M0,0.5 L0,5.5 L5.5,3 z')
+          .attr('fill',GLC[t]).attr('opacity',GLO[t]*1.4);
+    });
+    const filt = defs.append('filter').attr('id','gGlow').attr('x','-50%').attr('y','-50%').attr('width','200%').attr('height','200%');
+    filt.append('feGaussianBlur').attr('stdDeviation','4').attr('result','blur');
+    const mg = filt.append('feMerge');
+    mg.append('feMergeNode').attr('in','blur');
+    mg.append('feMergeNode').attr('in','SourceGraphic');
+
+    const TI = {
+      human:        {x:W*0.18, y:H*0.40},
+      skill:        {x:W*0.45, y:H*0.45},
+      python:       {x:W*0.55, y:H*0.28},
+      deterministic:{x:W*0.18, y:H*0.65},
+      ai:           {x:W*0.78, y:H*0.35},
+      vault:        {x:W*0.74, y:H*0.65},
+    };
+    const skillOrd = ['researcher','ideation','hook','outline','title','cascade','voice_cleanup','short_form'];
+    gNodes.forEach(n=>{
+      const base = TI[n.type];
+      if (n.type==='skill') {
+        const idx = skillOrd.indexOf(n.id);
+        const col = idx%3, row = Math.floor(idx/3);
+        n.x = W*0.28 + col*130 + (Math.random()-0.5)*30;
+        n.y = H*0.22 + row*120 + (Math.random()-0.5)*20;
+      } else {
+        n.x = base.x + (Math.random()-0.5)*150;
+        n.y = base.y + (Math.random()-0.5)*150;
+      }
+    });
+
+    const sim = d3.forceSimulation(gNodes)
+      .force('link',    d3.forceLink(gLinks).id(d=>d.id).distance(d=>({flow:120,human:135,writes:108,calls:100}[d.type]||105)).strength(d=>d.type==='flow'?0.7:0.3))
+      .force('charge',  d3.forceManyBody().strength(d=>-GNR[d.type]*24))
+      .force('center',  d3.forceCenter(W/2,H/2).strength(0.04))
+      .force('collide', d3.forceCollide(d=>GNR[d.type]+30).strength(0.85))
+      .force('x',       d3.forceX(d=>TI[d.type].x).strength(0.07))
+      .force('y',       d3.forceY(d=>TI[d.type].y).strength(0.07))
+      .alphaDecay(0.018);
+
+    const linkSel = zoomG.append('g').selectAll('line').data(gLinks).join('line')
+      .attr('stroke',d=>GLC[d.type]).attr('stroke-opacity',d=>GLO[d.type])
+      .attr('stroke-width',d=>GLW[d.type])
+      .attr('stroke-dasharray',d=>d.type==='human'?'4,3':d.type==='reads'?'2,3':null)
+      .attr('marker-end',d=>`url(#garr-${d.type})`);
+
+    const nodeSel = zoomG.append('g').selectAll('g').data(gNodes).join('g')
+      .attr('cursor','pointer')
+      .call(d3.drag()
+        .on('start',(e,d)=>{if(!e.active)sim.alphaTarget(0.2).restart();d.fx=d.x;d.fy=d.y;})
+        .on('drag', (e,d)=>{d.fx=e.x;d.fy=e.y;})
+        .on('end',  (e,d)=>{if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null;})
+      );
+
+    nodeSel.append('circle').attr('class','gh').attr('r',d=>GNR[d.type]+7)
+      .attr('fill','none').attr('stroke',d=>GTC[d.type]).attr('stroke-width',1)
+      .attr('stroke-opacity',0).attr('pointer-events','none');
+    nodeSel.append('circle').attr('class','gc').attr('r',d=>GNR[d.type])
+      .attr('fill',d=>GTC[d.type]).attr('fill-opacity',0.12)
+      .attr('stroke',d=>GTC[d.type]).attr('stroke-width',1.5).attr('stroke-opacity',0.7);
+    nodeSel.append('text').attr('text-anchor','middle').attr('dominant-baseline','central')
+      .attr('fill',d=>GTC[d.type]).attr('fill-opacity',0.55)
+      .attr('font-family','JetBrains Mono, monospace').attr('font-size',d=>GNR[d.type]>=18?'9px':'7px')
+      .attr('pointer-events','none')
+      .text(d=>{
+        if(d.type==='human') return 'YOU';
+        if(d.type==='skill') return ({researcher:'01',ideation:'02',hook:'03',outline:'04',title:'05',cascade:'06',voice_cleanup:'07',short_form:'08'}[d.id]||'');
+        return '';
+      });
+    nodeSel.append('text').attr('class','gl').attr('text-anchor','middle')
+      .attr('dy',d=>GNR[d.type]+12).attr('fill','#7A8394')
+      .attr('font-family','JetBrains Mono, monospace').attr('font-size','9.5px')
+      .attr('pointer-events','none').text(d=>d.label);
+
+    function applyPositions() {
+      linkSel.each(function(d){
+        const dx=d.target.x-d.source.x, dy=d.target.y-d.source.y;
+        const len=Math.sqrt(dx*dx+dy*dy)||1;
+        d3.select(this)
+          .attr('x1',d.source.x+dx/len*(GNR[d.source.type]+2))
+          .attr('y1',d.source.y+dy/len*(GNR[d.source.type]+2))
+          .attr('x2',d.target.x-dx/len*(GNR[d.target.type]+7))
+          .attr('y2',d.target.y-dy/len*(GNR[d.target.type]+7));
+      });
+      nodeSel.attr('transform',d=>`translate(${d.x},${d.y})`);
+    }
+
+    sim.on('tick', applyPositions);
+
+    // Pre-settle: run 300 ticks silently so graph appears centered on first render.
+    sim.stop();
+    for (let i = 0; i < 300; i++) sim.tick();
+    applyPositions();
+    sim.restart();
+
+    let gFocused = null;
+    function gNeighbors(id){
+      const nbrs=new Set([id]), edges=new Set();
+      gLinks.forEach((l,i)=>{
+        const s=typeof l.source==='object'?l.source.id:l.source;
+        const t=typeof l.target==='object'?l.target.id:l.target;
+        if(s===id||t===id){nbrs.add(s);nbrs.add(t);edges.add(i);}
+      });
+      return {nbrs,edges};
+    }
+    function gFocus(id){
+      gFocused=id;
+      const {nbrs,edges}=id?gNeighbors(id):{nbrs:null,edges:null};
+      nodeSel.each(function(d){
+        const sel=d3.select(this), nb=!id||nbrs.has(d.id), foc=d.id===id;
+        sel.select('.gc').attr('fill-opacity',foc?0.25:nb?0.15:0.05).attr('stroke-opacity',foc?1:nb?0.65:0.15).attr('filter',foc?'url(#gGlow)':null);
+        sel.select('.gh').attr('stroke-opacity',foc?0.3:0);
+        sel.select('.gl').attr('fill',nb?(foc?'#F0F2F5':'#7A8394'):'#2A3040').attr('fill-opacity',nb?1:0.4);
+      });
+      linkSel.each(function(d,i){
+        d3.select(this).attr('stroke-opacity',(!id||edges.has(i))?GLO[d.type]*(id?1.8:1):0.04);
+      });
+      if(id) gShowInfo(id); else gHideInfo();
+    }
+    function gShowInfo(id){
+      const n=gNodeMap[id];
+      document.getElementById('gIType').textContent=GTL[n.type];
+      document.getElementById('gIType').style.color=GTC[n.type];
+      document.getElementById('gIName').textContent=n.label;
+      document.getElementById('gIDesc').textContent=n.info;
+      const cl=document.getElementById('gIConnList'); cl.innerHTML='';
+      gLinks.forEach(l=>{
+        const s=typeof l.source==='object'?l.source.id:l.source;
+        const t=typeof l.target==='object'?l.target.id:l.target;
+        let other=null,dir='';
+        if(s===id){other=gNodeMap[t];dir='→';}
+        else if(t===id){other=gNodeMap[s];dir='←';}
+        if(other){
+          const row=document.createElement('div'); row.className='g-conn-row';
+          row.innerHTML=`<span style="color:${GLC[l.type]};opacity:0.7">${dir}</span><span>${other.label}</span>`;
+          cl.appendChild(row);
+        }
+      });
+      document.getElementById('gInfo').classList.add('show');
+    }
+    function gHideInfo(){ document.getElementById('gInfo').classList.remove('show'); }
+
+    nodeSel.on('click',(e,d)=>{e.stopPropagation();gFocused===d.id?gFocus(null):gFocus(d.id);});
+    svg.on('click',()=>gFocus(null));
+    nodeSel
+      .on('mouseenter',(e,d)=>{
+        if(gFocused)return;
+        d3.select(e.currentTarget).select('.gc').attr('fill-opacity',0.22).attr('filter','url(#gGlow)');
+        d3.select(e.currentTarget).select('.gh').attr('stroke-opacity',0.25);
+        d3.select(e.currentTarget).select('.gl').attr('fill','#F0F2F5');
+      })
+      .on('mouseleave',(e,d)=>{
+        if(gFocused)return;
+        d3.select(e.currentTarget).select('.gc').attr('fill-opacity',0.12).attr('filter',null);
+        d3.select(e.currentTarget).select('.gh').attr('stroke-opacity',0);
+        d3.select(e.currentTarget).select('.gl').attr('fill','#7A8394');
+      });
+
+    const gHiddenTypes=new Set();
+    document.querySelectorAll('.g-leg-item').forEach(el=>{
+      el.addEventListener('click',()=>{
+        const t=el.dataset.gtype;
+        if(gHiddenTypes.has(t)){gHiddenTypes.delete(t);el.classList.remove('off');}
+        else{gHiddenTypes.add(t);el.classList.add('off');}
+        nodeSel.attr('display',d=>gHiddenTypes.has(d.type)?'none':null);
+        linkSel.attr('display',d=>{
+          const s=typeof d.source==='object'?d.source.type:gNodeMap[d.source]?.type;
+          const t2=typeof d.target==='object'?d.target.type:gNodeMap[d.target]?.type;
+          return(gHiddenTypes.has(s)||gHiddenTypes.has(t2))?'none':null;
+        });
+      });
+    });
+
+    document.getElementById('gBtnReset').addEventListener('click',()=>svg.transition().duration(450).call(gZoom.transform,d3.zoomIdentity));
+    document.getElementById('gBtnClear').addEventListener('click',()=>gFocus(null));
+  }
+</script>
+</body>
+</html>

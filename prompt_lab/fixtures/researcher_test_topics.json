@@ -1,0 +1,17 @@
+{
+  "skill": "researcher",
+  "purpose": "Frozen test inputs for /prompt-lab autoresearch loop. Hold constant across iterations so score deltas reflect prompt quality, not input variance.",
+  "topics": [
+    "How Claude's extended thinking mode changes debugging workflows for complex problems",
+    "The hidden costs of async/await abstractions in Rust — what the docs don't tell you",
+    "Why local-first architectures are finally winning over cloud-only SaaS",
+    "The forgotten productivity killer: context switching in knowledge work",
+    "How to structure AI agent orchestration without turning into spaghetti"
+  ],
+  "model_settings": {
+    "temperature": 0.7,
+    "max_tokens": 2000,
+    "seed": 42
+  },
+  "notes": "Mix of AI/tech, systems design, and productivity — topics where content gap analysis reveals real audience pain points vs. marketing coverage."
+}

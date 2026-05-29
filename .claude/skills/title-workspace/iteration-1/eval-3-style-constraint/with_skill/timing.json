@@ -1,0 +1,6 @@
+﻿{
+  "total_tokens": 30,
+  "duration_ms": 160340,
+  "total_duration_seconds": 160.3,
+  "note": "Agent hit Claude API rate limit during python -m skills.title call. Titles may not have been generated."
+}

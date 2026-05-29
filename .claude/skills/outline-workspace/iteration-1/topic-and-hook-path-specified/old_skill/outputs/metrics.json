@@ -1,0 +1,23 @@
+{
+  "tool_calls": {
+    "Read": 2,
+    "Glob": 3,
+    "Bash": 6,
+    "PowerShell": 1
+  },
+  "total_tool_calls": 12,
+  "total_steps": 7,
+  "files_created": [
+    "transcript.md",
+    "metrics.json"
+  ],
+  "errors_encountered": 0,
+  "output_chars": 7586,
+  "transcript_chars": 7586,
+  "command_would_run": "python -m skills.outline \"How to stop wasting time on AI tools that don't stick\" --hook-path \"Content-Hub-Vault-V2/05-Hooks/2026-05-10_ai-tools-that-dont-stick.md\" --length 12 --platform yt-long",
+  "expected_output_file": "Content-Hub-Vault-V2/06-Outlines/2026-05-15_how-to-stop-wasting-time-on-ai-tools.md",
+  "hook_file_found": false,
+  "research_file_found": false,
+  "prompt_template_found": true,
+  "output_directory_ready": true
+}

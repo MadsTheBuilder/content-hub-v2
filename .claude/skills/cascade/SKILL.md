@@ -1,45 +1,63 @@
+---
+name: cascade
+description: Generate a full distribution package (blog post, Twitter/X thread, LinkedIn post) from a completed video outline+research or a YouTube URL. Use this skill whenever the user types /cascade, says "generate distribution content", "create social posts from my outline", "write a blog post from my research", "turn this into a Twitter thread and LinkedIn", "cascade this", or asks to repurpose a YouTube video into written content for multiple platforms. Also trigger when the user has just approved an outline and asks "what's next?" — cascade is the natural next step after /outline.
+---
+
 # /cascade
 
-Take a YouTube video, extract its transcript, and generate a blog post, Twitter/X thread, and LinkedIn post — all written to the Obsidian vault ready for review and manual posting.
+Turn approved research + outline (or a YouTube URL) into a ready-to-review distribution package: a blog post, Twitter/X thread, and LinkedIn post, all written to the Obsidian vault.
 
-## Trigger
-User types `/cascade` with a YouTube URL.
+**Default: use your own research + outline.** This is the mode to use after you've completed `/outline`. The YouTube URL fallback is for one-off cases where you want to repurpose someone else's video.
 
-## Execution Steps
+## How to run it
 
-1. Get YouTube URL from user (inline with command or ask if not provided)
-2. Confirm URL before running: "Running cascade on: [URL] — confirm?"
-3. Wait for user confirmation.
-4. Run: `python -m skills.cascade <url>`
-5. Report results: show the 3 file paths created + one-line preview of the Twitter hook tweet
+### After `/outline` (preferred)
 
-## Output
+The user will typically just type `/cascade` with no extra arguments. Your job is to find the right files.
 
-Cascade creates 4 files in `Content-Hub-Vault-V2/08-Distribution/YYYY-MM-DD_<slug>/`:
+1. **Find the files.** Look in:
+   - Research: `Content-Hub-Vault-V2/10-Research/` — find the most recent folder matching the topic, grab `research.md` inside it (or the dated `_brief.md` file at the root)
+   - Outline: `Content-Hub-Vault-V2/06-Outlines/` — find the most recent `.md` file matching the topic
+   
+   If the topic is ambiguous or multiple files match, list them and ask which one.
 
-- `blog_post.md` — Blog post (~600 words, vault markdown with frontmatter)
-- `twitter_thread.md` — Twitter/X thread (7–10 tweets, ≤280 chars each)
-- `linkedin_post.md` — LinkedIn post (~200 words)
-- `README.md` — Metadata and post tracking
+2. **Confirm once, then run.**
+   Say: "Running cascade on: [topic] — research from [filename], outline from [filename]. Go?"
+   
+   Wait for a yes. Then run:
+   ```
+   python -m skills.cascade --research-file "Content-Hub-Vault-V2/10-Research/..." --outline-file "Content-Hub-Vault-V2/06-Outlines/..." --title "<topic>"
+   ```
 
-All files are written to the Obsidian vault. No auto-publishing — review each file and post manually.
+3. **Report.** See "After completion" below.
 
-## After Completion
+### YouTube URL fallback
+
+Use this when the user provides a YouTube URL and there's no research/outline for the topic.
+
+1. Confirm: "Running cascade on: [URL]. This will extract the transcript and generate blog + Twitter + LinkedIn. Go?"
+2. Wait for yes. Then run: `python -m skills.cascade <url>`
+3. Report. See "After completion" below.
+
+## After completion
 
 Report:
-- Path to the output directory
-- The 3 markdown files created
-- One-line preview of the Twitter hook (first tweet)
+- Full path to the output directory (`Content-Hub-Vault-V2/08-Distribution/YYYY-MM-DD_<slug>/`)
+- The 4 files created: `blog_post.md`, `twitter_thread.md`, `linkedin_post.md`, `README.md`
+- One-line preview of the Twitter hook (first tweet, ≤280 chars)
+- Reminder: replace `[VIDEO_LINK]` placeholder in `twitter_thread.md` and `linkedin_post.md` before posting
 
-## Usage Examples
+Next step: `/short-form` to generate 3 short-form scripts from the same outline.
 
-- `/cascade https://youtube.com/watch?v=abc123` → extracts transcript, generates all 3 posts
-- `/cascade` → asks for YouTube URL, then runs the cascade
+## Things to know
 
-## Notes
+- **Content cap**: The helper uses up to 6,000 characters of combined research + outline. Long research files will be truncated — that's expected and fine.
+- **Title**: The helper auto-extracts the title from the outline's `topic:` frontmatter field. Use `--title` to override if it picks the wrong thing.
+- **If it fails**: Check that `ANTHROPIC_API_KEY` is set in `.env` and that the research/outline paths are correct. The script will print which step failed.
+- **Prompt source of truth**: `prompts/cascade.md` — edit that file to change tone, structure, or platform-specific rules globally.
 
-- Output goes to `Content-Hub-Vault-V2/08-Distribution/` — this is the Obsidian vault.
-- Transcript extraction can take 30–60 seconds depending on video length.
-- Replace `[VIDEO_LINK]` placeholder in `twitter_thread.md` and `linkedin_post.md` before posting.
-- Each post is independent — you can publish them on different dates or skip one entirely.
-- Review the generated content for accuracy and tone before posting to any platform.
+## Examples
+
+- `/cascade` (no args, after `/outline` approved) → finds most recent research+outline, runs automatically
+- `/cascade "AI agents for non-coders"` → finds matching files for that topic
+- `/cascade https://youtube.com/watch?v=abc123` → YouTube fallback mode

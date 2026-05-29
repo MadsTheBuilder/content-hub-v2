@@ -1,0 +1,11 @@
+{
+  "eval_id": 2,
+  "eval_name": "topic-specified",
+  "prompt": "Run /short-form for my 'AI Agents' video — the research and outline are in the vault from May 12.",
+  "assertions": [
+    "The agent resolved file paths containing '2026-05-12' and 'ai-agent' in the path",
+    "The agent ran python -m skills.short_form with both --research-file and --outline-file flags",
+    "The agent reported all 4 output files: 30s_script.md, 60s_script.md, 90s_script.md, README.md",
+    "The agent pasted the verbatim opening line of the 30s script as the hook preview"
+  ]
+}

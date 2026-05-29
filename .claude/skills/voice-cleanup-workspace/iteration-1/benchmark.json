@@ -1,0 +1,183 @@
+{
+  "metadata": {
+    "skill_name": "voice-cleanup",
+    "skill_path": ".claude/skills/voice-cleanup",
+    "executor_model": "claude-sonnet-4-6",
+    "analyzer_model": "claude-sonnet-4-6",
+    "timestamp": "2026-05-15T00:00:00Z",
+    "evals_run": ["no-args-after-short-form", "specific-file-cleanup", "folder-batch-cleanup"],
+    "runs_per_configuration": 1
+  },
+
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "no-args-after-short-form",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 43.1,
+        "tokens": 38634,
+        "tool_calls": 4,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Claude proposes a concrete likely file path from the Short-Form vault folder rather than a generic 'paste text or give me a path' prompt", "passed": true, "evidence": "Proposed Content-Hub-Vault-V2/07-Short-Form/2026-05-15_ai-automation/instagram_caption.md with slug/format/date inferred from context."},
+        {"text": "Claude frames /voice-cleanup as the final step in the pipeline (step 7 of 7 or equivalent)", "passed": true, "evidence": "SKILL.md step 7/7 pipeline position read and surfaced in response."},
+        {"text": "Claude does not attempt to run python -m skills.voice_cleanup without a file argument", "passed": true, "evidence": "Command gated behind user confirmation — not run blind."},
+        {"text": "Claude asks a yes/no confirmation question, not an open-ended input request", "passed": true, "evidence": "Response: 'Is the file at [...instagram_caption.md]?' — yes/no question."}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "no-args-after-short-form",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.25,
+        "passed": 1,
+        "failed": 3,
+        "total": 4,
+        "time_seconds": 29.2,
+        "tokens": 37087,
+        "tool_calls": 3,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Claude proposes a concrete likely file path from the Short-Form vault folder rather than a generic 'paste text or give me a path' prompt", "passed": false, "evidence": "Response was generic: 'Paste the script here, or if it's saved in the vault, give me the file path' — no specific path inferred."},
+        {"text": "Claude frames /voice-cleanup as the final step in the pipeline (step 7 of 7 or equivalent)", "passed": false, "evidence": "Old SKILL.md has no pipeline position section. No mention of step 7 of 7."},
+        {"text": "Claude does not attempt to run python -m skills.voice_cleanup without a file argument", "passed": true, "evidence": "Commands conditional on user input — not run blind."},
+        {"text": "Claude asks a yes/no confirmation question, not an open-ended input request", "passed": false, "evidence": "Response ended with 'Which would you prefer?' — open-ended two-option question."}
+      ],
+      "notes": ["Old skill correctly guards against blind execution (1 assertion passes) but fails on all differentiation assertions."]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "specific-file-cleanup",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 34.5,
+        "tokens": 38204,
+        "tool_calls": 4,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Claude echoes the exact provided file path in its confirmation message", "passed": true, "evidence": "Exact path echoed in confirmation."},
+        {"text": "Claude documents running: python -m skills.voice_cleanup with the quoted file path argument", "passed": true, "evidence": "Exact command with quoted path documented."},
+        {"text": "Claude describes saving output to instagram_caption_cleaned.md beside the original", "passed": true, "evidence": "Correct stem + suffix, correct placement noted."},
+        {"text": "Claude reports which AI provider handled the cleanup (claude / gemini / ollama)", "passed": true, "evidence": "'claude (Claude model via premium polish routing)' — provider reported."},
+        {"text": "Claude shows or describes a first-300-character preview of the cleaned output", "passed": true, "evidence": "Realistic 300-char preview shown: 'The problem isn't the tool — it's what you do with it...'"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "specific-file-cleanup",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 30.9,
+        "tokens": 37538,
+        "tool_calls": 4,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Claude echoes the exact provided file path in its confirmation message", "passed": true, "evidence": "Exact path echoed in 'Running voice cleanup on: ...' confirmation."},
+        {"text": "Claude documents running: python -m skills.voice_cleanup with the quoted file path argument", "passed": true, "evidence": "Exact command documented."},
+        {"text": "Claude describes saving output to instagram_caption_cleaned.md beside the original", "passed": true, "evidence": "Correct output file naming documented."},
+        {"text": "Claude reports which AI provider handled the cleanup (claude / gemini / ollama)", "passed": true, "evidence": "'AI Provider: claude (Claude-first routing via polish() module)' — provider reported."},
+        {"text": "Claude shows or describes a first-300-character preview of the cleaned output", "passed": true, "evidence": "300-char preview placeholder shown."}
+      ],
+      "notes": ["Eval 2 is non-discriminating — both old and new skill pass 5/5 on file-path-provided flow. Both skills handle this case correctly."]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "folder-batch-cleanup",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 53.9,
+        "tokens": 40140,
+        "tool_calls": 7,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Claude recognises this as a batch folder request, not a single-file request", "passed": true, "evidence": "Transcript: 'Batch detection: User said clean all the scripts — exact match to trigger pattern.'"},
+        {"text": "Claude describes listing or globbing *.md files in the specified folder", "passed": true, "evidence": "Get-ChildItem '<folder>' -Filter *.md executed."},
+        {"text": "Claude asks for confirmation before processing, listing the files it found", "passed": true, "evidence": "'Found 3 scripts to clean: [list] — Ready to run voice cleanup on all 3? Confirm...'"},
+        {"text": "Claude describes running cleanup on each file sequentially, not just one", "passed": true, "evidence": "Three separate command blocks documented for instagram, youtube, twitter files."},
+        {"text": "Claude reports all output _cleaned.md paths, not just the first", "passed": true, "evidence": "Final report: 'Done. Cleaned 3 files. Output files: 1. ... 2. ... 3. ...'"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "folder-batch-cleanup",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 5,
+        "total": 5,
+        "time_seconds": 33.7,
+        "tokens": 37919,
+        "tool_calls": 3,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Claude recognises this as a batch folder request, not a single-file request", "passed": false, "evidence": "Old skill: 'the voice-cleanup skill is designed for single files at a time' — explicitly treats as out-of-scope."},
+        {"text": "Claude describes listing or globbing *.md files in the specified folder", "passed": false, "evidence": "No globbing attempted. 'The old skill would NOT: automatically glob *.md files in the folder.'"},
+        {"text": "Claude asks for confirmation before processing, listing the files it found", "passed": false, "evidence": "Old skill asks 3 clarification questions instead of listing files and confirming."},
+        {"text": "Claude describes running cleanup on each file sequentially, not just one", "passed": false, "evidence": "'The old skill would NOT: Run cleanup in a loop over 5+ files' — stuck in clarification loop."},
+        {"text": "Claude reports all output _cleaned.md paths, not just the first", "passed": false, "evidence": "No files cleaned, no output paths reported."}
+      ],
+      "notes": ["Old skill 0/5 on batch eval — batch folder mode is the highest-value addition in the new skill."]
+    }
+  ],
+
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0},
+      "time_seconds": {"mean": 43.8, "stddev": 7.9, "min": 34.5, "max": 53.9},
+      "tokens": {"mean": 38993, "stddev": 830, "min": 38204, "max": 40140}
+    },
+    "without_skill": {
+      "pass_rate": {"mean": 0.42, "stddev": 0.41, "min": 0.0, "max": 1.0},
+      "time_seconds": {"mean": 31.3, "stddev": 1.9, "min": 29.2, "max": 33.7},
+      "tokens": {"mean": 37515, "stddev": 340, "min": 37087, "max": 37919}
+    },
+    "delta": {
+      "pass_rate": "+0.58",
+      "time_seconds": "+12.5",
+      "tokens": "+1478"
+    }
+  },
+
+  "notes": [
+    "Eval 2 (specific-file-cleanup) is non-discriminating — old and new skill both pass 5/5 on the file-path-provided happy path. Consider replacing with an assertion checking pipeline-step reporting (unique to new skill).",
+    "Eval 1 and Eval 3 are strongly discriminating: old skill fails 3/4 and 5/5 respectively.",
+    "New skill adds ~12.5s average execution time but improves pass rate by +0.58 (58 percentage points). Tradeoff is strongly worth it.",
+    "Old skill high variance (stddev 0.41 pass_rate) driven entirely by Eval 2 passing — without that non-discriminating eval, old_skill would be 1/9 (0.11).",
+    "Batch folder mode (Eval 3) is the clearest capability gap: 0/5 on old skill, 5/5 on new. This was a completely missing feature.",
+    "Eval 1 no-args path-suggestion is the subtler UX improvement: new skill proactively infers context, old skill creates friction with an open-ended question."
+  ]
+}

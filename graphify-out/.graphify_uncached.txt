@@ -1,0 +1,961 @@
+CLAUDE.md
+local_agent_context.md
+local_system_prompt.txt
+requirements.txt
+archive\tmp\nb_id.txt
+archive\tmp\round1_raw.txt
+archive\tmp\video-bug-report.md
+backend\prompts\skills\ab-testing.md
+backend\prompts\skills\brainstorming.md
+backend\prompts\skills\content-strategy.md
+backend\prompts\skills\copy-editing-quick.md
+backend\prompts\skills\copy-editing.md
+backend\prompts\skills\copywriting.md
+backend\prompts\skills\dispatching-parallel-agents.md
+backend\prompts\skills\marketing-psychology.md
+backend\prompts\skills\product-marketing-context.md
+backend\prompts\skills\social-content.md
+backend\prompts\skills\subagent-driven-development.md
+backend\prompts\skills\systematic-debugging.md
+backend\prompts\skills\test-driven-development.md
+backend\prompts\skills\using-git-worktrees.md
+backend\prompts\skills\verification-before-completion.md
+backend\prompts\skills\writing-plans.md
+Content-Hub-Vault-V2\delegation.md
+Content-Hub-Vault-V2\00-Management\Memory\ASB_Framework_Analysis.md
+Content-Hub-Vault-V2\00-Management\Memory\context.md
+Content-Hub-Vault-V2\00-Management\Orchestrations\2026-04-22_approval-workflow.md
+Content-Hub-Vault-V2\00-Management\Orchestrations\2026-04-22_platform-posting-schedule.md
+Content-Hub-Vault-V2\00-Management\Orchestrations\2026-04-22_posting-time-recommendations.md
+Content-Hub-Vault-V2\00-Management\Orchestrations\2026-04-22_views-count-feature.md
+Content-Hub-Vault-V2\00-Management\Orchestrations\2026-04-23_phase3-remediation-completion.md
+Content-Hub-Vault-V2\00-Management\Orchestrations\2026-04-27_phase3-orchestration-code-review.md
+Content-Hub-Vault-V2\00-Management\Orchestrations\2026-04-28_phase0-v2-cleanup.md
+Content-Hub-Vault-V2\00-Management\Orchestrations\2026-04-28_v2-bootstrap-verification.md
+Content-Hub-Vault-V2\00-Management\Orchestrations\2026-05-07_source-control-auto-commit.md
+Content-Hub-Vault-V2\00-Management\Orchestrations\README.md
+Content-Hub-Vault-V2\00-Management\Plans\AGENTS.md
+Content-Hub-Vault-V2\00-Management\Plans\analytics-tracking-decomposition.md
+Content-Hub-Vault-V2\00-Management\Plans\CLAUDE.md
+Content-Hub-Vault-V2\00-Management\Plans\community-subcluster-proposal.md
+Content-Hub-Vault-V2\00-Management\Plans\Final_Implementation_Plan.md
+Content-Hub-Vault-V2\00-Management\Plans\MVP_Completion_Plan.md
+Content-Hub-Vault-V2\00-Management\Plans\skill.md
+Content-Hub-Vault-V2\00-Management\Program-Architecture\actual_generation_tree.md
+Content-Hub-Vault-V2\00-Management\Program-Architecture\intended_generation_tree.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-09_Automatic_Session_Logging_Protocol.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-09_Day1_E2E_Pipeline_Smoke_Test.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-09_Migration_and_Agentic_Second_Brain_Setup.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-09_Ollama_Bridge_Setup.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-09_Vault_Cleanup_and_Path_Fixes.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-12_Day2_Backend_Platform_Learning_Skills.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-12_Day3_Frontend_Polish_E2E_Verification.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-13_Day3&4_Code_Review.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-13_Day3&4_Code_Review_Fixes.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-13_Day4_Final_Hardening.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-13_Phase2_Code_Review.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-14_Day4_Tieing_Loose_Ends.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-14_Final_Task_Audit.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-14_Phase2_Implementation_Audit_Report.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-14_Phase2_Production_Execution.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-14_Phase2_Production_Execution_Fixes.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-14_Phase2_Test_Infrastructure.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-14_Phase2_Test_Infrastructure_Final_Audit.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-14_Phase2_Test_Infrastructure_Review_Fixes.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-14_T2.3_Verification_Complete.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-14_T3.2_General_Trending_Scrape.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-15_ Phase3_Audit_Report.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-15_Agent_Orchestrator_Implementation.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-15_Compiled_Phase3_Logs.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-15_Phase3_Complete.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-15_Phase3_Complete_All_Tasks.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-15_Phase3_Final_Completion.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-15_Phase3_T2.3_T3.1_T3.2_Complete.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-15_Phase_2_Complete.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-15_Phase_2_Task_Completion_Session.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-15_Session_Summary.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-15_T1.2_Multi_User_Auth_Hardening.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-15_T2.1_Remotion_Auth.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-15_T2.2_Server_Side_Library_Search.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-15_T2.2_Server_Side_Search.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-15_T3.1_Active_Style_Markers.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-15_T3.2_General_Trending_Scrape.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-16_Orchestrated_Execution_Skill.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-16_Orchestrator_Deep_Dive_Log.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-16_Phase3_Remediation_P1-P3.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-17_Phase4_AB_Testing_Frontend_Recon.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-17_Phase4_AB_Testing_Server_Side.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-20_CLAUDE_md_Refactor.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-20_Orchestrate_Skill_Compaction_Fix.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-20_Phase3_Remediation_Verification_Audit.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-21_Graphify_tmp_marketingskills_Recovery.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-21_Graph_Questions_Followup.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-21_Proposals_CDE_Execution.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-21_Tier2_Proposals_CD.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-22_Graphify_Report_Display_Fix.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-22_Graphify_Update_Validation.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-22_ORCH-001_Root_Cause_Analysis.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-22_Orchestrate_Benchmark_Pipeline_Complete.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-22_Orchestrate_Eval_Test.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-22_System_Bug_Orchestrate_Haiku_Recon_Dispatch.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-23_Backend_Startup_Fix_httpx_Import.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-23_Close_Experiment_Memory_Wiring.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-23_Experiments_Integration_Tests.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-23_Experiments_Pages_Build.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-23_Frontend_Experiments_Scaffolding.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-23_Frontend_Supabase_Health_Check.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-23_General_Trending_Integration_Tests.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-23_Phase_3_Completion_Orchestration.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-27_General_Trending_UUID_Fix.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-27_Phase3_Code_Review_Orchestration_Complete.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-27_Phase3_Pipeline_Code_Review.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-27_Security_Hardening_Phase3_Loose_Ends.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-27_Synthesize_Fstring_Bug_Bandaid.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-04-27_Video_Bug_Triage.md
+Content-Hub-Vault-V2\00-Management\Sessions\2026-05-07_Auto_Commit_System_Build.md
+Content-Hub-Vault-V2\00-Management\Superpowers\brainstorming.md
+Content-Hub-Vault-V2\00-Management\Superpowers\dispatching-parallel-agents.md
+Content-Hub-Vault-V2\00-Management\Superpowers\executing-plans.md
+Content-Hub-Vault-V2\00-Management\Superpowers\finishing-a-development-branch.md
+Content-Hub-Vault-V2\00-Management\Superpowers\orchestrated-execution.md
+Content-Hub-Vault-V2\00-Management\Superpowers\receiving-code-review.md
+Content-Hub-Vault-V2\00-Management\Superpowers\requesting-code-review.md
+Content-Hub-Vault-V2\00-Management\Superpowers\subagent-driven-development.md
+Content-Hub-Vault-V2\00-Management\Superpowers\systematic-debugging.md
+Content-Hub-Vault-V2\00-Management\Superpowers\test-driven-development.md
+Content-Hub-Vault-V2\00-Management\Superpowers\using-git-worktrees.md
+Content-Hub-Vault-V2\00-Management\Superpowers\verification-before-completion.md
+Content-Hub-Vault-V2\00-Management\Superpowers\writing-plans.md
+Content-Hub-Vault-V2\00-Management\Tasks\Current_Sprint.md
+Content-Hub-Vault-V2\00-Management\Tasks\MPV_Completion_Tasks.md
+Content-Hub-Vault-V2\00-Management\Tasks\Phase_2_Production_Tasks.md
+Content-Hub-Vault-V2\00-Management\Tasks\Phase_3_Remediation_Tasks.md
+Content-Hub-Vault-V2\00-Management-V2\README.md
+Content-Hub-Vault-V2\00-Management-V2\Memory\context.md
+Content-Hub-Vault-V2\00-Management-V2\Orchestrations\2026-04-29_phase4a-cascade.md
+Content-Hub-Vault-V2\00-Management-V2\Orchestrations\2026-04-29_phase4b-short-form.md
+Content-Hub-Vault-V2\00-Management-V2\Orchestrations\2026-05-06_phase3a-3b-hook-outline-skills.md
+Content-Hub-Vault-V2\00-Management-V2\Orchestrations\2026-05-07_phase0a-twitter-data-layer.md
+Content-Hub-Vault-V2\00-Management-V2\Orchestrations\2026-05-07_phase0a-twitter-scout.md
+Content-Hub-Vault-V2\00-Management-V2\Orchestrations\2026-05-07_phase3c-title-skill.md
+Content-Hub-Vault-V2\00-Management-V2\Orchestrations\README.md
+Content-Hub-Vault-V2\00-Management-V2\Plans\Chase_AI_System_Breakdown.md
+Content-Hub-Vault-V2\00-Management-V2\Plans\CLAUDE.md
+Content-Hub-Vault-V2\00-Management-V2\Plans\Local_First_Skill_Engine_Plan.md
+Content-Hub-Vault-V2\00-Management-V2\Plans\Researcher_Optimisation.md
+Content-Hub-Vault-V2\00-Management-V2\Plans\Wrapper_Plan.md
+Content-Hub-Vault-V2\00-Management-V2\Program-Architecture\README.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-04-28_Phase0_Cleanup.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-04-29_Chase_AI_Sprint_Rewrite.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-04-29_Chase_AI_System_Analysis_and_Context_Fixes.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-04-29_GitHub_Trending_Deep_Dive_Output.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-04-29_GitHub_Trending_Script.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-04-29_Phase4a_Cascade_Skill.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-04-29_Phase4b_ShortForm_Skill.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-04-29_Vault_Path_Test.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-04-29_Vault_Separation_Fix.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-04-29_YT_Pipeline_Skill.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-04-30_Phase2_Ideation_Skill.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-04-30_Phase4c_VoiceCleanup_Skill.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-04-30_Researcher_Skill_Architecture_Revised.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-04-30_Researcher_Skill_Build.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-06_Phase3a_3b_Hook_Outline_Skills.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-06_Ruflo_Research_Handoff.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-07_Competitor_YouTube_Scrape.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-07_OpenMythos_Dogfood_Run.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-07_Phase0a_Twitter_Data_Layer.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-07_Phase0a_Twitter_Scout.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-07_Phase3c_Title_Skill.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-07_Scheduler_Activation.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-07_Vault_Tracking_Config_Validation.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-08_Artifact_Generation_Test.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-08_Guardrails_Reverification.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-08_Guardrails_Verification.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-08_Researcher_Fix_Verified.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-08_Research_Guardrails_Implementation.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-08_Research_Guardrails_Orchestration_Design.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-08_YT_Pipeline_Friction_Repair.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-10_Skill_Engine_Audit.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-11_TRIBE_v2_Analysis_VRAM_Debug.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-11_TRIBE_v2_LLaMA_CPU_Fix.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-11_Wrapper_Plan_Hive_Swarm_Launch.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-12_Control_Room_Build.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-12_Control_Room_Smoke_Test.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-13_Researcher_Optimisation_Complete.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-13_Researcher_Source_Quality_Handoff.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\2026-05-13_Researcher_Source_Verification_Agent.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\HANDOFF_2026-05-12.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\README.md
+Content-Hub-Vault-V2\00-Management-V2\Sessions\session_log_2026_04_28.md
+Content-Hub-Vault-V2\00-Management-V2\Superpowers\README.md
+Content-Hub-Vault-V2\00-Management-V2\Tasks\Architecture_Building.md
+Content-Hub-Vault-V2\00-Management-V2\Tasks\Current_Sprint.md
+Content-Hub-Vault-V2\00-Management-V2\Tasks\README.md
+Content-Hub-Vault-V2\01-Knowledge\marketing_brain.md
+Content-Hub-Vault-V2\01-Knowledge\voice_profile.md
+Content-Hub-Vault-V2\02-Ideas\2026-05-07_openmythos.md
+Content-Hub-Vault-V2\02-Ideas\2026-05-12_ai-agents.md
+Content-Hub-Vault-V2\04-Trends\github_trending.md
+Content-Hub-Vault-V2\04-Trends\cosmicstack-labs_mercury-agent\cosmicstack-labs_mercury-agent.md
+Content-Hub-Vault-V2\04-Trends\crynta_terax-ai\crynta_terax-ai.md
+Content-Hub-Vault-V2\04-Trends\earthtojake_text-to-cad\earthtojake_text-to-cad.md
+Content-Hub-Vault-V2\04-Trends\kyegomez_OpenMythos\kyegomez_OpenMythos.md
+Content-Hub-Vault-V2\04-Trends\Manavarya09_design-extract\Manavarya09_design-extract.md
+Content-Hub-Vault-V2\04-Trends\TitanFlow-Systems_best-of-algorithmic-trading\TitanFlow-Systems_best-of-algorithmic-trading.md
+Content-Hub-Vault-V2\04-Trends\yaojingang_yao-open-prompts\yaojingang_yao-open-prompts.md
+Content-Hub-Vault-V2\05-Hooks\2026-05-06_the-github-repo-that-gives-claude.md
+Content-Hub-Vault-V2\05-Hooks\2026-05-07_what-anthropic-actually-published-vs-what.md
+Content-Hub-Vault-V2\05-Hooks\2026-05-07_what-anthropic-actually-published-vs-what_cleaned.md
+Content-Hub-Vault-V2\05-Hooks\2026-05-12_ai-agents.md
+Content-Hub-Vault-V2\06-Outlines\2026-05-06_why-ruflo-is-a-must-use.md
+Content-Hub-Vault-V2\06-Outlines\2026-05-07_what-anthropic-actually-published-vs-what.md
+Content-Hub-Vault-V2\06-Outlines\2026-05-07_what-anthropic-actually-published-vs-what_cleaned.md
+Content-Hub-Vault-V2\06-Outlines\2026-05-12_ai-agents.md
+Content-Hub-Vault-V2\07-Titles\2026-05-07_how-i-built-a-rag-pipeline-that-actually-works.md
+Content-Hub-Vault-V2\07-Titles\2026-05-07_what-anthropic-actually-published-vs-what-openmyth.md
+Content-Hub-Vault-V2\07-Titles\2026-05-10_help.md
+Content-Hub-Vault-V2\07-Titles\2026-05-12_ai-agents-building-reliable-systems.md
+Content-Hub-Vault-V2\08-Distribution\2026-04-29_social-media-isnt-hard-its-misunderstood\blog_post.md
+Content-Hub-Vault-V2\08-Distribution\2026-04-29_social-media-isnt-hard-its-misunderstood\linkedin_post.md
+Content-Hub-Vault-V2\08-Distribution\2026-04-29_social-media-isnt-hard-its-misunderstood\README.md
+Content-Hub-Vault-V2\08-Distribution\2026-04-29_social-media-isnt-hard-its-misunderstood\twitter_thread.md
+Content-Hub-Vault-V2\08-Distribution\2026-05-07_is-openmythos-legit-i-checked-every-clai\blog_post.md
+Content-Hub-Vault-V2\08-Distribution\2026-05-07_is-openmythos-legit-i-checked-every-clai\blog_post_cleaned.md
+Content-Hub-Vault-V2\08-Distribution\2026-05-07_is-openmythos-legit-i-checked-every-clai\linkedin_post.md
+Content-Hub-Vault-V2\08-Distribution\2026-05-07_is-openmythos-legit-i-checked-every-clai\linkedin_post_cleaned.md
+Content-Hub-Vault-V2\08-Distribution\2026-05-07_is-openmythos-legit-i-checked-every-clai\README.md
+Content-Hub-Vault-V2\08-Distribution\2026-05-07_is-openmythos-legit-i-checked-every-clai\twitter_thread.md
+Content-Hub-Vault-V2\08-Distribution\2026-05-07_is-openmythos-legit-i-checked-every-clai\twitter_thread_cleaned.md
+Content-Hub-Vault-V2\08-Distribution\2026-05-12_ai-agents\blog_post.md
+Content-Hub-Vault-V2\08-Distribution\2026-05-12_ai-agents\linkedin_post.md
+Content-Hub-Vault-V2\08-Distribution\2026-05-12_ai-agents\README.md
+Content-Hub-Vault-V2\08-Distribution\2026-05-12_ai-agents\twitter_thread.md
+Content-Hub-Vault-V2\09-Shorts\2026-04-30_social-media-isnt-hard-its-misunderstood\30s_script.md
+Content-Hub-Vault-V2\09-Shorts\2026-04-30_social-media-isnt-hard-its-misunderstood\60s_script.md
+Content-Hub-Vault-V2\09-Shorts\2026-04-30_social-media-isnt-hard-its-misunderstood\90s_script.md
+Content-Hub-Vault-V2\09-Shorts\2026-04-30_social-media-isnt-hard-its-misunderstood\README.md
+Content-Hub-Vault-V2\09-Shorts\2026-05-08_is-openmythos-legit-i-checked-every-clai\30s_script.md
+Content-Hub-Vault-V2\09-Shorts\2026-05-08_is-openmythos-legit-i-checked-every-clai\30s_script_cleaned.md
+Content-Hub-Vault-V2\09-Shorts\2026-05-08_is-openmythos-legit-i-checked-every-clai\60s_script.md
+Content-Hub-Vault-V2\09-Shorts\2026-05-08_is-openmythos-legit-i-checked-every-clai\60s_script_cleaned.md
+Content-Hub-Vault-V2\09-Shorts\2026-05-08_is-openmythos-legit-i-checked-every-clai\90s_script.md
+Content-Hub-Vault-V2\09-Shorts\2026-05-08_is-openmythos-legit-i-checked-every-clai\90s_script_cleaned.md
+Content-Hub-Vault-V2\09-Shorts\2026-05-08_is-openmythos-legit-i-checked-every-clai\README.md
+Content-Hub-Vault-V2\09-Shorts\2026-05-12_ai-agents\30s_script.md
+Content-Hub-Vault-V2\09-Shorts\2026-05-12_ai-agents\60s_script.md
+Content-Hub-Vault-V2\09-Shorts\2026-05-12_ai-agents\90s_script.md
+Content-Hub-Vault-V2\09-Shorts\2026-05-12_ai-agents\README.md
+Content-Hub-Vault-V2\10-Research\2026-04-30_ai-memory_brief.md
+Content-Hub-Vault-V2\10-Research\2026-04-30_open-source-ai-developer-tools_brief.md
+Content-Hub-Vault-V2\10-Research\2026-04-30_trading_brief.md
+Content-Hub-Vault-V2\10-Research\2026-05-01_ai-memory_brief.md
+Content-Hub-Vault-V2\10-Research\2026-05-01_claude_code_+_notebooklm.md
+Content-Hub-Vault-V2\10-Research\2026-05-06_ruflo_skills_agents_architecture.md
+Content-Hub-Vault-V2\10-Research\2026-05-08_typescript_brief.md
+Content-Hub-Vault-V2\10-Research\2026-05-09_Mario_Zechner_LLM_NotebookLM_StudyGuide.md
+Content-Hub-Vault-V2\10-Research\2026-05-09_Mario_Zechner_LLM_Software_Building.md
+Content-Hub-Vault-V2\10-Research\2026-05-12_ai-agents_brief.md
+Content-Hub-Vault-V2\10-Research\2026-05-13_open-source-design-tools_brief.md
+Content-Hub-Vault-V2\10-Research\2026-05-13_test_brief.md
+Content-Hub-Vault-V2\10-Research\2026-05-06_ruflo\mindmap.md
+Content-Hub-Vault-V2\10-Research\2026-05-06_ruflo\report.md
+Content-Hub-Vault-V2\10-Research\2026-05-06_ruflo\slides_images\Untitled.md
+Content-Hub-Vault-V2\10-Research\2026-05-07_openmythos\research.md
+Content-Hub-Vault-V2\10-Research\2026-05-12_ai_agents\research.md
+Content-Hub-Vault-V2\backend\config.py.md
+Content-Hub-Vault-V2\backend\database.py.md
+Content-Hub-Vault-V2\backend\main.py.md
+Content-Hub-Vault-V2\backend\__init__.py.md
+Content-Hub-Vault-V2\backend\auth\dependencies.py.md
+Content-Hub-Vault-V2\backend\auth\router.py.md
+Content-Hub-Vault-V2\backend\auth\__init__.py.md
+Content-Hub-Vault-V2\backend\brand\models.py.md
+Content-Hub-Vault-V2\backend\brand\router.py.md
+Content-Hub-Vault-V2\backend\brand\__init__.py.md
+Content-Hub-Vault-V2\backend\content\models.py.md
+Content-Hub-Vault-V2\backend\content\platform_adapter.py.md
+Content-Hub-Vault-V2\backend\content\renderer_slides.py.md
+Content-Hub-Vault-V2\backend\content\renderer_talking_head.py.md
+Content-Hub-Vault-V2\backend\content\renderer_video.py.md
+Content-Hub-Vault-V2\backend\content\router.py.md
+Content-Hub-Vault-V2\backend\content\scripting.py.md
+Content-Hub-Vault-V2\backend\content\storyboard.py.md
+Content-Hub-Vault-V2\backend\content\__init__.py.md
+Content-Hub-Vault-V2\backend\intelligence\memory.py.md
+Content-Hub-Vault-V2\backend\intelligence\rejection.py.md
+Content-Hub-Vault-V2\backend\intelligence\suggestions.py.md
+Content-Hub-Vault-V2\backend\intelligence\synthesis.py.md
+Content-Hub-Vault-V2\backend\intelligence\triggers.py.md
+Content-Hub-Vault-V2\backend\intelligence\voice.py.md
+Content-Hub-Vault-V2\backend\intelligence\__init__.py.md
+Content-Hub-Vault-V2\backend\prompts\skill_loader.py.md
+Content-Hub-Vault-V2\backend\prompts\skills\content-strategy.md
+Content-Hub-Vault-V2\backend\prompts\skills\copy-editing-quick.md
+Content-Hub-Vault-V2\backend\prompts\skills\copy-editing.md
+Content-Hub-Vault-V2\backend\prompts\skills\copywriting.md
+Content-Hub-Vault-V2\backend\prompts\skills\marketing-psychology.md
+Content-Hub-Vault-V2\backend\prompts\skills\product-marketing-context.md
+Content-Hub-Vault-V2\backend\prompts\skills\SKILL.md
+Content-Hub-Vault-V2\backend\prompts\skills\social-content.md
+Content-Hub-Vault-V2\backend\research\apify_client.py.md
+Content-Hub-Vault-V2\backend\research\organic_score.py.md
+Content-Hub-Vault-V2\backend\research\rag.py.md
+Content-Hub-Vault-V2\backend\research\research_service.py.md
+Content-Hub-Vault-V2\backend\research\video_downloader.py.md
+Content-Hub-Vault-V2\backend\research\__init__.py.md
+Content-Hub-Vault-V2\backend\scheduler\jobs.py.md
+Content-Hub-Vault-V2\backend\scheduler\__init__.py.md
+Content-Hub-Vault-V2\backend\storage\client.py.md
+Content-Hub-Vault-V2\backend\storage\__init__.py.md
+Content-Hub-Vault-V2\backend\workflows\models.py.md
+Content-Hub-Vault-V2\backend\workflows\router.py.md
+Content-Hub-Vault-V2\backend\workflows\service.py.md
+Content-Hub-Vault-V2\backend\workflows\templates.py.md
+Content-Hub-Vault-V2\backend\workflows\__init__.py.md
+Content-Hub-Vault-V2\Code-Brain\2026-04-13 Day 4 Final Hardening.md
+Content-Hub-Vault-V2\Code-Brain\AB Test Hypothesis Framework.md
+Content-Hub-Vault-V2\Code-Brain\AB Test Setup Skill.md
+Content-Hub-Vault-V2\Code-Brain\AB Testing Advisory Integration via Skill.md
+Content-Hub-Vault-V2\Code-Brain\AB Testing Experiments System (Phase 4).md
+Content-Hub-Vault-V2\Code-Brain\Actual Generation Tree (Audit 2026-04-14).md
+Content-Hub-Vault-V2\Code-Brain\adapt_for_platform.md
+Content-Hub-Vault-V2\Code-Brain\Agentic Second Brain (ASB) Framework.md
+Content-Hub-Vault-V2\Code-Brain\AI Provider Google Gemini.md
+Content-Hub-Vault-V2\Code-Brain\API Client Library.md
+Content-Hub-Vault-V2\Code-Brain\Apify Web Scraping Client.md
+Content-Hub-Vault-V2\Code-Brain\APScheduler Jobs Configuration.md
+Content-Hub-Vault-V2\Code-Brain\Architecture Content Synthesis (Strategy Review).md
+Content-Hub-Vault-V2\Code-Brain\Architecture Mock Mode Fallback Strategy.md
+Content-Hub-Vault-V2\Code-Brain\Architecture Platform Strategy (Setup Phase).md
+Content-Hub-Vault-V2\Code-Brain\Architecture Script Generation (Creation Phase).md
+Content-Hub-Vault-V2\Code-Brain\Architecture The Learning Loop (Intelligence).md
+Content-Hub-Vault-V2\Code-Brain\Architecture Trending Intelligence (Discovery Phase).md
+Content-Hub-Vault-V2\Code-Brain\Architecture Voice Configuration (Setup Phase).md
+Content-Hub-Vault-V2\Code-Brain\Auth Utilities.md
+Content-Hub-Vault-V2\Code-Brain\Authentication API.md
+Content-Hub-Vault-V2\Code-Brain\Authentication Dependencies.md
+Content-Hub-Vault-V2\Code-Brain\Authentication Router.md
+Content-Hub-Vault-V2\Code-Brain\Backend Configuration Module.md
+Content-Hub-Vault-V2\Code-Brain\Backend Module experiments.md
+Content-Hub-Vault-V2\Code-Brain\Backend Stack FastAPI (Python).md
+Content-Hub-Vault-V2\Code-Brain\Brain in a Jar Structural Gap (Orchestrator Tools Limitation).md
+Content-Hub-Vault-V2\Code-Brain\Brainstorming Skill (Design Before Implementation).md
+Content-Hub-Vault-V2\Code-Brain\Brand API.md
+Content-Hub-Vault-V2\Code-Brain\Brand Color System.md
+Content-Hub-Vault-V2\Code-Brain\Brand Configs Table.md
+Content-Hub-Vault-V2\Code-Brain\Brand Configuration.md
+Content-Hub-Vault-V2\Code-Brain\Brand Protocol Configuration Page.md
+Content-Hub-Vault-V2\Code-Brain\Brand Typography.md
+Content-Hub-Vault-V2\Code-Brain\Brand Voice Signature.md
+Content-Hub-Vault-V2\Code-Brain\brand-agent.md
+Content-Hub-Vault-V2\Code-Brain\brand.models.md
+Content-Hub-Vault-V2\Code-Brain\brand.router.md
+Content-Hub-Vault-V2\Code-Brain\brand.__init__.md
+Content-Hub-Vault-V2\Code-Brain\BrandProfile.md
+Content-Hub-Vault-V2\Code-Brain\BrandUpdate.md
+Content-Hub-Vault-V2\Code-Brain\build_voice_config.md
+Content-Hub-Vault-V2\Code-Brain\check_topic_overlap.md
+Content-Hub-Vault-V2\Code-Brain\Claude Code Orchestration Architecture (Advisor + Subagents).md
+Content-Hub-Vault-V2\Code-Brain\CLAUDE.md Refactor (Compact Session Protocol).md
+Content-Hub-Vault-V2\Code-Brain\Content API.md
+Content-Hub-Vault-V2\Code-Brain\Content Calendar Page.md
+Content-Hub-Vault-V2\Code-Brain\Content Detail Page.md
+Content-Hub-Vault-V2\Code-Brain\Content Edit Page.md
+Content-Hub-Vault-V2\Code-Brain\Content Embeddings Table.md
+Content-Hub-Vault-V2\Code-Brain\Content Generate From Strategy API.md
+Content-Hub-Vault-V2\Code-Brain\Content Hub.md
+Content-Hub-Vault-V2\Code-Brain\Content Items Table.md
+Content-Hub-Vault-V2\Code-Brain\Content Library Page.md
+Content-Hub-Vault-V2\Code-Brain\Content Pillars & Topic Clustering.md
+Content-Hub-Vault-V2\Code-Brain\Content Publication Memory Table.md
+Content-Hub-Vault-V2\Code-Brain\Content Strategy Skill.md
+Content-Hub-Vault-V2\Code-Brain\Content Synthesize API.md
+Content-Hub-Vault-V2\Code-Brain\Content Types.md
+Content-Hub-Vault-V2\Code-Brain\content.models.md
+Content-Hub-Vault-V2\Code-Brain\content.platform_adapter.md
+Content-Hub-Vault-V2\Code-Brain\content.renderer_slides.md
+Content-Hub-Vault-V2\Code-Brain\content.renderer_talking_head.md
+Content-Hub-Vault-V2\Code-Brain\content.renderer_video.md
+Content-Hub-Vault-V2\Code-Brain\content.router.md
+Content-Hub-Vault-V2\Code-Brain\content.scripting.md
+Content-Hub-Vault-V2\Code-Brain\content.storyboard.md
+Content-Hub-Vault-V2\Code-Brain\content.__init__.md
+Content-Hub-Vault-V2\Code-Brain\ContentGenerateRequest, ContentEditRequest, SynthesizeRequest, StrategyGenerateRequest.md
+Content-Hub-Vault-V2\Code-Brain\ContentItem Type.md
+Content-Hub-Vault-V2\Code-Brain\Copy Editing Skill.md
+Content-Hub-Vault-V2\Code-Brain\Copywriting Skill.md
+Content-Hub-Vault-V2\Code-Brain\CRITICAL Missing brand-assets Storage Bucket.md
+Content-Hub-Vault-V2\Code-Brain\CRITICAL Missing HookBodyCTAComposition.tsx.md
+Content-Hub-Vault-V2\Code-Brain\CRITICAL Port Mismatch (Remotion 3001 vs config 3100).md
+Content-Hub-Vault-V2\Code-Brain\CRITICAL Regenerate Notes Parameter Mismatch.md
+Content-Hub-Vault-V2\Code-Brain\Current Sprint Phase 3 Completion.md
+Content-Hub-Vault-V2\Code-Brain\Dashboard Page.md
+Content-Hub-Vault-V2\Code-Brain\Data Slides Content.md
+Content-Hub-Vault-V2\Code-Brain\Database Client and Mock Mode.md
+Content-Hub-Vault-V2\Code-Brain\Database Supabase (PostgreSQL + pgvector + RLS).md
+Content-Hub-Vault-V2\Code-Brain\db-agent.md
+Content-Hub-Vault-V2\Code-Brain\detect_trend_spikes.md
+Content-Hub-Vault-V2\Code-Brain\enrich_trending_posts.md
+Content-Hub-Vault-V2\Code-Brain\Evolution Columns Migration.md
+Content-Hub-Vault-V2\Code-Brain\Executing Plans Skill.md
+Content-Hub-Vault-V2\Code-Brain\F-02 conclude_experiment not calling update_experiment_learnings.md
+Content-Hub-Vault-V2\Code-Brain\F-05 ExperimentResult.variant has no validation.md
+Content-Hub-Vault-V2\Code-Brain\F-06 record_result has no status guard.md
+Content-Hub-Vault-V2\Code-Brain\F-07 updated_at not set on start and record-result.md
+Content-Hub-Vault-V2\Code-Brain\FastAPI Main Application.md
+Content-Hub-Vault-V2\Code-Brain\Final Implementation Plan (7 tasks).md
+Content-Hub-Vault-V2\Code-Brain\Finance & Investing Niche.md
+Content-Hub-Vault-V2\Code-Brain\Finding reference_creators Unused in Pipeline.md
+Content-Hub-Vault-V2\Code-Brain\Finding Supabase Schema Missing Brand Fields.md
+Content-Hub-Vault-V2\Code-Brain\Finishing Development Branch Skill.md
+Content-Hub-Vault-V2\Code-Brain\Fitness & Health Niche.md
+Content-Hub-Vault-V2\Code-Brain\Framer Motion.md
+Content-Hub-Vault-V2\Code-Brain\Frontend Component AuthProvider.md
+Content-Hub-Vault-V2\Code-Brain\Frontend Package Configuration.md
+Content-Hub-Vault-V2\Code-Brain\Frontend Pages Login & Signup.md
+Content-Hub-Vault-V2\Code-Brain\Frontend Stack Next.js 15, Tailwind, Framer Motion.md
+Content-Hub-Vault-V2\Code-Brain\frontend-agent.md
+Content-Hub-Vault-V2\Code-Brain\General Trending Scrape (T3.2).md
+Content-Hub-Vault-V2\Code-Brain\General Trending Scrape Platform-Wide Discovery.md
+Content-Hub-Vault-V2\Code-Brain\generate_script.md
+Content-Hub-Vault-V2\Code-Brain\generate_strategy_document.md
+Content-Hub-Vault-V2\Code-Brain\generate_suggestions.md
+Content-Hub-Vault-V2\Code-Brain\Generating Status.md
+Content-Hub-Vault-V2\Code-Brain\Generation Pipeline.md
+Content-Hub-Vault-V2\Code-Brain\get_platform_group.md
+Content-Hub-Vault-V2\Code-Brain\Git Commit feat(auth) - JWT validation.md
+Content-Hub-Vault-V2\Code-Brain\Git Commit feat(brand) - style markers.md
+Content-Hub-Vault-V2\Code-Brain\Git Commit feat(research) - general trending scrape.md
+Content-Hub-Vault-V2\Code-Brain\Git Commit feat(T2.2) - server-side search.md
+Content-Hub-Vault-V2\Code-Brain\Guided Questionnaire.md
+Content-Hub-Vault-V2\Code-Brain\Home Page.md
+Content-Hub-Vault-V2\Code-Brain\Hook Formulas for Social Content.md
+Content-Hub-Vault-V2\Code-Brain\ICE Prioritization Framework.md
+Content-Hub-Vault-V2\Code-Brain\Increment Selection Memory RPC.md
+Content-Hub-Vault-V2\Code-Brain\Instagram Platform.md
+Content-Hub-Vault-V2\Code-Brain\intelligence-agent.md
+Content-Hub-Vault-V2\Code-Brain\intelligence.memory.md
+Content-Hub-Vault-V2\Code-Brain\intelligence.rejection.md
+Content-Hub-Vault-V2\Code-Brain\intelligence.suggestions.md
+Content-Hub-Vault-V2\Code-Brain\intelligence.synthesis.md
+Content-Hub-Vault-V2\Code-Brain\intelligence.triggers.md
+Content-Hub-Vault-V2\Code-Brain\intelligence.voice.md
+Content-Hub-Vault-V2\Code-Brain\intelligence.__init__.md
+Content-Hub-Vault-V2\Code-Brain\JWT Authentication Architecture.md
+Content-Hub-Vault-V2\Code-Brain\JWT Authentication System (T1.2).md
+Content-Hub-Vault-V2\Code-Brain\Library Search Server-Side ILIKE.md
+Content-Hub-Vault-V2\Code-Brain\Life & Business Coaching Niche.md
+Content-Hub-Vault-V2\Code-Brain\LinkedIn Platform.md
+Content-Hub-Vault-V2\Code-Brain\load_skill.md
+Content-Hub-Vault-V2\Code-Brain\load_skill_sections.md
+Content-Hub-Vault-V2\Code-Brain\Login Page.md
+Content-Hub-Vault-V2\Code-Brain\Lucide React Icons.md
+Content-Hub-Vault-V2\Code-Brain\Marketing Psychology & Mental Models.md
+Content-Hub-Vault-V2\Code-Brain\Match Embeddings RPC Function.md
+Content-Hub-Vault-V2\Code-Brain\Memory RPC Migration.md
+Content-Hub-Vault-V2\Code-Brain\Mental Models for Marketing.md
+Content-Hub-Vault-V2\Code-Brain\Migration 005 Phase 3 Brand Fields.md
+Content-Hub-Vault-V2\Code-Brain\Migration 005 Phase 3 Brand Fields_1.md
+Content-Hub-Vault-V2\Code-Brain\Migration 006 AB Experiments Table.md
+Content-Hub-Vault-V2\Code-Brain\Migration 006 AB Experiments.md
+Content-Hub-Vault-V2\Code-Brain\Mock mode fallback when Supabase URL is placeholder.md
+Content-Hub-Vault-V2\Code-Brain\MODERATE Remotion Returns Unusable file URLs.md
+Content-Hub-Vault-V2\Code-Brain\Multi-Agent Dispatch Pattern.md
+Content-Hub-Vault-V2\Code-Brain\Multimodal Asset Processing.md
+Content-Hub-Vault-V2\Code-Brain\Multimodal Embeddings Migration.md
+Content-Hub-Vault-V2\Code-Brain\MVP Completion Plan 4 Days (Apr 9-13).md
+Content-Hub-Vault-V2\Code-Brain\MVP Completion Tasks.md
+Content-Hub-Vault-V2\Code-Brain\Narrative Synthesis with Gemini.md
+Content-Hub-Vault-V2\Code-Brain\Neural Pipeline Initialization.md
+Content-Hub-Vault-V2\Code-Brain\New Content Generation Page.md
+Content-Hub-Vault-V2\Code-Brain\New Workflow Page.md
+Content-Hub-Vault-V2\Code-Brain\Next.js Configuration.md
+Content-Hub-Vault-V2\Code-Brain\Next.js.md
+Content-Hub-Vault-V2\Code-Brain\No public.users table (auth.users source of truth).md
+Content-Hub-Vault-V2\Code-Brain\Orchestrate Skill Compaction Recovery Fix.md
+Content-Hub-Vault-V2\Code-Brain\Orchestrated Execution Skill Design.md
+Content-Hub-Vault-V2\Code-Brain\Orchestrated Execution.md
+Content-Hub-Vault-V2\Code-Brain\Orchestration Skill.md
+Content-Hub-Vault-V2\Code-Brain\Orchestrations README.md
+Content-Hub-Vault-V2\Code-Brain\Orchestrator Deep Dive & Architecture Audit.md
+Content-Hub-Vault-V2\Code-Brain\Organic Content Filtering (Non-Sponsored).md
+Content-Hub-Vault-V2\Code-Brain\Organic Content Scoring Engine.md
+Content-Hub-Vault-V2\Code-Brain\package_talking_head.md
+Content-Hub-Vault-V2\Code-Brain\Parallel Agent Dispatch Skill.md
+Content-Hub-Vault-V2\Code-Brain\parse_brand_persona.md
+Content-Hub-Vault-V2\Code-Brain\Pattern Extraction & Performance Estimation.md
+Content-Hub-Vault-V2\Code-Brain\Phase 1 Recon and Exploration.md
+Content-Hub-Vault-V2\Code-Brain\Phase 1 The Seed Brain (Current State).md
+Content-Hub-Vault-V2\Code-Brain\Phase 2 Active Memory (Memory-First Injections).md
+Content-Hub-Vault-V2\Code-Brain\Phase 2 Production Execution (MVP Waves 1-4).md
+Content-Hub-Vault-V2\Code-Brain\Phase 2 Production Tasks Completion.md
+Content-Hub-Vault-V2\Code-Brain\Phase 2 Production Tasks.md
+Content-Hub-Vault-V2\Code-Brain\Phase 2 Task Decomposition and Planning.md
+Content-Hub-Vault-V2\Code-Brain\Phase 2 Video, Intelligence, UX, Testing.md
+Content-Hub-Vault-V2\Code-Brain\Phase 2.5 Test Infrastructure.md
+Content-Hub-Vault-V2\Code-Brain\Phase 3 Complete All 7 Tasks Delivered.md
+Content-Hub-Vault-V2\Code-Brain\Phase 3 Completion & Vault Update.md
+Content-Hub-Vault-V2\Code-Brain\Phase 3 Loose Ends - Critical Issues.md
+Content-Hub-Vault-V2\Code-Brain\Phase 3 Loose Ends Audit & Remediation Plan.md
+Content-Hub-Vault-V2\Code-Brain\Phase 3 Refinement (7 tasks remaining).md
+Content-Hub-Vault-V2\Code-Brain\Phase 3 Remediation (Phases 1-3 Schema, Pipeline, Security).md
+Content-Hub-Vault-V2\Code-Brain\Phase 3 Remediation Tasks.md
+Content-Hub-Vault-V2\Code-Brain\Phase 3 Remediation Verification Audit.md
+Content-Hub-Vault-V2\Code-Brain\Phase 3 The Narrative Vault.md
+Content-Hub-Vault-V2\Code-Brain\Phase 3 User Approval.md
+Content-Hub-Vault-V2\Code-Brain\Phase 4 AB Testing Frontend Recon & Planning.md
+Content-Hub-Vault-V2\Code-Brain\Phase 4 AB Testing Server-Side (Complete).md
+Content-Hub-Vault-V2\Code-Brain\Phase 4 Parallel Execution.md
+Content-Hub-Vault-V2\Code-Brain\Phase 5 Result Handling and Stuck Agent Recovery.md
+Content-Hub-Vault-V2\Code-Brain\Phase 6 Final Verification.md
+Content-Hub-Vault-V2\Code-Brain\pipeline-agent.md
+Content-Hub-Vault-V2\Code-Brain\Posted Status.md
+Content-Hub-Vault-V2\Code-Brain\Product Marketing Context.md
+Content-Hub-Vault-V2\Code-Brain\Production Deployment Checklist.md
+Content-Hub-Vault-V2\Code-Brain\Project Phase Status Tracking.md
+Content-Hub-Vault-V2\Code-Brain\prompts.skill_loader.md
+Content-Hub-Vault-V2\Code-Brain\Quick Copy Editing Skill (Social Scripts).md
+Content-Hub-Vault-V2\Code-Brain\RAG (Retrieval-Augmented Generation).md
+Content-Hub-Vault-V2\Code-Brain\RAG-First architecture (pgvector source of truth).md
+Content-Hub-Vault-V2\Code-Brain\React.md
+Content-Hub-Vault-V2\Code-Brain\Ready Status.md
+Content-Hub-Vault-V2\Code-Brain\Real Estate Niche.md
+Content-Hub-Vault-V2\Code-Brain\Receiving Code Review.md
+Content-Hub-Vault-V2\Code-Brain\Red-Green-Refactor Cycle.md
+Content-Hub-Vault-V2\Code-Brain\refine_script.md
+Content-Hub-Vault-V2\Code-Brain\Remotion Rendering Microservice.md
+Content-Hub-Vault-V2\Code-Brain\Rendering Playwright (slides) + Remotion (video).md
+Content-Hub-Vault-V2\Code-Brain\Rendering Status.md
+Content-Hub-Vault-V2\Code-Brain\render_slides.md
+Content-Hub-Vault-V2\Code-Brain\render_video.md
+Content-Hub-Vault-V2\Code-Brain\Requesting Code Review.md
+Content-Hub-Vault-V2\Code-Brain\Research Brief Generation.md
+Content-Hub-Vault-V2\Code-Brain\Research Service (Orchestration Layer).md
+Content-Hub-Vault-V2\Code-Brain\research-agent.md
+Content-Hub-Vault-V2\Code-Brain\Root Cause Investigation.md
+Content-Hub-Vault-V2\Code-Brain\Root Layout Component.md
+Content-Hub-Vault-V2\Code-Brain\Scheduler Jobs (APScheduler).md
+Content-Hub-Vault-V2\Code-Brain\Scraping Apify.md
+Content-Hub-Vault-V2\Code-Brain\Scripting Status.md
+Content-Hub-Vault-V2\Code-Brain\script_to_storyboard.md
+Content-Hub-Vault-V2\Code-Brain\Sentinel Value Design workflow_id = '__general__'.md
+Content-Hub-Vault-V2\Code-Brain\Server-Side Content Search (T2.2).md
+Content-Hub-Vault-V2\Code-Brain\Service role bypass for backend writes (MVP simplicity).md
+Content-Hub-Vault-V2\Code-Brain\Session Agentic Second Brain Birth.md
+Content-Hub-Vault-V2\Code-Brain\Session Day 1 E2E Pipeline Smoke Test.md
+Content-Hub-Vault-V2\Code-Brain\Session Day 2 MVP Backend (Platform Strategy, Learning Loops, Skills).md
+Content-Hub-Vault-V2\Code-Brain\Session Day 3 Code Review Audit.md
+Content-Hub-Vault-V2\Code-Brain\Session Day 3 Frontend Polish & E2E Verification.md
+Content-Hub-Vault-V2\Code-Brain\Seven Sweeps Copy Editing Framework.md
+Content-Hub-Vault-V2\Code-Brain\Short-form Video Content.md
+Content-Hub-Vault-V2\Code-Brain\Sidebar Component.md
+Content-Hub-Vault-V2\Code-Brain\Signup Page.md
+Content-Hub-Vault-V2\Code-Brain\Social Content Skill.md
+Content-Hub-Vault-V2\Code-Brain\Software Development Niche.md
+Content-Hub-Vault-V2\Code-Brain\Specification Coverage Self-Review.md
+Content-Hub-Vault-V2\Code-Brain\State File Persistence in Orchestrations.md
+Content-Hub-Vault-V2\Code-Brain\State Persistence Fix for Orchestration (Compaction Recovery).md
+Content-Hub-Vault-V2\Code-Brain\Storage Client (Supabase).md
+Content-Hub-Vault-V2\Code-Brain\Storyboard Enrichment with Timing & Transitions.md
+Content-Hub-Vault-V2\Code-Brain\Strategy Revision Loop.md
+Content-Hub-Vault-V2\Code-Brain\StrategyDocument Type.md
+Content-Hub-Vault-V2\Code-Brain\StrategyDocument.md
+Content-Hub-Vault-V2\Code-Brain\Subagent-Driven Development.md
+Content-Hub-Vault-V2\Code-Brain\Synthesize Content Page.md
+Content-Hub-Vault-V2\Code-Brain\Systematic Debugging.md
+Content-Hub-Vault-V2\Code-Brain\T1.1 Commit All Uncommitted Work.md
+Content-Hub-Vault-V2\Code-Brain\T1.2 Multi-User Auth Hardening (Supabase JWT).md
+Content-Hub-Vault-V2\Code-Brain\T2.1 Remotion Service Authentication.md
+Content-Hub-Vault-V2\Code-Brain\T2.2 Server-side library search (HIGH).md
+Content-Hub-Vault-V2\Code-Brain\T2.2 Server-Side Library Search (PostgreSQL ILIKE).md
+Content-Hub-Vault-V2\Code-Brain\T2.3 AB Testing Advisory Integration.md
+Content-Hub-Vault-V2\Code-Brain\T3.1 Active Style Markers (Transition Styles).md
+Content-Hub-Vault-V2\Code-Brain\T3.1 Active Style Markers.md
+Content-Hub-Vault-V2\Code-Brain\T3.2 General trending scrape (MEDIUM).md
+Content-Hub-Vault-V2\Code-Brain\T3.2 General Trending Scrape (Platform Discovery).md
+Content-Hub-Vault-V2\Code-Brain\Tailwind CSS Configuration.md
+Content-Hub-Vault-V2\Code-Brain\Tailwind CSS.md
+Content-Hub-Vault-V2\Code-Brain\Talking Head Content.md
+Content-Hub-Vault-V2\Code-Brain\Test Infrastructure Offline Wall (Mock Supabase & Gemini).md
+Content-Hub-Vault-V2\Code-Brain\Test-Driven Development (TDD).md
+Content-Hub-Vault-V2\Code-Brain\TikTok Platform.md
+Content-Hub-Vault-V2\Code-Brain\Topic Content.md
+Content-Hub-Vault-V2\Code-Brain\Transition Style Mapping TRANSITION_MAP.md
+Content-Hub-Vault-V2\Code-Brain\Transition Style Markers (T3.1).md
+Content-Hub-Vault-V2\Code-Brain\Trending Content Table.md
+Content-Hub-Vault-V2\Code-Brain\TrendingContent Type.md
+Content-Hub-Vault-V2\Code-Brain\TwitterX Platform.md
+Content-Hub-Vault-V2\Code-Brain\TypeScript Configuration.md
+Content-Hub-Vault-V2\Code-Brain\TypeScript Type Definitions.md
+Content-Hub-Vault-V2\Code-Brain\update_publication_memory.md
+Content-Hub-Vault-V2\Code-Brain\update_selection_memory.md
+Content-Hub-Vault-V2\Code-Brain\Using Git Worktrees.md
+Content-Hub-Vault-V2\Code-Brain\Verification Before Completion.md
+Content-Hub-Vault-V2\Code-Brain\Verification Framework verification-before-completion.md
+Content-Hub-Vault-V2\Code-Brain\Verification Gate Function.md
+Content-Hub-Vault-V2\Code-Brain\Video Downloader (yt-dlp wrapper).md
+Content-Hub-Vault-V2\Code-Brain\VoiceConfig.md
+Content-Hub-Vault-V2\Code-Brain\Workflow API Router.md
+Content-Hub-Vault-V2\Code-Brain\Workflow Detail Page.md
+Content-Hub-Vault-V2\Code-Brain\Workflow Pydantic Models.md
+Content-Hub-Vault-V2\Code-Brain\Workflow Service.md
+Content-Hub-Vault-V2\Code-Brain\Workflow Templates.md
+Content-Hub-Vault-V2\Code-Brain\Workflow Type.md
+Content-Hub-Vault-V2\Code-Brain\Workflows API.md
+Content-Hub-Vault-V2\Code-Brain\Workflows Scrape API.md
+Content-Hub-Vault-V2\Code-Brain\Workflows Table.md
+Content-Hub-Vault-V2\Code-Brain\Workflows Trending API.md
+Content-Hub-Vault-V2\Code-Brain\Writing Plans.md
+Content-Hub-Vault-V2\Code-Brain\YouTube Platform.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 0.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 1.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 10.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 11.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 12.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 13.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 14.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 15.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 16.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 17.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 18.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 19.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 2.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 20.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 21.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 22.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 23.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 24.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 25.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 26.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 27.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 28.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 29.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 3.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 30.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 31.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 32.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 33.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 34.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 35.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 36.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 37.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 38.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 39.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 4.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 40.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 41.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 42.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 43.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 44.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 45.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 46.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 5.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 6.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 7.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 8.md
+Content-Hub-Vault-V2\Code-Brain\_COMMUNITY_Community 9.md
+Content-Hub-Vault-V2\Exoskeleton\kallaway_masterclass.md
+Content-Hub-Vault-V2\Exoskeleton\niche_context.md
+Content-Hub-Vault-V2\Exoskeleton\trends.md
+Content-Hub-Vault-V2\frontend\next-env.d.ts.md
+Content-Hub-Vault-V2\frontend\next.config.mjs.md
+Content-Hub-Vault-V2\frontend\package-lock.json.md
+Content-Hub-Vault-V2\frontend\package.json.md
+Content-Hub-Vault-V2\frontend\postcss.config.mjs.md
+Content-Hub-Vault-V2\frontend\README.md
+Content-Hub-Vault-V2\frontend\tailwind.config.ts.md
+Content-Hub-Vault-V2\frontend\tsconfig.json.md
+Content-Hub-Vault-V2\frontend\app\globals.css.md
+Content-Hub-Vault-V2\frontend\app\layout.tsx.md
+Content-Hub-Vault-V2\frontend\app\page.tsx.md
+Content-Hub-Vault-V2\frontend\app\(auth)\login\page.tsx.md
+Content-Hub-Vault-V2\frontend\app\(auth)\signup\page.tsx.md
+Content-Hub-Vault-V2\frontend\app\brand\[workflowId]\page.tsx.md
+Content-Hub-Vault-V2\frontend\app\content\calendar\page.tsx.md
+Content-Hub-Vault-V2\frontend\app\content\library\page.tsx.md
+Content-Hub-Vault-V2\frontend\app\content\new\page.tsx.md
+Content-Hub-Vault-V2\frontend\app\content\synthesize\page.tsx.md
+Content-Hub-Vault-V2\frontend\app\content\[id]\page.tsx.md
+Content-Hub-Vault-V2\frontend\app\content\[id]\edit\page.tsx.md
+Content-Hub-Vault-V2\frontend\app\dashboard\layout.tsx.md
+Content-Hub-Vault-V2\frontend\app\dashboard\page.tsx.md
+Content-Hub-Vault-V2\frontend\app\workflows\new\page.tsx.md
+Content-Hub-Vault-V2\frontend\app\workflows\[id]\page.tsx.md
+Content-Hub-Vault-V2\frontend\components\Sidebar.tsx.md
+Content-Hub-Vault-V2\frontend\lib\api.ts.md
+Content-Hub-Vault-V2\frontend\lib\auth.ts.md
+Content-Hub-Vault-V2\frontend\lib\types.ts.md
+Content-Hub-Vault-V2\source-verification\observation\2026-05-13_nexu-io-open-design_observation.md
+Content-Hub-Vault-V2\supabase\migrations\001_initial_schema.sql.md
+Content-Hub-Vault-V2\supabase\migrations\002_multimodal_embeddings.sql.md
+Content-Hub-Vault-V2\supabase\migrations\003_evolution_columns.sql.md
+Content-Hub-Vault-V2\supabase\migrations\004_memory_rpc.sql.md
+docs\researcher-pipeline-comparison.html
+docs\superpowers\plans\2026-04-08-vulnerability-hardening.md
+free-claude-code\AGENTS.md
+free-claude-code\CLAUDE.md
+free-claude-code\PLAN.md
+free-claude-code\README.md
+free-claude-code\smoke\README.md
+graphify-out\graph.html
+graphify-out\GRAPH_REPORT.md
+graphs\backend\graph.html
+graphs\backend\GRAPH_REPORT.md
+graphs\Content-Hub-Vault\graph.html
+graphs\Content-Hub-Vault\GRAPH_REPORT.md
+graphs\frontend\graph.html
+graphs\frontend\GRAPH_REPORT.md
+graphs\remotion-service\graph.html
+graphs\remotion-service\GRAPH_REPORT.md
+graphs\scratch\graph.html
+graphs\scratch\GRAPH_REPORT.md
+graphs\tmp_marketingskills\graph.html
+graphs\tmp_marketingskills\GRAPH_REPORT.md
+graphs\tools\graph.html
+graphs\tools\GRAPH_REPORT.md
+models\tribev2\README.md
+notebooklm-py\AGENTS.md
+notebooklm-py\CHANGELOG.md
+notebooklm-py\CLAUDE.md
+notebooklm-py\CONTRIBUTING.md
+notebooklm-py\README.md
+notebooklm-py\SECURITY.md
+notebooklm-py\SKILL.md
+notebooklm-py\docs\cli-reference.md
+notebooklm-py\docs\configuration.md
+notebooklm-py\docs\development.md
+notebooklm-py\docs\python-api.md
+notebooklm-py\docs\releasing.md
+notebooklm-py\docs\rpc-development.md
+notebooklm-py\docs\rpc-reference.md
+notebooklm-py\docs\stability.md
+notebooklm-py\docs\troubleshooting.md
+orchestrate-workspace\iteration-1\benchmark.md
+orchestrate-workspace\iteration-1\eval-review.html
+orchestrate-workspace\iteration-1\eval-1-views-count\without_skill\outputs\plan.md
+orchestrate-workspace\iteration-1\eval-1-views-count\without_skill\outputs\transcript.md
+orchestrate-workspace\iteration-1\eval-1-views-count\with_skill\outputs\plan.md
+orchestrate-workspace\iteration-1\eval-1-views-count\with_skill\outputs\state_file_copy.md
+orchestrate-workspace\iteration-1\eval-1-views-count\with_skill\outputs\transcript.md
+orchestrate-workspace\iteration-1\eval-2-platform-schedule\without_skill\outputs\plan.md
+orchestrate-workspace\iteration-1\eval-2-platform-schedule\without_skill\outputs\transcript.md
+orchestrate-workspace\iteration-1\eval-2-platform-schedule\with_skill\outputs\plan.md
+orchestrate-workspace\iteration-1\eval-2-platform-schedule\with_skill\outputs\state_file_copy.md
+orchestrate-workspace\iteration-1\eval-2-platform-schedule\with_skill\outputs\transcript.md
+orchestrate-workspace\iteration-1\eval-3-approval-workflow\without_skill\outputs\plan.md
+orchestrate-workspace\iteration-1\eval-3-approval-workflow\without_skill\outputs\transcript.md
+orchestrate-workspace\iteration-1\eval-3-approval-workflow\with_skill\outputs\plan.md
+orchestrate-workspace\iteration-1\eval-3-approval-workflow\with_skill\outputs\state_file_copy.md
+orchestrate-workspace\iteration-1\eval-3-approval-workflow\with_skill\outputs\transcript.md
+orchestrate-workspace\iteration-2\benchmark.html
+orchestrate-workspace\iteration-2\benchmark.md
+orchestrate-workspace\iteration-2\eval-1-views-count\baseline\outputs\plan.md
+orchestrate-workspace\iteration-2\eval-1-views-count\baseline\outputs\transcript_summary.md
+orchestrate-workspace\iteration-2\eval-1-views-count\with_skill\outputs\plan.md
+orchestrate-workspace\iteration-2\eval-1-views-count\with_skill\outputs\transcript_summary.md
+orchestrate-workspace\iteration-2\eval-2-posting-time\baseline\outputs\plan.md
+orchestrate-workspace\iteration-2\eval-2-posting-time\baseline\outputs\transcript_summary.md
+orchestrate-workspace\iteration-2\eval-2-posting-time\with_skill\outputs\plan.md
+orchestrate-workspace\iteration-2\eval-2-posting-time\with_skill\outputs\transcript_summary.md
+orchestrate-workspace\iteration-2\eval-3-approval-workflow\baseline\outputs\plan.md
+orchestrate-workspace\iteration-2\eval-3-approval-workflow\baseline\outputs\transcript_summary.md
+orchestrate-workspace\iteration-2\eval-3-approval-workflow\with_skill\outputs\plan.md
+orchestrate-workspace\iteration-2\eval-3-approval-workflow\with_skill\outputs\transcript_summary.md
+output\2026-04-28\ideas.md
+prompts\cascade.md
+prompts\hook.md
+prompts\ideation.md
+prompts\outline.md
+prompts\researcher.md
+prompts\research_followups.md
+prompts\short_form.md
+prompts\title.md
+prompts\voice_cleanup.md
+prompts\yt_pipeline.md
+scratch\notebooklm_findings.md
+scratch\superpowers\AGENTS.md
+scratch\superpowers\CHANGELOG.md
+scratch\superpowers\CLAUDE.md
+scratch\superpowers\CODE_OF_CONDUCT.md
+scratch\superpowers\GEMINI.md
+scratch\superpowers\README.md
+scratch\superpowers\RELEASE-NOTES.md
+scratch\superpowers\agents\code-reviewer.md
+scratch\superpowers\commands\brainstorm.md
+scratch\superpowers\commands\execute-plan.md
+scratch\superpowers\commands\write-plan.md
+scratch\superpowers\docs\README.codex.md
+scratch\superpowers\docs\README.opencode.md
+scratch\superpowers\docs\testing.md
+scratch\superpowers\docs\plans\2025-11-22-opencode-support-design.md
+scratch\superpowers\docs\plans\2025-11-22-opencode-support-implementation.md
+scratch\superpowers\docs\plans\2025-11-28-skills-improvements-from-user-feedback.md
+scratch\superpowers\docs\plans\2026-01-17-visual-brainstorming.md
+scratch\superpowers\docs\superpowers\plans\2026-01-22-document-review-system.md
+scratch\superpowers\docs\superpowers\plans\2026-02-19-visual-brainstorming-refactor.md
+scratch\superpowers\docs\superpowers\plans\2026-03-11-zero-dep-brainstorm-server.md
+scratch\superpowers\docs\superpowers\plans\2026-03-23-codex-app-compatibility.md
+scratch\superpowers\docs\superpowers\specs\2026-01-22-document-review-system-design.md
+scratch\superpowers\docs\superpowers\specs\2026-02-19-visual-brainstorming-refactor-design.md
+scratch\superpowers\docs\superpowers\specs\2026-03-11-zero-dep-brainstorm-server-design.md
+scratch\superpowers\docs\superpowers\specs\2026-03-23-codex-app-compatibility-design.md
+scratch\superpowers\docs\windows\polyglot-hooks.md
+scratch\superpowers\skills\brainstorming\SKILL.md
+scratch\superpowers\skills\brainstorming\spec-document-reviewer-prompt.md
+scratch\superpowers\skills\brainstorming\visual-companion.md
+scratch\superpowers\skills\brainstorming\scripts\frame-template.html
+scratch\superpowers\skills\dispatching-parallel-agents\SKILL.md
+scratch\superpowers\skills\executing-plans\SKILL.md
+scratch\superpowers\skills\finishing-a-development-branch\SKILL.md
+scratch\superpowers\skills\receiving-code-review\SKILL.md
+scratch\superpowers\skills\requesting-code-review\code-reviewer.md
+scratch\superpowers\skills\requesting-code-review\SKILL.md
+scratch\superpowers\skills\subagent-driven-development\code-quality-reviewer-prompt.md
+scratch\superpowers\skills\subagent-driven-development\implementer-prompt.md
+scratch\superpowers\skills\subagent-driven-development\SKILL.md
+scratch\superpowers\skills\subagent-driven-development\spec-reviewer-prompt.md
+scratch\superpowers\skills\systematic-debugging\condition-based-waiting.md
+scratch\superpowers\skills\systematic-debugging\CREATION-LOG.md
+scratch\superpowers\skills\systematic-debugging\defense-in-depth.md
+scratch\superpowers\skills\systematic-debugging\root-cause-tracing.md
+scratch\superpowers\skills\systematic-debugging\SKILL.md
+scratch\superpowers\skills\systematic-debugging\test-academic.md
+scratch\superpowers\skills\systematic-debugging\test-pressure-1.md
+scratch\superpowers\skills\systematic-debugging\test-pressure-2.md
+scratch\superpowers\skills\systematic-debugging\test-pressure-3.md
+scratch\superpowers\skills\test-driven-development\SKILL.md
+scratch\superpowers\skills\test-driven-development\testing-anti-patterns.md
+scratch\superpowers\skills\using-git-worktrees\SKILL.md
+scratch\superpowers\skills\using-superpowers\SKILL.md
+scratch\superpowers\skills\using-superpowers\references\codex-tools.md
+scratch\superpowers\skills\using-superpowers\references\copilot-tools.md
+scratch\superpowers\skills\using-superpowers\references\gemini-tools.md
+scratch\superpowers\skills\verification-before-completion\SKILL.md
+scratch\superpowers\skills\writing-plans\plan-document-reviewer-prompt.md
+scratch\superpowers\skills\writing-plans\SKILL.md
+scratch\superpowers\skills\writing-skills\anthropic-best-practices.md
+scratch\superpowers\skills\writing-skills\persuasion-principles.md
+scratch\superpowers\skills\writing-skills\SKILL.md
+scratch\superpowers\skills\writing-skills\testing-skills-with-subagents.md
+scratch\superpowers\skills\writing-skills\examples\CLAUDE_MD_TESTING.md
+scratch\superpowers\tests\claude-code\README.md
+scratch\superpowers\tests\explicit-skill-requests\prompts\action-oriented.txt
+scratch\superpowers\tests\explicit-skill-requests\prompts\after-planning-flow.txt
+scratch\superpowers\tests\explicit-skill-requests\prompts\claude-suggested-it.txt
+scratch\superpowers\tests\explicit-skill-requests\prompts\i-know-what-sdd-means.txt
+scratch\superpowers\tests\explicit-skill-requests\prompts\mid-conversation-execute-plan.txt
+scratch\superpowers\tests\explicit-skill-requests\prompts\please-use-brainstorming.txt
+scratch\superpowers\tests\explicit-skill-requests\prompts\skip-formalities.txt
+scratch\superpowers\tests\explicit-skill-requests\prompts\subagent-driven-development-please.txt
+scratch\superpowers\tests\explicit-skill-requests\prompts\use-systematic-debugging.txt
+scratch\superpowers\tests\skill-triggering\prompts\dispatching-parallel-agents.txt
+scratch\superpowers\tests\skill-triggering\prompts\executing-plans.txt
+scratch\superpowers\tests\skill-triggering\prompts\requesting-code-review.txt
+scratch\superpowers\tests\skill-triggering\prompts\systematic-debugging.txt
+scratch\superpowers\tests\skill-triggering\prompts\test-driven-development.txt
+scratch\superpowers\tests\skill-triggering\prompts\writing-plans.txt
+scratch\superpowers\tests\subagent-driven-dev\go-fractals\design.md
+scratch\superpowers\tests\subagent-driven-dev\go-fractals\plan.md
+scratch\superpowers\tests\subagent-driven-dev\svelte-todo\design.md
+scratch\superpowers\tests\subagent-driven-dev\svelte-todo\plan.md
+tmp\voice_cleanup_test.md
+tmp\voice_cleanup_test_cleaned.md
+tmp_marketingskills\AGENTS.md
+tmp_marketingskills\CLAUDE.md
+tmp_marketingskills\CONTRIBUTING.md
+tmp_marketingskills\README.md
+tmp_marketingskills\VERSIONS.md
+tmp_marketingskills\skills\ab-test-setup\SKILL.md
+tmp_marketingskills\skills\ab-test-setup\references\sample-size-guide.md
+tmp_marketingskills\skills\ab-test-setup\references\test-templates.md
+tmp_marketingskills\skills\ad-creative\SKILL.md
+tmp_marketingskills\skills\ad-creative\references\generative-tools.md
+tmp_marketingskills\skills\ad-creative\references\platform-specs.md
+tmp_marketingskills\skills\ai-seo\SKILL.md
+tmp_marketingskills\skills\ai-seo\references\content-patterns.md
+tmp_marketingskills\skills\ai-seo\references\platform-ranking-factors.md
+tmp_marketingskills\skills\analytics-strategy\SKILL.md
+tmp_marketingskills\skills\analytics-tracking\SKILL.md
+tmp_marketingskills\skills\analytics-tracking\references\event-library.md
+tmp_marketingskills\skills\analytics-tracking\references\ga4-implementation.md
+tmp_marketingskills\skills\analytics-tracking\references\google-ads-implementation.md
+tmp_marketingskills\skills\analytics-tracking\references\gtm-implementation.md
+tmp_marketingskills\skills\churn-prevention\SKILL.md
+tmp_marketingskills\skills\churn-prevention\references\cancel-flow-patterns.md
+tmp_marketingskills\tools\integrations\mixpanel.md
+tmp_marketingskills\tools\integrations\nitrosend.md
+tmp_marketingskills\tools\integrations\onesignal.md
+tmp_marketingskills\tools\integrations\optimizely.md
+tmp_marketingskills\tools\integrations\outreach.md
+tmp_marketingskills\tools\integrations\paddle.md
+tmp_marketingskills\tools\integrations\partnerstack.md
+tmp_marketingskills\tools\integrations\pendo.md
+tmp_marketingskills\tools\integrations\plausible.md
+tmp_marketingskills\tools\integrations\posthog.md
+tmp_marketingskills\tools\integrations\postmark.md
+tmp_marketingskills\tools\integrations\rb2b.md
+tmp_marketingskills\tools\integrations\resend.md
+tmp_marketingskills\tools\integrations\rewardful.md
+tmp_marketingskills\tools\integrations\salesforce.md
+tmp_marketingskills\tools\integrations\sanity.md
+tmp_marketingskills\tools\integrations\savvycal.md
+tmp_marketingskills\tools\integrations\segment.md
+tmp_marketingskills\tools\integrations\semrush.md
+tmp_marketingskills\tools\integrations\sendgrid.md
+tmp_marketingskills\tools\integrations\shopify.md
+tmp_marketingskills\tools\integrations\similarweb.md
+tmp_marketingskills\tools\integrations\snov.md
+tmp_marketingskills\tools\integrations\sparktoro.md
+tmp_marketingskills\tools\integrations\strapi.md
+tmp_marketingskills\tools\integrations\stripe.md
+tmp_marketingskills\tools\integrations\supermetrics.md
+tmp_marketingskills\tools\integrations\tiktok-ads.md
+tmp_marketingskills\tools\integrations\tolt.md
+tmp_marketingskills\tools\integrations\trustpilot.md
+tmp_marketingskills\tools\integrations\typeform.md
+tmp_marketingskills\tools\integrations\webflow.md
+tmp_marketingskills\tools\integrations\wistia.md
+tmp_marketingskills\tools\integrations\wordpress.md
+tmp_marketingskills\tools\integrations\zapier.md
+tmp_marketingskills\tools\integrations\zoominfo.md
+Content-Hub-Vault-V2\10-Research\2026-05-06_ruflo\slides.pdf
+Content-Hub-Vault-V2\10-Research\2026-05-06_ruflo\slides_ruflo_focused.pdf
+archive\tmp\frames\frame_000s.png
+archive\tmp\frames\frame_004s.png
+archive\tmp\frames\frame_008s.png
+archive\tmp\frames\frame_012s.png
+archive\tmp\frames\frame_016s.png
+archive\tmp\frames\frame_020s.png
+archive\tmp\frames\frame_024s.png
+archive\tmp\frames\frame_028s.png
+archive\tmp\frames\frame_032s.png
+archive\tmp\frames\frame_036s.png
+archive\tmp\frames\frame_040s.png
+archive\tmp\frames\frame_044s.png
+archive\tmp\frames\frame_048s.png
+archive\tmp\frames\frame_052s.png
+archive\tmp\frames\frame_056s.png
+archive\tmp\frames\frame_060s.png
+archive\tmp\frames\frame_064s.png
+archive\tmp\frames\frame_068s.png
+archive\tmp\frames\frame_072s.png
+archive\tmp\frames\frame_073s.png
+Content-Hub-Vault-V2\10-Research\2026-05-06_ruflo\infographic.png
+Content-Hub-Vault-V2\10-Research\2026-05-06_ruflo\slides_images\slide_01.png
+Content-Hub-Vault-V2\10-Research\2026-05-06_ruflo\slides_images\slide_02.png
+Content-Hub-Vault-V2\10-Research\2026-05-06_ruflo\slides_images\slide_03.png
+Content-Hub-Vault-V2\10-Research\2026-05-06_ruflo\slides_images\slide_04.png
+Content-Hub-Vault-V2\10-Research\2026-05-06_ruflo\slides_images\slide_05.png
+Content-Hub-Vault-V2\10-Research\2026-05-06_ruflo\slides_images\slide_06.png
+Content-Hub-Vault-V2\10-Research\2026-05-06_ruflo\slides_images\slide_07.png
+Content-Hub-Vault-V2\10-Research\2026-05-06_ruflo\slides_images\slide_08.png
+Content-Hub-Vault-V2\10-Research\2026-05-06_ruflo\slides_images\slide_09.png
+Content-Hub-Vault-V2\10-Research\2026-05-06_ruflo\slides_images\slide_10.png
+Content-Hub-Vault-V2\10-Research\2026-05-06_ruflo\slides_images\slide_11.png
+Content-Hub-Vault-V2\10-Research\2026-05-06_ruflo\slides_images\slide_12.png
+Content-Hub-Vault-V2\10-Research\2026-05-06_ruflo\slides_images\slide_13.png
+Content-Hub-Vault-V2\10-Research\2026-05-06_ruflo\slides_images\slide_14.png
+Content-Hub-Vault-V2\10-Research\2026-05-07_openmythos\infographic.png
+free-claude-code\cc-model-picker.png
+free-claude-code\pic.png
+notebooklm-py\notebooklm-py.png

@@ -8,4 +8,4 @@ Mirrors `00-Management/Orchestrations/` — active orchestration state files for
 
 Empty until the first orchestrated work happens (likely Phase 3, when `/cascade` + `/short-form` + `/voice-cleanup` are built in parallel).
 
-References: [[Current_Sprint]] | [[CLAUDE]]
+References: [[Architecture_Building]] | [[CLAUDE]]

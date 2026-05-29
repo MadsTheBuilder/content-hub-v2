@@ -1,0 +1,44 @@
+{
+  "skill": "ideation",
+  "purpose": "Frozen test inputs for /prompt-lab autoresearch loop. Hold constant across iterations so score deltas reflect prompt quality, not input variance.",
+  "topics": [
+    {
+      "topic": "How Claude's extended thinking mode changes debugging workflows",
+      "prior_research": "Claude's extended thinking (introduced May 2024) enables reasoning traces visible to developers. Current coverage treats it as a cost/speed tradeoff, missing the real win: reducing the feedback loop between hypothesis and validation. Stack Overflow analysis shows 60% of debugging threads pivot on \"I didn't see the issue until I explained it step by step\" — extended thinking externalizes that step. Anthropic's docs cover the feature but not the workflow shift. Key gap: how to restructure prompt design when debugging becomes more transparent."
+    },
+    {
+      "topic": "The hidden costs of async/await in Rust — implementation pitfalls",
+      "prior_research": "Tokio and async Rust dominate production, but YouTube coverage focuses on syntax, not gotchas. GitHub issues in tokio/miri repos reveal three underdocumented pain points: (1) hidden allocations in Future trait objects, (2) executor starvation when mixing CPU-bound work, (3) panic behavior across task boundaries. The Rust book covers these lightly; Tokio tutorials skip them. Jon Gjengset's talks hint at these but don't systematize fixes. Gap: a video that shows real production breakage and the exact fixes used at scale."
+    },
+    {
+      "topic": "Why local-first databases are finally winning the adoption race",
+      "prior_research": "Replicache, SQLite-WASM, and CRDTs shifted local-first from research paper to production. VC funding to local-first startups hit $200M in 2024. Existing content (OneGraph, Ink & Switch essays) explains the philosophy but not the pragmatics: when to migrate, cost comparison, user experience differences. LinkedIn threads show SMB owners confused about \"do I really need cloud sync?\" Gap: a practical decision tree for when local-first wins, with real tradeoff numbers."
+    },
+    {
+      "topic": "Context switching as the actual bottleneck in knowledge work",
+      "prior_research": "Clifford Nass's multitasking research (Stanford) established cognitive load, but modern content misses the implementation angle. Mads's own vault notes productivity themes. Remote work has made async-first architectures mainstream, yet most teams still default to synchronous tools. Deep Work (Newport) popularized the idea; Cal Newport's recent work quantifies recovery time (15-25min per switch). Gap: how to audit your actual context-switch rate and redesign workflows around batching."
+    },
+    {
+      "topic": "Building AI agent orchestration without creating dependency spaghetti",
+      "prior_research": "Agent frameworks (LangChain, AutoGen, CrewAI) solve single-agent problems. Multi-agent coordination is largely ad-hoc. Karpathy's autoresearch hints at compositional agents. Papers on multi-agent systems (ICML 2023) exist but assume academic audience. Reddit/Discord threads show practitioners building orchestration layers in-house. Gap: architecture patterns for scaling from 2-agent toys to 5+ specalist agents without creating hard-to-debug message passing hell."
+    },
+    {
+      "topic": "Burnout prevention through permissionless productivity systems",
+      "prior_research": "Burnout research (HBR, CultureAmp) focuses on organizational interventions. Individual agency is under-covered. Mads's voice values \"freedom, optionality, avoiding burnout.\" Existing creator content mixes generic wellness with productivity — rarely connects the two. Deep focus on systems that give users control (not just time-boxing). Gap: how to design your own work OS so optionality becomes the default, not the exception."
+    },
+    {
+      "topic": "How to benchmark AI models on your actual use case (not synthetic evals)",
+      "prior_research": "Evals are hot (OpenAI, Anthropic publish heavily), but 90% are synthetic. MMLU, HHRL, others measure general capability. Production teams struggle to translate this to domain performance. Hugging Face leaderboards gloss over the gap between benchmark score and real app performance. Internal case studies exist (Anthropic's customer reports) but aren't systematized. Gap: step-by-step eval design that measures what your users actually care about."
+    },
+    {
+      "topic": "The economics of keeping your own LLM vs. renting Claude/GPT",
+      "prior_research": "LLama 3.1 and open-source scaling shifted the TCO calculation. Ollama made local inference accessible. Cloud costs well-documented. But breakeven analysis rarely factors in: latency SLA, fine-tuning costs, inference optimization time, opportunity cost of team bandwidth. Databricks/AI2 have published some numbers; most coverage is philosophical (\"open good, proprietary bad\"). Gap: actual spreadsheet-level decision model with real infrastructure costs baked in."
+    }
+  ],
+  "model_settings": {
+    "temperature": 0.7,
+    "max_tokens": 2000,
+    "seed": 42
+  },
+  "notes": "8 ideas spanning AI/tech, productivity, systems design, economics. Each prior_research snippet is realistic 150–300 words with inline citations, mirroring actual researcher.py output. Tests whether ideation can rank ideas well when given good upstream signal."
+}

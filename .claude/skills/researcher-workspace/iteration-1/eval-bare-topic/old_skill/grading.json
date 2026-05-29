@@ -1,0 +1,58 @@
+{
+  "expectations": [
+    {
+      "text": "Claude attempts to run `python -m skills.researcher --list` to show available repos",
+      "passed": true,
+      "evidence": "Transcript shows 'Command Attempted: python -m skills.researcher --list — Result: Command succeeded. Available repos (9 total)' with full numbered list."
+    },
+    {
+      "text": "Claude asks the user to select which repos to research before running",
+      "passed": true,
+      "evidence": "Response ends with 'Which repos would you like me to research for the AI agents niche?' — correctly stops for user input."
+    },
+    {
+      "text": "Claude identifies the niche as 'AI agents' from the command argument",
+      "passed": true,
+      "evidence": "Response opens 'Got it — I'll run isolated content gap research on AI agents' — niche correctly extracted."
+    },
+    {
+      "text": "Claude shows the correct command syntax including --niche and --repos flags",
+      "passed": false,
+      "evidence": "Response focuses on getting user repo selection and does not show the full command syntax at this stage. Only mentions '~5–8 minutes depending on mode'."
+    },
+    {
+      "text": "Claude does not run the research pipeline without user confirmation of repo selection",
+      "passed": true,
+      "evidence": "Response holds at repo selection step. No research is triggered. Says 'Just tell me the repo numbers or names, and I'll confirm before running the research'."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 1,
+    "total": 5,
+    "pass_rate": 0.80
+  },
+  "execution_metrics": {
+    "tool_calls": {"Read": 1, "Bash": 1, "Write": 2},
+    "total_tool_calls": 4,
+    "total_steps": 3,
+    "errors_encountered": 0,
+    "output_chars": 980,
+    "transcript_chars": 1250
+  },
+  "timing": {
+    "executor_duration_seconds": 22.7,
+    "grader_duration_seconds": 0.0,
+    "total_duration_seconds": 22.7
+  },
+  "claims": [],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Same pass rate as with_skill on this eval. Both handle the interaction flow correctly."
+  }
+}

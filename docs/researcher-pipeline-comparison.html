@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Researcher Pipeline — Before vs After</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #0d1117;
+    color: #e6edf3;
+    padding: 32px 24px 64px;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: #e6edf3;
+    margin-bottom: 6px;
+    letter-spacing: 0.02em;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: #8b949e;
+    margin-bottom: 40px;
+  }
+
+  .columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 32px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .col-header {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .before .col-header {
+    background: #3d1f1f;
+    color: #f87171;
+    border: 1px solid #5c2626;
+  }
+
+  .after .col-header {
+    background: #1a2e1a;
+    color: #4ade80;
+    border: 1px solid #264426;
+  }
+
+  .enhanced .col-header {
+    background: #1a1f3a;
+    color: #60a5fa;
+    border: 1px solid #1e3a8a;
+  }
+
+  .pipeline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .step {
+    width: 100%;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    line-height: 1.5;
+    border: 1px solid;
+    position: relative;
+  }
+
+  .step-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    opacity: 0.7;
+  }
+
+  .step-title {
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  .step-detail {
+    font-size: 12px;
+    color: #8b949e;
+    margin-top: 3px;
+  }
+
+  /* Step types */
+  .step.shared {
+    background: #161b22;
+    border-color: #30363d;
+    color: #e6edf3;
+  }
+
+  .step.bad {
+    background: #2d1515;
+    border-color: #5c2626;
+    color: #fca5a5;
+  }
+
+  .step.bad .step-label { color: #f87171; }
+  .step.bad .step-detail { color: #cd5c5c; }
+
+  .step.new {
+    background: #0f2318;
+    border-color: #264426;
+    color: #bbf7d0;
+  }
+
+  .step.new .step-label { color: #4ade80; }
+  .step.new .step-detail { color: #6ee7b7; }
+
+  .step.danger {
+    background: #2d1515;
+    border-color: #7f1d1d;
+    color: #fca5a5;
+  }
+
+  .step.success {
+    background: #0f2318;
+    border-color: #14532d;
+    color: #bbf7d0;
+  }
+
+  /* Arrow between steps */
+  .arrow {
+    width: 2px;
+    height: 18px;
+    background: #30363d;
+    margin: 0 auto;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .arrow::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: -4px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #30363d;
+  }
+
+  .arrow.red { background: #5c2626; }
+  .arrow.red::after { border-top-color: #5c2626; }
+
+  .arrow.green { background: #264426; }
+  .arrow.green::after { border-top-color: #264426; }
+
+  /* Result box at the bottom */
+  .result {
+    width: 100%;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 12px;
+    text-align: center;
+    font-weight: 600;
+    margin-top: 20px;
+    border: 1px solid;
+  }
+
+  .result.fail {
+    background: #2d1515;
+    border-color: #7f1d1d;
+    color: #f87171;
+  }
+
+  .result.pass {
+    background: #0f2318;
+    border-color: #14532d;
+    color: #4ade80;
+  }
+
+  .result .score {
+    font-size: 22px;
+    display: block;
+    margin-top: 4px;
+  }
+
+  /* Key insight box */
+  .insight {
+    max-width: 1100px;
+    margin: 40px auto 0;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    padding: 20px 24px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #8b949e;
+  }
+
+  .insight h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #e6edf3;
+    margin-bottom: 10px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .insight .highlight {
+    color: #e6edf3;
+    font-weight: 500;
+  }
+
+  .insight code {
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 11.5px;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: #79c0ff;
+  }
+
+  .divider-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin: 6px 0 2px;
+  }
+
+  .divider-label span {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #e6cc79;
+    white-space: nowrap;
+  }
+
+  .divider-label hr {
+    flex: 1;
+    border: none;
+    border-top: 1px dashed #e6cc7940;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  .tag.removed { background: #5c2626; color: #fca5a5; }
+  .tag.added { background: #264426; color: #86efac; }
+  .tag.changed { background: #1e3a5f; color: #93c5fd; }
+</style>
+</head>
+<body>
+
+<h1>Researcher Pipeline</h1>
+<p class="subtitle">skills/researcher.py — source quality architecture before &amp; after</p>
+
+<div class="columns">
+
+  <!-- BEFORE -->
+  <div class="before">
+    <div class="col-header">Before <span style="font-weight:400;opacity:0.6;text-transform:none;font-size:11px;">— keyword filter (reverted)</span></div>
+    <div class="pipeline">
+
+      <div class="step shared">
+        <div class="step-label">Step 1</div>
+        <div class="step-title">Create Notebook</div>
+        <div class="step-detail">One isolated notebook per repo</div>
+      </div>
+      <div class="arrow"></div>
+
+      <div class="step shared">
+        <div class="step-label">Step 2</div>
+        <div class="step-title">Add Primary Sources</div>
+        <div class="step-detail">Repo URL + raw README from GitHub</div>
+      </div>
+      <div class="arrow"></div>
+
+      <div class="step shared">
+        <div class="step-label">Step 3</div>
+        <div class="step-title">Web Research</div>
+        <div class="step-detail">NotebookLM searches using repo name string; poll until complete</div>
+      </div>
+      <div class="arrow"></div>
+
+      <div class="step bad">
+        <div class="step-label">Step 4 <span class="tag removed">removed</span></div>
+        <div class="step-title">Keyword Filter</div>
+        <div class="step-detail">
+          <code>_repo_keywords()</code> extracts slug tokens<br>
+          <code>_is_relevant_source()</code> keeps source only if URL/title contains a token<br><br>
+          <strong style="color:#f87171">Problem:</strong> Drops sources that don't name the repo explicitly — e.g. an Anthropic article about the Mythos model would be dropped for <code>kyegomez/OpenMythos</code>
+        </div>
+      </div>
+      <div class="arrow red"></div>
+
+      <div class="step shared">
+        <div class="step-label">Step 5</div>
+        <div class="step-title">Import Filtered Sources (≤10)</div>
+        <div class="step-detail">Imports whatever survived the keyword pass</div>
+      </div>
+      <div class="arrow"></div>
+
+      <div class="step shared">
+        <div class="step-label">Step 6</div>
+        <div class="step-title">Sleep 75s — Index</div>
+        <div class="step-detail">Wait for NotebookLM to index new sources</div>
+      </div>
+      <div class="arrow"></div>
+
+      <div class="step shared">
+        <div class="step-label">Step 7</div>
+        <div class="step-title">chat.configure() anchor</div>
+        <div class="step-detail">Sets repo-specific system prompt to prevent drift</div>
+      </div>
+      <div class="arrow"></div>
+
+      <div class="step danger">
+        <div class="step-label">Step 8</div>
+        <div class="step-title">8 Research Questions</div>
+        <div class="step-detail">
+          <strong style="color:#f87171">All sources</strong> in notebook — no <code>source_ids=</code> filter<br>
+          If wrong sources survived Step 4, LLM answers from them
+        </div>
+      </div>
+      <div class="arrow red"></div>
+
+      <div class="step danger">
+        <div class="step-label">Step 9</div>
+        <div class="step-title">3 Angle Battery Questions</div>
+        <div class="step-detail"><strong style="color:#f87171">All sources</strong> — same problem</div>
+      </div>
+      <div class="arrow red"></div>
+
+      <div class="step shared">
+        <div class="step-label">Step 10</div>
+        <div class="step-title">Generate Slides & Infographics</div>
+        <div class="step-detail">
+          <strong style="color:#f87171">Generic NotebookLM artifact</strong> generation<br>
+          No research context fed to the generator — default slide templates
+        </div>
+      </div>
+      <div class="arrow red"></div>
+
+      <div class="step shared">
+        <div class="step-label">Step 11</div>
+        <div class="step-title">Compile Brief</div>
+      </div>
+
+      <div class="result fail">
+        Smoke test result (8 repos)
+        <span class="score">2 / 8 useful</span>
+        mercury-agent &amp; terax-ai → 0/11 answers each<br>
+        Sources were wrong entities sharing the name
+      </div>
+
+    </div>
+  </div>
+
+  <!-- AFTER -->
+  <div class="after">
+    <div class="col-header">After <span style="font-weight:400;opacity:0.6;text-transform:none;font-size:11px;">— semantic verification agent</span></div>
+    <div class="pipeline">
+
+      <div class="step shared">
+        <div class="step-label">Step 1</div>
+        <div class="step-title">Create Notebook</div>
+        <div class="step-detail">One isolated notebook per repo</div>
+      </div>
+      <div class="arrow"></div>
+
+      <div class="step shared">
+        <div class="step-label">Step 2</div>
+        <div class="step-title">Add Primary Sources</div>
+        <div class="step-detail">Repo URL + raw README from GitHub — <strong style="color:#4ade80">always kept, never verified</strong></div>
+      </div>
+      <div class="arrow"></div>
+
+      <div class="step shared">
+        <div class="step-label">Step 3</div>
+        <div class="step-title">Web Research</div>
+        <div class="step-detail">NotebookLM searches using repo name string; poll until complete</div>
+      </div>
+      <div class="arrow"></div>
+
+      <div class="step new">
+        <div class="step-label">Step 4 <span class="tag added">new</span></div>
+        <div class="step-title">Import ALL Discovered Sources (≤10)</div>
+        <div class="step-detail">
+          No filter at this stage — capture <code>imported_source_ids</code> from return value for later partitioning
+        </div>
+      </div>
+      <div class="arrow green"></div>
+
+      <div class="step shared">
+        <div class="step-label">Step 5</div>
+        <div class="step-title">Sleep 75s — Index</div>
+        <div class="step-detail">Wait for NotebookLM to index all sources</div>
+      </div>
+      <div class="arrow"></div>
+
+      <div class="step new">
+        <div class="step-label">Step 6 <span class="tag added">new — verification agent</span></div>
+        <div class="step-title">Semantic Source Verification</div>
+        <div class="step-detail">
+          <strong style="color:#4ade80">1.</strong> <code>sources.list()</code> → partition <em>primary</em> vs <em>discovered</em><br>
+          <strong style="color:#4ade80">2.</strong> <code>sources.get_guide()</code> per discovered source → AI summary + keywords<br>
+          <strong style="color:#4ade80">3.</strong> One batched <strong>Claude Haiku</strong> call with all summaries → <code>keep_sources</code> tool-use<br>
+          <strong style="color:#4ade80">4.</strong> <code>verified_source_ids</code> = primary_ids + kept discovered IDs<br><br>
+          <strong style="color:#4ade80">Judges by content</strong>, not URL tokens — an Anthropic/Mythos article is kept because its summary describes AI world-building, which matches OpenMythos
+        </div>
+      </div>
+      <div class="arrow green"></div>
+
+      <div class="step shared">
+        <div class="step-label">Step 7</div>
+        <div class="step-title">chat.configure() anchor</div>
+        <div class="step-detail">Sets repo-specific system prompt to prevent drift</div>
+      </div>
+      <div class="arrow"></div>
+
+      <div class="step success">
+        <div class="step-label">Step 8 <span class="tag changed">changed</span></div>
+        <div class="step-title">8 Research Questions</div>
+        <div class="step-detail">
+          <code>chat.ask(..., source_ids=verified_source_ids)</code><br>
+          LLM reads <strong style="color:#4ade80">only verified sources</strong> — wrong entities excluded
+        </div>
+      </div>
+      <div class="arrow green"></div>
+
+      <div class="step success">
+        <div class="step-label">Step 9 <span class="tag changed">changed</span></div>
+        <div class="step-title">3 Angle Battery Questions</div>
+        <div class="step-detail"><code>source_ids=verified_source_ids</code> — same guard</div>
+      </div>
+      <div class="arrow green"></div>
+
+      <div class="step new">
+        <div class="step-label">Step 10 <span class="tag added">new</span></div>
+        <div class="step-title">Generate Slides & Infographics</div>
+        <div class="step-detail">
+          <strong style="color:#4ade80">Research-driven</strong> NotebookLM generation:<br>
+          • Pass research findings + key takeaways<br>
+          • Instruct: <em>"Create slides highlighting...</em><br>
+          &nbsp;&nbsp;these findings with this structure"<br>
+          • Artifacts reflect the research, not generic templates
+        </div>
+      </div>
+      <div class="arrow green"></div>
+
+      <div class="step shared">
+        <div class="step-label">Step 11</div>
+        <div class="step-title">Compile Brief</div>
+      </div>
+
+      <div class="result pass">
+        Target behaviour
+        <span class="score">semantic judgment</span>
+        mercury/terax sources identified as wrong entities<br>and dropped before any questions are asked
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ENHANCED -->
+  <div class="enhanced">
+    <div class="col-header">Enhanced <span style="font-weight:400;opacity:0.6;text-transform:none;font-size:11px;">— deep documentation crawler</span></div>
+    <div class="pipeline">
+
+      <div class="step shared">
+        <div class="step-label">Step 1</div>
+        <div class="step-title">Create Notebook</div>
+        <div class="step-detail">One isolated notebook per repo</div>
+      </div>
+      <div class="arrow"></div>
+
+      <div class="step new">
+        <div class="step-label">Step 2 <span class="tag added">enhanced</span></div>
+        <div class="step-title">Add Primary Sources</div>
+        <div class="step-detail">
+          <strong style="color:#60a5fa">README</strong> + discover & crawl docs:<br>
+          • <code>/docs</code>, <code>/documentation</code>, API references<br>
+          • <code>CONTRIBUTING.md</code>, architecture guides<br>
+          • Examples, tutorials, quickstart files<br>
+          <strong style="color:#60a5fa">Result:</strong> 5–15 sources covering <em>how &amp; when to use</em>
+        </div>
+      </div>
+      <div class="arrow green"></div>
+
+      <div class="step shared">
+        <div class="step-label">Step 3</div>
+        <div class="step-title">Web Research</div>
+        <div class="step-detail">NotebookLM searches using repo name string; poll until complete</div>
+      </div>
+      <div class="arrow"></div>
+
+      <div class="step new">
+        <div class="step-label">Step 4 <span class="tag added">new</span></div>
+        <div class="step-title">Import ALL Discovered Sources (≤10)</div>
+        <div class="step-detail">
+          No filter at this stage — capture <code>imported_source_ids</code> from return value for later partitioning
+        </div>
+      </div>
+      <div class="arrow green"></div>
+
+      <div class="step shared">
+        <div class="step-label">Step 5</div>
+        <div class="step-title">Sleep 75s — Index</div>
+        <div class="step-detail">Wait for NotebookLM to index all sources</div>
+      </div>
+      <div class="arrow"></div>
+
+      <div class="step new">
+        <div class="step-label">Step 6 <span class="tag added">verification + context</span></div>
+        <div class="step-title">Semantic Verification + Context Build</div>
+        <div class="step-detail">
+          <strong style="color:#60a5fa">1.</strong> Partition <em>primary</em> vs <em>discovered</em> sources<br>
+          <strong style="color:#60a5fa">2.</strong> For discovered: get summaries, verify semantic fit<br>
+          <strong style="color:#60a5fa">3.</strong> <strong style="color:#4ade80">✓ Keep</strong> sources that match repo context<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<strong style="color:#f87171">✗ Remove</strong> sources that don't fit<br>
+          <strong style="color:#60a5fa">4.</strong> From primary docs → extract:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;• Core use cases and when to use<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;• Key concepts and mental models<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;• Common patterns &amp; anti-patterns<br>
+          <strong style="color:#60a5fa">5.</strong> Build context instruction for research
+        </div>
+      </div>
+      <div class="arrow green"></div>
+
+      <div class="step shared">
+        <div class="step-label">Step 7</div>
+        <div class="step-title">chat.configure() anchor</div>
+        <div class="step-detail">Repo-specific system prompt + extracted context</div>
+      </div>
+      <div class="arrow"></div>
+
+      <div class="step success">
+        <div class="step-label">Step 8 <span class="tag changed">changed</span></div>
+        <div class="step-title">8 Research Questions</div>
+        <div class="step-detail">
+          <code>source_ids=verified_source_ids</code><br>
+          LLM has <strong style="color:#60a5fa">deep context</strong> on how/when to use
+        </div>
+      </div>
+      <div class="arrow green"></div>
+
+      <div class="step success">
+        <div class="step-label">Step 9 <span class="tag changed">changed</span></div>
+        <div class="step-title">3 Angle Battery Questions</div>
+        <div class="step-detail"><code>source_ids=verified_source_ids</code> + context-aware</div>
+      </div>
+      <div class="arrow green"></div>
+
+      <div class="step success">
+        <div class="step-label">Step 10 <span class="tag added">new — instructed generation</span></div>
+        <div class="step-title">Generate Slides & Infographics</div>
+        <div class="step-detail">
+          <strong style="color:#60a5fa">Context-driven NotebookLM generation:</strong><br>
+          <strong style="color:#60a5fa">1.</strong> Compile research findings + context from Steps 8–9<br>
+          <strong style="color:#60a5fa">2.</strong> Create detailed instruction prompt:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;• What to include (key findings, use cases, concepts)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;• How to present (structure, emphasis, visual flow)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;• Target audience &amp; tone<br>
+          <strong style="color:#60a5fa">3.</strong> Pass to NotebookLM artifact engine<br>
+          <strong style="color:#60a5fa">Result:</strong> Slide decks &amp; infographics that reflect actual research
+        </div>
+      </div>
+      <div class="arrow green"></div>
+
+      <div class="step shared">
+        <div class="step-label">Step 11</div>
+        <div class="step-title">Compile Brief</div>
+      </div>
+
+      <div class="result pass">
+        Full understanding
+        <span class="score">deep context + verification</span>
+        Sources are verified + LLM understands the full picture<br>of how &amp; when the repo is used
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Key insight -->
+<div class="insight">
+  <h3>Three approaches: keyword filtering → semantic verification → full documentation context</h3>
+
+  <p>
+    <span class="highlight">The progression:</span> Each approach addresses a limitation of the previous one.
+  </p>
+
+  <br>
+
+  <p>
+    <span class="highlight">Keyword filtering (BEFORE):</span> Failed because repo names are ambiguous. <code>mercury-agent</code> returns sources about chemistry,
+    not AI agents. The filter created a false binary: either you keep wrong sources or you strip relevant research material.
+  </p>
+
+  <br>
+
+  <p>
+    <span class="highlight">Semantic verification (AFTER):</span> Solves the ambiguity problem. <code>sources.get_guide()</code> returns content summaries,
+    and Claude Haiku makes a judgment call based on <em>actual meaning</em>, not URL tokens. This works reliably: mercury sources are dropped,
+    Anthropic/Mythos articles are kept because they describe relevant concepts.
+  </p>
+
+  <br>
+
+  <p>
+    <span class="highlight">Full documentation context (ENHANCED):</span> Adds a critical dimension: <strong style="color:#60a5fa">understanding how and when to use the repo</strong>.
+    Instead of just README + web search, the researcher crawls the repo's own documentation — <code>/docs</code>, guides, API references, tutorials.
+    These sources are added to the notebook alongside web research, providing LLM context on:
+  </p>
+  <ul style="margin-left:20px;margin-top:8px;color:#8b949e;">
+    <li>Core use cases and design philosophy</li>
+    <li>Key concepts and mental models</li>
+    <li>Common patterns and anti-patterns</li>
+    <li>When to use / when not to use</li>
+  </ul>
+
+  <p style="margin-top:12px;">
+    This context is <strong style="color:#60a5fa">extracted and embedded in the research prompt</strong>, so research questions are answered
+    not just with factual accuracy, but with <em>semantic depth</em>. The brief becomes more useful because the LLM knows the repo's
+    purpose and constraints before answering.
+  </p>
+</div>
+
+</body>
+</html>

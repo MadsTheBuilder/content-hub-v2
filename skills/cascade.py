@@ -1,6 +1,6 @@
 """Cascade — V2 Multi-Platform Content Generation from YouTube."""
 
-import asyncio, argparse, logging, sys, re, tempfile
+import asyncio, argparse, logging, sys, re
 from datetime import date
 from pathlib import Path
 
@@ -11,70 +11,27 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
 from skills.utils.ai import generate
+from skills.utils.transcript import extract_transcript
+from skills.brief_loader import load_brief
+from skills.brief_args import add_brief_args
 
 logger = logging.getLogger(__name__)
 VAULT_DIR = PROJECT_ROOT / "Content-Hub-Vault-V2" / "08-Distribution"
-
-
-def extract_transcript(youtube_url: str) -> tuple[str, str]:
-    """Extract transcript and title from YouTube via yt_dlp Python API."""
-    import yt_dlp
-
-    with tempfile.TemporaryDirectory() as tmpdir:
-        tmppath = Path(tmpdir)
-        opts = {
-            "writeautomaticsub": True,
-            "subtitleslangs": ["en"],
-            "subtitlesformat": "vtt",
-            "skip_download": True,
-            "outtmpl": str(tmppath / "%(title)s"),
-            "quiet": True,
-            "no_warnings": True,
-        }
-        title = "Untitled"
-        try:
-            with yt_dlp.YoutubeDL(opts) as ydl:
-                info = ydl.extract_info(youtube_url, download=True)
-                title = info.get("title", "Untitled") if info else "Untitled"
-        except Exception as e:
-            logger.error("yt_dlp failed: %s", e)
-            return "", title
-
-        vtt_files = list(tmppath.glob("*.vtt"))
-        if not vtt_files:
-            return "", title
-
-        raw = vtt_files[0].read_text(encoding="utf-8", errors="ignore")
-        lines = []
-        for line in raw.split("\n"):
-            line = line.strip()
-            if line and not line.startswith("WEBVTT") and "-->" not in line and not re.match(r"^\d+$", line):
-                line = re.sub(r"<[^>]+>", "", line).strip()
-                if line:
-                    lines.append(line)
-
-        deduped = []
-        prev = ""
-        for line in lines:
-            if line != prev:
-                deduped.append(line)
-                prev = line
-        return " ".join(deduped), title
 
 
 def load_prompts() -> tuple[str, str, str]:
     """Load and split prompts/cascade.md into three templates."""
     content = (PROJECT_ROOT / "prompts" / "cascade.md").read_text()
     blog_start = content.find("## BLOG POST PROMPT")
-    twitter_start = content.find("## TWITTER THREAD PROMPT")
+    instagram_start = content.find("## INSTAGRAM PROMPT")
     linkedin_start = content.find("## LINKEDIN PROMPT")
-    if blog_start == -1 or twitter_start == -1 or linkedin_start == -1:
+    if blog_start == -1 or instagram_start == -1 or linkedin_start == -1:
         logger.error("Could not find section headers in prompts/cascade.md")
         sys.exit(1)
-    blog = content[blog_start + len("## BLOG POST PROMPT"):twitter_start].strip()
-    twitter = content[twitter_start + len("## TWITTER THREAD PROMPT"):linkedin_start].strip()
+    blog = content[blog_start + len("## BLOG POST PROMPT"):instagram_start].strip()
+    instagram = content[instagram_start + len("## INSTAGRAM PROMPT"):linkedin_start].strip()
     linkedin = content[linkedin_start + len("## LINKEDIN PROMPT"):].strip()
-    return blog, twitter, linkedin
+    return blog, instagram, linkedin
 
 
 def make_output_dir(title: str) -> Path:
@@ -87,37 +44,69 @@ def make_output_dir(title: str) -> Path:
 
 
 async def main():
-    parser = argparse.ArgumentParser(description="Generate distribution content from YouTube")
-    parser.add_argument("youtube_url", help="YouTube video URL")
-    parser.add_argument("--title", default="", help="Override video title")
+    parser = argparse.ArgumentParser(description="Generate distribution content from research+outline or YouTube")
+    parser.add_argument("youtube_url", nargs="?", help="YouTube video URL (optional if --research-file provided)")
+    parser.add_argument("--title", default="", help="Override content title")
+    parser.add_argument("--research-file", help="Path to research markdown file (relative to project root or absolute)")
+    parser.add_argument("--outline-file", help="Path to outline markdown file (relative to project root or absolute)")
+    add_brief_args(parser)
     args = parser.parse_args()
+    brief = load_brief()
 
-    print(f"📹 Extracting transcript from {args.youtube_url}...")
-    transcript, extracted_title = extract_transcript(args.youtube_url)
-    if not transcript:
-        print("❌ Failed to extract transcript")
+    raw_url = args.youtube_url  # None when omitted — used for routing only
+
+    if args.research_file or args.outline_file:
+        parts = []
+        title = args.title
+        if args.research_file:
+            rp = Path(args.research_file)
+            if not rp.is_absolute():
+                rp = PROJECT_ROOT / rp
+            parts.append(f"## RESEARCH NOTES\n\n{rp.read_text(encoding='utf-8')}")
+        if args.outline_file:
+            op = Path(args.outline_file)
+            if not op.is_absolute():
+                op = PROJECT_ROOT / op
+            outline_text = op.read_text(encoding="utf-8")
+            parts.append(f"## VIDEO OUTLINE\n\n{outline_text}")
+            if not title:
+                m = re.search(r"^topic:\s*(.+)$", outline_text, re.MULTILINE)
+                if m:
+                    title = m.group(1).strip()
+        title = title or "Content"
+        transcript = "\n\n".join(parts)
+        youtube_url = raw_url or "[VIDEO_LINK]"
+        print(f"📄 Loaded research+outline ({len(transcript)} chars) for '{title}'")
+    elif raw_url:
+        print(f"📹 Extracting transcript from {raw_url}...")
+        transcript, extracted_title = extract_transcript(raw_url)
+        if not transcript:
+            print("❌ Failed to extract transcript")
+            sys.exit(1)
+        title = args.title or extracted_title
+        youtube_url = raw_url
+        print(f"✅ Extracted {len(transcript)} characters from '{title}'")
+    else:
+        print("❌ Provide either a YouTube URL or --research-file / --outline-file")
         sys.exit(1)
 
-    title = args.title or extracted_title
-    print(f"✅ Extracted {len(transcript)} characters from '{title}'")
-
-    blog_tpl, twitter_tpl, linkedin_tpl = load_prompts()
-    transcript_trunc = transcript[:4000]
+    blog_tpl, instagram_tpl, linkedin_tpl = load_prompts()
+    transcript_trunc = transcript[:6000]
     today = date.today().isoformat()
 
     print("\n" + "=" * 60)
-    blog_result = await generate(blog_tpl.format(title=title, transcript=transcript_trunc, youtube_url=args.youtube_url))
-    print("Generating Twitter thread...")
-    twitter_result = await generate(twitter_tpl.format(title=title, transcript=transcript_trunc))
+    blog_result = await generate(blog_tpl.format(title=title, transcript=transcript_trunc, youtube_url=youtube_url))
+    print("Generating Instagram carousel...")
+    instagram_result = await generate(instagram_tpl.format(title=title, transcript=transcript_trunc, youtube_url=youtube_url))
     print("Generating LinkedIn post...")
-    linkedin_result = await generate(linkedin_tpl.format(title=title, transcript=transcript_trunc, youtube_url=args.youtube_url))
+    linkedin_result = await generate(linkedin_tpl.format(title=title, transcript=transcript_trunc, youtube_url=youtube_url))
     print("=" * 60)
 
     blog_content = blog_result["text"] if blog_result["success"] else ""
-    twitter_content = twitter_result["text"] if twitter_result["success"] else ""
+    instagram_content = instagram_result["text"] if instagram_result["success"] else ""
     linkedin_content = linkedin_result["text"] if linkedin_result["success"] else ""
 
-    if not all([blog_content, twitter_content, linkedin_content]):
+    if not all([blog_content, instagram_content, linkedin_content]):
         print("❌ One or more generations failed")
         sys.exit(1)
 
@@ -126,43 +115,43 @@ async def main():
     (output_dir / "blog_post.md").write_text(f"""---
 title: "{title}"
 date: {today}
-youtube_url: {args.youtube_url}
+youtube_url: "{youtube_url}"
 tags: [ai-tools, build-in-public]
 ---
 
 {blog_content}
 """, encoding="utf-8")
 
-    (output_dir / "twitter_thread.md").write_text(f"# Twitter Thread\n\n{twitter_content}\n", encoding="utf-8")
+    (output_dir / "instagram_post.md").write_text(f"# Instagram Carousel\n\n{instagram_content}\n", encoding="utf-8")
     (output_dir / "linkedin_post.md").write_text(f"# LinkedIn Post\n\n{linkedin_content}\n", encoding="utf-8")
     (output_dir / "README.md").write_text(f"""# Distribution — {title}
 
 **Date:** {today}
-**Video:** {args.youtube_url}
+**Video:** {youtube_url}
 
 ## Files
 - `blog_post.md` — ready to publish
-- `twitter_thread.md` — 7-10 tweet thread
+- `instagram_post.md` — carousel slides (5-7 slides)
 - `linkedin_post.md` — single post
 
 ## Checklist
 - [ ] Review blog_post.md → publish
-- [ ] Review twitter_thread.md → replace [VIDEO_LINK] → post
+- [ ] Review instagram_post.md → replace [VIDEO_LINK] → post as carousel
 - [ ] Review linkedin_post.md → replace [VIDEO_LINK] → post
 """, encoding="utf-8")
 
-    twitter_hook = twitter_content[:280]
+    instagram_hook = instagram_content[:280]
     print(f"""
 ✅ Distribution package written to:
    {output_dir}
 
 📝 blog_post.md
-🐦 twitter_thread.md
+📸 instagram_post.md
 💼 linkedin_post.md
 📋 README.md
 
-Preview — Twitter hook:
-{twitter_hook}
+Preview — Instagram hook:
+{instagram_hook}
 """)
 
 

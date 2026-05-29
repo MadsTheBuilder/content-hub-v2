@@ -1,0 +1,17 @@
+{
+  "tool_calls": {
+    "Read": 2,
+    "Glob": 2,
+    "Grep": 1,
+    "Bash": 0
+  },
+  "total_tool_calls": 5,
+  "total_steps": 6,
+  "files_created": [
+    "transcript.md",
+    "metrics.json"
+  ],
+  "errors_encountered": 0,
+  "output_chars": 5847,
+  "transcript_chars": 7236
+}
