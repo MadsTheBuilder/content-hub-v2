@@ -8,6 +8,7 @@ export class ConflictError extends Error {
 }
 
 const STAGE_ENDPOINTS = {
+  trends: "/api/pipeline/trends",
   research: "/api/pipeline/researcher",
   ideation: "/api/pipeline/ideation",
   hooks: "/api/pipeline/hook",
@@ -34,10 +35,10 @@ export async function runStage(stage, body) {
   return res.json(); // { job_id }
 }
 
-export async function getRecent(folder, limit = 10) {
-  const res = await fetch(
-    `/api/vault/recent?folder=${encodeURIComponent(folder)}&limit=${limit}`
-  );
+export async function getRecent(folder, limit = 10, subfoldersOnly = false) {
+  let url = `/api/vault/recent?folder=${encodeURIComponent(folder)}&limit=${limit}`;
+  if (subfoldersOnly) url += "&subfolders_only=true";
+  const res = await fetch(url);
   if (!res.ok) return [];
   return res.json(); // [{ name, path, modified }]
 }
@@ -69,6 +70,12 @@ export async function runBrainAnalysis(content) {
     throw new Error(`Brain analyze failed (${res.status}): ${text}`);
   }
   return res.json(); // { job_id }
+}
+
+export async function getJobStatus(jobId) {
+  const res = await fetch(`/api/jobs/${encodeURIComponent(jobId)}`);
+  if (!res.ok) throw new Error(`Job not found: ${res.status}`);
+  return res.json(); // { job_id, stage, status, result, error, ... }
 }
 
 export async function getHealth() {

@@ -7,9 +7,20 @@ description: "Active sprint tasks for Content Hub V2 — tracks completed, in-pr
 
 # Current Sprint
 
-## Active — Webapp Sprint (2026-05-22)
+## In Progress — Full Pipeline Page (2026-05-31)
 
-- [~] **Design-doc web app wiring** — See [[Webapp_sprint]]
+- [x] **Full pipeline state loss + ideation naming (2026-05-31)** — See [[2026-05-31_Full_Pipeline_State_Loss_Ideation_Name_Fix]]
+  - Bug 1 fixed: `App.jsx` switched from conditional render to `display:none` wrapper — component stays mounted across tab switches, all `useState` preserved.
+  - Bug 3 fixed: `approveResearch` now sends `research.niche.trim() || seed.trim()` instead of `seed` — ideation gets a real topic even when the top-level seed input was left blank.
+  - Bug 2 (research file naming) — **pending user clarification**: current format `2026-05-31_design_brief.md` is `{date}_{niche}_brief.md`; user expects repo name included but exact format TBD.
+
+- [x] **Research config gate + options** — picking a trend now opens a Research config form (instead of auto-running) on `FullPipelinePage.jsx`: niche (editable, prefilled, **required**), `fast/deep` mode toggle, target-length, and a collapsed Advanced section (tone/audience/banned, all optional → `brief.md` defaults when blank). Fixes the empty-niche crash (`--niche is required`) by disabling **Run Research** until a niche is entered. Backend: `ResearcherBody` + `run_researcher` forward `--target-length/--tone/--audience/--banned-phrase`; no `researcher.py` change (flags already exist via [[brief_args]]). Build + lint clean. **Backend restart (`--reload`) needed to load new body fields.** See [[2026-05-31_Research_Options_Config_Gate]].
+
+- [x] **Full Pipeline auto-run page** — new `Design-doc/web/src/FullPipelinePage.jsx` chains all 8 stages (trends → research → ideation → hook → outline → title → cascade → short-form) with a human-in-the-loop gate at each step; selecting a result auto-runs the next stage. Reuses [[useJobStream]], `runStage`/`readVaultFile` (`api.js`), `MarkdownViewer`, `OutputBrowser`, `VaultPicker`. Wired into `App.jsx` (new `full-pipeline` view + accent + Tweaks jump) and `Sidebar.jsx` (Rocket nav button). Build + lint clean (196 modules, 0 errors). **Live end-to-end run still pending** (needs backend + dev server; real skill spend). See [[2026-05-31_Full_Pipeline_Page]].
+
+## Completed — Webapp Sprint (2026-05-22 → 2026-05-29)
+
+- [x] **Design-doc web app wiring** — See [[Webapp_sprint]]
   - Mini-phase breakdown of [[Design_Doc_Web_App_Plan]] across 7 phases (Scaffold → Backend → Frontend port → Wire 5 stages → Distribution multi-tab → Dashboard/Brain/polish → Launch + E2E).
   - 14–19h total estimate; supersedes [[Content_Hub_Web_Design_Spec]] and [[Wrapper_Plan]] (Streamlit).
   - **Plan reconciled with prototype updates (2026-05-22)** — see [[Design_Doc_Web_App_Plan]] § Runtime note + § Prototype updates. Changes: SourcesPanel added to component list + Frontend Port + Phase 1 copy list; canvas instruction corrected (particles.js creates its own canvas dynamically — no `<canvas>` in `web/index.html`); React 19.2.6 (Vite) documented as the resolved version vs prototype's CDN React 18.
@@ -29,9 +40,10 @@ description: "Active sprint tasks for Content Hub V2 — tracks completed, in-pr
     - `particles.js` — removed unused `t` accumulator; `catch (e)` → `catch {}` (optional binding)
     - Build: ✅ clean (`vite build`) · Lint: ✅ clean (`eslint .`)
   - **Phase 4 (Wire 5 stages) — complete**: `api.js`, `useJobStream.js`, `VaultPicker.jsx`, `MarkdownViewer.jsx`, `OutputBrowser.jsx` created; `StageWorkspace.jsx` + `SourcesPanel.jsx` rewritten; `App.jsx` cleaned. Build + lint clean (187 modules). Live verification run 2026-05-24: ideation + hooks produce real vault files; SSE streams correctly; history drawer returns real artifacts. Research SSE works but researcher skill requires non-empty `--repos` — with the playbook payload (`repos: []`) no file is written (skill CLI gap, not frontend defect). Agent memory notes 01–08 absent (execution-record gap). See [[2026-05-24_phase4-wire-stages]].
-  - **Phase 5 (Distribution multi-tab) — complete**: `DistributionWorkspace.jsx` + 5 tab files (`OutlineTab`, `TitleTab`, `CascadeTab`, `ShortFormTab`, `VoiceCleanupTab`) created; `Sidebar.jsx` consolidated (title/outline removed); `App.jsx` routes to `DistributionWorkspace`; `Dashboard.jsx` Outline card links to `#distribution/outline`. Hash routing without router library. Build + lint clean (193 modules). See [[2026-05-24_Webapp_Phase5_Distribution]].
+  - **Phase 5 (Distribution multi-tab) — complete + verified (2026-05-29)**: `DistributionWorkspace.jsx` + 5 tab files (`OutlineTab`, `TitleTab`, `CascadeTab`, `ShortFormTab`, `VoiceCleanupTab`) created; `Sidebar.jsx` consolidated (title/outline removed); `App.jsx` routes to `DistributionWorkspace`; `Dashboard.jsx` Outline card links to `#distribution/outline`. Hash routing without router library. Build + lint clean (193 modules). Step 5.8 full-chain verification passed 2026-05-29: all 5 Distribution endpoints confirmed, all vault artifacts dated today, 409 constraint confirmed. See [[2026-05-24_Webapp_Phase5_Distribution]] + [[2026-05-29_Phase5_FullChain_Verification]].
   - **Phase 6 (Dashboard + Brain + polish) — complete**: `usePipelineSnapshot` hook + `jobActivity.js` created; Dashboard live recents; Sidebar dynamic status dots + health badge; Brain real analysis via `runBrainAnalysis` + `useJobStream`; `ConflictError` + 409 inline notices wired in StageWorkspace + Brain + all 5 Distribution tabs; TweaksPanel already localStorage-clean. Build + lint clean (195 modules, 0 problems). See [[2026-05-24_phase6-dashboard-brain-polish]].
-  - **Next**: Phase 7 — Launch convenience (`start.ps1`) + full-chain E2E acceptance run.
+  - **Phase 7 (Launch + E2E) — complete (2026-05-29)**: `start.ps1` created. 9/9 stages produced real vault output in browser-facing acceptance run. 3 pipeline bugs fixed (hook.py argparse, StageWorkspace.jsx URL flush, vault.py subdirectory listing). Brain: all 5 fields confirmed. 409: human-readable notice confirmed. 14 post-sprint polish items deferred. See [[2026-05-29_Design_Doc_Web_App_Wired]].
+  - **Phase 5/6 repair pass — complete (2026-05-29)**: 4 runtime bugs fixed per [[2026-05-29_Phase5_Phase6_Bug_Fix_Plan]]. Brain reads `result.data` correctly; snapshot refreshes on focus + job settle; Distribution status rolls up across all 4 output folders; hardcoded Dashboard stats removed; static SourcesPanel demo data (~270 lines) deleted. Build + lint clean. Browser-facing acceptance (Phase 7 re-run) still needed. See [[2026-05-29_Phase5_Phase6_Bug_Fixes_Applied]].
 
 - [x] **Design-doc theme rewrite + system graph (2026-05-27)** — See [[2026-05-27_Design_Doc_Theme_And_Graph]]
   - `Design-doc/systems-deck.html` fully reskinned to V2 design system (Inter + JetBrains Mono, `#0D0F12` palette, per-slide `--page-accent` ambient gradients via `data-accent` + JS)
@@ -227,6 +239,24 @@ description: "Active sprint tasks for Content Hub V2 — tracks completed, in-pr
   - NIM error logging fixed in `skills/utils/ai.py` (HTTP status + 500-char body preview)
   - Verified by 4-agent parallel loop (Validator + Smoke Tester + Verifier), 2 iterations, ALL CLEAR
   - **Next: E2E pipeline run in next session** (burns NLM/NIM credits — user's instruction)
+
+## Completed — Trends UI Fix + 404 (2026-05-31)
+
+- [x] **Trends stage UI redesign + 404 resolved** — See [[2026-05-31_Trends_UI_Fix_404_Resolved]]
+  - Removed `isTrends` hardcoded markdown-viewer branch from `InputZone`; Trends now uses the standard form (textarea, file drop, URL field, Run button) matching the approved design.
+  - Added URL input support for Trends stage; updated `handleRun` body builder to send `{ space: prompt }`.
+  - Backend: added `TrendsBody` model to `main.py`; `pipeline.py` `run_trends` now accepts and forwards `--space` arg.
+  - 404 root cause: server running old `main.py` without `--reload`. Fix: restart with `.venv/Scripts/python.exe -m uvicorn main:app --app-dir Design-doc/server --port 8765 --reload` (forward slashes for Git Bash).
+  - **Open**: `scripts/github_trending.py` ignores `--space` for now — future work to add argparse and niche filtering.
+
+## Completed — Trends Job Fix (2026-05-31)
+
+- [x] **Trends "Job failed" root cause fixed** — See [[2026-05-31_Trends_Job_Fixed_Subprocess]]
+  - Root cause: `asyncio.create_subprocess_exec` raises `NotImplementedError` on Windows with uvicorn's `SelectorEventLoop`.
+  - Fix: replaced with `loop.run_in_executor(None, lambda: subprocess.run(...))` in [[pipeline.py]]. Tradeoff: SSE output arrives batch-at-end instead of line-by-line.
+  - Also wired `--space` argparse in [[github_trending.py]] (was forwarded by pipeline but silently ignored).
+  - Verified: job ran 3m 13s, status `completed`, vault file written.
+  - **Open**: Phase 7 E2E acceptance re-run (all 9 stages).
 
 ## Next Up
 

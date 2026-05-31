@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import Icon from '../Icons.jsx';
+import VaultPicker from '../VaultPicker.jsx';
 import OutputBrowser from '../OutputBrowser.jsx';
+import { SourcesPanel, StackedPanel } from '../SourcesPanel.jsx';
 import { runStage, ConflictError } from '../api.js';
 import { announceStart, announceDone, announceFail } from '../jobActivity.js';
 import useJobStream from '../hooks/useJobStream.js';
 
 export default function TitleTab() {
   const [concept, setConcept] = useState('');
+  const [outlineFile, setOutlineFile] = useState(null);
   const [jobId, setJobId] = useState(null);
   const [runState, setRunState] = useState('idle');
   const [jobResult, setJobResult] = useState(null);
@@ -29,15 +32,17 @@ export default function TitleTab() {
   }, [jobStream.status, jobStream.result, jobStream.error]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
+  const canRun = Boolean(concept.trim() || outlineFile);
+
   const handleRun = async () => {
-    if (!concept.trim()) return;
+    if (!canRun) return;
     setRunState('loading');
     setJobError(null);
     setJobResult(null);
     setConflictNotice(false);
     announceStart('distribution');
     try {
-      const { job_id } = await runStage('title', { concept: concept.trim() });
+      const { job_id } = await runStage('title', { concept: concept.trim(), outline_file: outlineFile || '' });
       setJobId(job_id);
     } catch (e) {
       if (e instanceof ConflictError) {
@@ -69,6 +74,16 @@ export default function TitleTab() {
           </div>
         </div>
 
+        <div>
+          <label className="field-label">Outline file (optional)</label>
+          <VaultPicker
+            folder="06-Outlines"
+            value={outlineFile}
+            onChange={setOutlineFile}
+            placeholder="Select outline file..."
+          />
+        </div>
+
         {conflictNotice && (
           <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>A job is already running — wait for it to finish.</p>
         )}
@@ -79,7 +94,7 @@ export default function TitleTab() {
         <button
           className={'run-btn' + (runState === 'loading' ? ' loading' : runState === 'done' ? ' done' : '')}
           onClick={handleRun}
-          disabled={runState === 'loading' || !concept.trim()}
+          disabled={runState === 'loading' || !canRun}
         >
           {runState === 'loading' ? (
             <><span className="spinner-icon" style={{ display: 'grid', placeItems: 'center', animation: 'spin 0.8s linear infinite' }}><Icon.Loader size={14} /></span>Running…</>
@@ -91,7 +106,9 @@ export default function TitleTab() {
         </button>
       </section>
 
-      <section className="output-zone">
+      <StackedPanel
+        back={<SourcesPanel stageId="title" />}
+        front={<section className="output-zone">
         {runState === 'idle' && !jobResult && (
           <div className="output-empty">
             <div className="output-empty-icon"><Icon.Type size={26} /></div>
@@ -129,7 +146,8 @@ export default function TitleTab() {
             <OutputBrowser result={jobResult} />
           </>
         )}
-      </section>
+      </section>}
+      />
     </div>
   );
 }

@@ -14,6 +14,7 @@ used only when parsing fails. No skill files are modified (§3 Surgical Changes)
 import asyncio
 import os
 import re
+import subprocess
 import sys
 from datetime import date
 from pathlib import Path
@@ -125,6 +126,11 @@ def resolve_voice_cleanup(stdout: str, file_path: str, inplace: bool) -> JobResu
     return JobResult(result_type="file", primary_path=path, outputs=[path])
 
 
+def resolve_trends(stdout: str) -> JobResult:
+    path = str(VAULT_ROOT / "04-Trends" / "github_trending.md")
+    return JobResult(result_type="file", primary_path=path, outputs=[path])
+
+
 # ---------------------------------------------------------------------------
 # Job launcher
 # ---------------------------------------------------------------------------
@@ -135,37 +141,35 @@ async def launch_job(stage: str, args: list[str], resolver: Callable[[str], JobR
 
     async def _run() -> None:
         try:
-            proc = await asyncio.create_subprocess_exec(
-                *args,
-                stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE,
-                cwd=str(PROJECT_ROOT),
-                env=env,
+            loop = asyncio.get_event_loop()
+            completed = await loop.run_in_executor(
+                None,
+                lambda: subprocess.run(
+                    args,
+                    capture_output=True,
+                    cwd=str(PROJECT_ROOT),
+                    env=env,
+                ),
             )
 
-            stdout_lines: list[str] = []
-            stderr_lines: list[str] = []
+            stdout_lines = completed.stdout.decode("utf-8", errors="replace").splitlines()
+            stderr_lines = completed.stderr.decode("utf-8", errors="replace").splitlines()
 
-            async def _drain(stream: asyncio.StreamReader, lines: list[str], is_err: bool) -> None:
-                async for raw in stream:
-                    text = raw.decode("utf-8", errors="replace").rstrip()
-                    lines.append(text)
-                    job.stdout_lines.append(text) if not is_err else job.stderr_lines.append(text)
-                    job.queue.put_nowait({"type": "stderr" if is_err else "stdout", "line": text})
+            for line in stdout_lines:
+                job.stdout_lines.append(line)
+                job.queue.put_nowait({"type": "stdout", "line": line})
+            for line in stderr_lines:
+                job.stderr_lines.append(line)
+                job.queue.put_nowait({"type": "stderr", "line": line})
 
-            await asyncio.gather(
-                _drain(proc.stdout, stdout_lines, False),
-                _drain(proc.stderr, stderr_lines, True),
-            )
-            await proc.wait()
-
-            if proc.returncode == 0:
+            if completed.returncode == 0:
                 result = resolver("\n".join(stdout_lines))
                 complete_job(job.job_id, result)
             else:
                 fail_job(job.job_id, "\n".join(stderr_lines[-30:]))
         except Exception as exc:
-            fail_job(job.job_id, str(exc))
+            import traceback as _tb
+            fail_job(job.job_id, f"EXC {type(exc).__name__}: {exc!r} | {_tb.format_exc()[-500:]}")
 
     asyncio.create_task(_run())
     return job.job_id
@@ -175,10 +179,50 @@ async def launch_job(stage: str, args: list[str], resolver: Callable[[str], JobR
 # Per-skill wrappers
 # ---------------------------------------------------------------------------
 
-async def run_researcher(niche: str, repos: list[str], mode: str = "deep") -> str:
+async def run_trends(space: str = "") -> str:
+    args = [sys.executable, "scripts/github_trending.py"]
+    if space:
+        args += ["--space", space]
+    return await launch_job("trends", args, resolve_trends)
+
+
+def _github_url_from_trend_file(path_str: str) -> str:
+    """Extract the first github.com URL from a vault trend file."""
+    try:
+        text = Path(path_str).read_text(encoding="utf-8", errors="replace")
+        m = re.search(r'https://github\.com/[^\s\)\]]+', text)
+        return m.group(0).rstrip("/") if m else ""
+    except Exception:
+        return ""
+
+
+async def run_researcher(
+    niche: str,
+    repos: list[str],
+    mode: str = "deep",
+    trend_repo: str = "",
+    target_length: int | None = None,
+    tone: str = "",
+    audience: str = "",
+    banned_phrases: list[str] | None = None,
+) -> str:
     args = [sys.executable, "-m", "skills.researcher", "--niche", niche, "--mode", mode]
-    if repos:
-        args += ["--repos", *repos]
+    all_repos = list(repos)
+    if trend_repo:
+        url = _github_url_from_trend_file(trend_repo)
+        if url:
+            all_repos.insert(0, url)
+    if all_repos:
+        args += ["--repos", *all_repos]
+    if target_length:
+        args += ["--target-length", str(target_length)]
+    if tone:
+        args += ["--tone", tone]
+    if audience:
+        args += ["--audience", audience]
+    for phrase in (banned_phrases or []):
+        if phrase.strip():
+            args += ["--banned-phrase", phrase.strip()]
     return await launch_job("researcher", args, lambda out: resolve_researcher(out, niche))
 
 
@@ -224,9 +268,14 @@ async def run_outline(
     return await launch_job("outline", args, lambda out: resolve_outline(out, topic))
 
 
-async def run_title(concept: str) -> str:
-    args = [sys.executable, "-m", "skills.title", concept]
-    return await launch_job("title", args, lambda out: resolve_title(out, concept))
+async def run_title(concept: str, outline_file: str = "") -> str:
+    label = concept or Path(outline_file).stem or "title"
+    args = [sys.executable, "-m", "skills.title"]
+    if concept:
+        args.append(concept)
+    if outline_file:
+        args += ["--outline-file", outline_file]
+    return await launch_job("title", args, lambda out: resolve_title(out, label))
 
 
 async def run_cascade(

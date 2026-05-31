@@ -10,7 +10,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
-from skills.utils.ai import generate
+from skills.utils.ai import generate, polish
 from skills.utils.transcript import extract_transcript
 from skills.brief_loader import load_brief
 from skills.brief_args import add_brief_args
@@ -32,6 +32,18 @@ def load_prompts() -> tuple[str, str, str]:
     instagram = content[instagram_start + len("## INSTAGRAM PROMPT"):linkedin_start].strip()
     linkedin = content[linkedin_start + len("## LINKEDIN PROMPT"):].strip()
     return blog, instagram, linkedin
+
+
+def _load_voice_cleanup_template() -> str:
+    return (PROJECT_ROOT / "prompts" / "voice_cleanup.md").read_text(encoding="utf-8")
+
+
+async def _voice_clean(text: str, template: str) -> str:
+    result = await polish(template.format(text=text))
+    if result["success"] and result["text"].strip():
+        return result["text"].strip()
+    logger.warning("Voice cleanup failed (%s) — using original", result.get("error", "empty response"))
+    return text
 
 
 def make_output_dir(title: str) -> Path:
@@ -110,6 +122,14 @@ async def main():
         print("❌ One or more generations failed")
         sys.exit(1)
 
+    voice_tpl = _load_voice_cleanup_template()
+    print("\n✍️  Voice-cleaning blog post...")
+    blog_content = await _voice_clean(blog_content, voice_tpl)
+    print("✍️  Voice-cleaning Instagram post...")
+    instagram_content = await _voice_clean(instagram_content, voice_tpl)
+    print("✍️  Voice-cleaning LinkedIn post...")
+    linkedin_content = await _voice_clean(linkedin_content, voice_tpl)
+
     output_dir = make_output_dir(title)
 
     (output_dir / "blog_post.md").write_text(f"""---
@@ -130,9 +150,9 @@ tags: [ai-tools, build-in-public]
 **Video:** {youtube_url}
 
 ## Files
-- `blog_post.md` — ready to publish
-- `instagram_post.md` — carousel slides (5-7 slides)
-- `linkedin_post.md` — single post
+- `blog_post.md` — voice-cleaned, ready to publish
+- `instagram_post.md` — voice-cleaned carousel slides (5-7 slides)
+- `linkedin_post.md` — voice-cleaned single post
 
 ## Checklist
 - [ ] Review blog_post.md → publish

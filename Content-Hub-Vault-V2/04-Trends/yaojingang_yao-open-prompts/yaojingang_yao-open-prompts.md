@@ -2,26 +2,26 @@
 
 > Yao Open Prompts：中文 AI 提示词库，覆盖工作、学习、内容、营销和生活场景
 
-**Language:** Python · **Stars:** 2,265 · **Velocity:** 125.8/day · [GitHub](https://github.com/yaojingang/yao-open-prompts)
+**Language:** Python · **Stars:** 2,336 · **Velocity:** 97.3/day · [GitHub](https://github.com/yaojingang/yao-open-prompts)
 
-*Captured 2026-05-25*
+*Captured 2026-05-31*
 
 ---
 
 ## What problem does it solve?
 
-Most AI prompt libraries are in English, leaving Chinese-speaking developers and content creators without a curated, culturally-relevant prompt collection. Crafting effective prompts from scratch is time-consuming and requires significant trial and error. This repo solves the cold-start problem for Chinese users adopting AI tools across professional and daily workflows.
+Most AI prompt libraries are English-first, leaving Chinese-speaking developers and content creators without a curated, domain-specific collection they can actually use. Writing effective prompts from scratch for every new use case wastes time and produces inconsistent results. This repo centralizes reusable, battle-tested Chinese prompts across the most common professional and personal scenarios.
 
 ## How it works
 
-It is a Python-based repository that curates a structured library of Chinese-language AI prompts organized by use-case categories including work, learning, content creation, marketing, and lifestyle. The prompts are likely stored as structured text or data files, with Python utilities to browse, search, or export them for use with AI APIs.
+It is a Python-backed repository that organizes a structured library of Chinese-language AI prompts, categorized by domain: work, learning, content creation, marketing, and daily life. Users browse or query prompts by category and plug them directly into any LLM API or chat interface without modification.
 
 ## Best use cases
 
-- A content creator pulls marketing copy prompts to generate product descriptions or social media posts in Chinese without writing prompts from scratch
-- A developer integrates the prompt library into a Chinese-language chatbot or internal tool to cover common workflow automations
-- A learner uses the study and productivity prompts as templates to build a personal AI assistant tuned to Chinese educational contexts
+- A content creator pulls a marketing copywriting prompt to generate product descriptions in idiomatic Chinese
+- A developer integrates categorized prompts into an app or chatbot to give Chinese-speaking users high-quality default instructions
+- A knowledge worker uses the learning or work-scenario prompts to accelerate document drafting, summarization, or task planning in Chinese
 
 ## Getting started
 
-Clone the repository from GitHub and browse the categorized prompt files; since it is Python-based, you can likely run a provided script or notebook to search and export prompts for use directly with the OpenAI or Anthropic API.
+Clone the repo and browse the categorized prompt files to find prompts matching your domain, then copy them directly into your LLM API calls or chat UI. Since it is Python-based, you can also import or script against the prompt collection to build automated pipelines.

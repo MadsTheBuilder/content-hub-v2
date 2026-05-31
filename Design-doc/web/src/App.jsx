@@ -6,6 +6,7 @@ import StageWorkspace from './StageWorkspace.jsx';
 import TweaksPanel, { TweakSection, TweakColor, TweakRadio, TweakToggle, TweakSelect } from './TweaksPanel.jsx';
 import Brain from './Brain.jsx';
 import DistributionWorkspace from './DistributionWorkspace.jsx';
+import FullPipelinePage from './FullPipelinePage.jsx';
 
 const TWEAK_DEFAULTS = {
   "accent": "#5B8DEF",
@@ -43,6 +44,7 @@ function App() {
       ideation: "#A855F7",
       hooks: "#EC4899",
       distribution: "#3DD68C",
+      "full-pipeline": "#06B6D4",
       brain: "#06B6D4",
       settings: t.accent,
     };
@@ -95,6 +97,9 @@ function App() {
             />
           )}
           {view === "distribution" && <DistributionWorkspace onBack={() => navigate("dashboard")} />}
+          <div style={{ display: view === "full-pipeline" ? "" : "none" }}>
+            <FullPipelinePage onBack={() => navigate("dashboard")} />
+          </div>
           {view === "brain" && <Brain />}
           {view === "settings" && <SettingsPlaceholder />}
         </div>
@@ -137,6 +142,7 @@ function App() {
               { value: "ideation", label: "Ideation workspace" },
               { value: "hooks", label: "Hooks (with results)" },
               { value: "distribution", label: "Distribution workspace" },
+              { value: "full-pipeline", label: "Full Pipeline (auto-run)" },
               { value: "brain", label: "Knowledge Brain (analysis open)" },
             ]}
           />

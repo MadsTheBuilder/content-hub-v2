@@ -95,7 +95,7 @@ const STAGES = {
   }
 };
 
-const LIVE_STAGES = new Set(["research", "ideation", "hooks"]);
+const LIVE_STAGES = new Set(["trends", "research", "ideation", "hooks"]);
 const TRENDS_FILE = "04-Trends/github_trending.md";
 const STAGE_FOLDER = { trends: "04-Trends", research: "10-Research", ideation: "02-Ideas", hooks: "05-Hooks" };
 
@@ -183,6 +183,7 @@ function StageWorkspace({ stageId, onBack, initialState = {} }) {
   const [mode, setMode] = useState("fast");
   const [jobId, setJobId] = useState(null);
   const [researchFile, setResearchFile] = useState(null);
+  const [trendRepo, setTrendRepo] = useState(null);
   const [jobResult, setJobResult] = useState(null);
   const [jobError, setJobError] = useState(null);
   const [conflictNotice, setConflictNotice] = useState(false);
@@ -200,6 +201,7 @@ function StageWorkspace({ stageId, onBack, initialState = {} }) {
     setMode("fast");
     setJobId(null);
     setResearchFile(null);
+    setTrendRepo(null);
     setJobResult(null);
     setJobError(null);
     setConflictNotice(false);
@@ -222,16 +224,17 @@ function StageWorkspace({ stageId, onBack, initialState = {} }) {
   /* eslint-enable react-hooks/set-state-in-effect */
 
   const handleRun = async () => {
-    if (stageId === "trends") return;
-
     if (LIVE_STAGES.has(stageId)) {
       setRunState("loading");
       setJobError(null);
       setConflictNotice(false);
       announceStart(stageId);
       try {
+        const effectiveUrls = urlDraft.trim() ? [...urls, urlDraft.trim()] : urls;
         const body = stageId === "research"
-          ? { niche: prompt, repos: urls, mode }
+          ? { niche: prompt, repos: effectiveUrls, mode, trend_repo: trendRepo || "" }
+          : stageId === "trends"
+          ? { space: prompt }
           : { topic: prompt, research_file: researchFile || "" };
         const { job_id } = await runStage(stageId, body);
         setJobId(job_id);
@@ -298,6 +301,7 @@ function StageWorkspace({ stageId, onBack, initialState = {} }) {
           onRun={handleRun}
           mode={mode} onModeChange={setMode}
           researchFile={researchFile} onResearchFileChange={setResearchFile}
+          trendRepo={trendRepo} onTrendRepoChange={setTrendRepo}
           conflictNotice={conflictNotice}
         />
 
@@ -325,24 +329,14 @@ function StageWorkspace({ stageId, onBack, initialState = {} }) {
   );
 }
 
-function InputZone({ stage, prompt, setPrompt, files, setFiles, urls, setUrls, urlDraft, setUrlDraft, handleUrlKey, runState, onRun, mode, onModeChange, researchFile, onResearchFileChange, conflictNotice }) {
-  const isTrends = stage.id === "trends";
+function InputZone({ stage, prompt, setPrompt, files, setFiles, urls, setUrls, urlDraft, setUrlDraft, handleUrlKey, runState, onRun, mode, onModeChange, researchFile, onResearchFileChange, trendRepo, onTrendRepoChange, conflictNotice }) {
   const showModeToggle = stage.id === "research";
   const showVaultPicker = stage.id === "ideation" || stage.id === "hooks";
-  const showUrlInput = stage.id === "research";
+  const showTrendPicker = stage.id === "research";
+  const showUrlInput = stage.id === "research" || stage.id === "trends";
   const modeMeta = mode === "fast"
     ? "~6s · single-pass synthesis"
     : "~45s · multi-source cross-check, citations";
-
-  if (isTrends) {
-    return (
-      <section className="input-zone">
-        <div style={{ color: "var(--text-muted)", fontSize: 13 }}>
-          Read-only &#183; auto-updated from vault.
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section className="input-zone">
@@ -458,6 +452,19 @@ function InputZone({ stage, prompt, setPrompt, files, setFiles, urls, setUrls, u
         </div>
       )}
 
+      {showTrendPicker && (
+        <div>
+          <label className="field-label">Source repo (optional)</label>
+          <VaultPicker
+            folder="04-Trends"
+            subfoldersOnly={true}
+            value={trendRepo}
+            onChange={onTrendRepoChange}
+            placeholder="Select a trending repo…"
+          />
+        </div>
+      )}
+
       {conflictNotice && (
         <p style={{ fontSize: 12, color: "var(--text-muted)", margin: "0 0 8px" }}>
           A job is already running — wait for it to finish.
@@ -493,12 +500,45 @@ function InputZone({ stage, prompt, setPrompt, files, setFiles, urls, setUrls, u
 
 function OutputZone({ stage, runState, jobResult, jobError, liveLines }) {
   if (stage.id === "trends") {
+    if (jobError) {
+      return (
+        <section className="output-zone">
+          <div className="output-body">
+            <p style={{ color: "var(--text-muted)", fontSize: 13 }}>Error: {jobError}</p>
+          </div>
+        </section>
+      );
+    }
+
+    if (runState === "loading") {
+      return (
+        <section className="output-zone">
+          <div className="output-meta">
+            <span>Running Trends&#8230; &#183; streaming scrape logs</span>
+          </div>
+          <div className="output-body">
+            {liveLines.length > 0 ? (
+              <div style={{ fontFamily: "monospace", fontSize: 12, lineHeight: 1.6 }}>
+                {liveLines.map((line, i) => <div key={i}>{line}</div>)}
+              </div>
+            ) : (
+              <>
+                <div className="skeleton skeleton-row long" />
+                <div className="skeleton skeleton-row medium" />
+                <div className="skeleton skeleton-block" />
+              </>
+            )}
+          </div>
+        </section>
+      );
+    }
+
     return (
       <section className="output-zone">
         <div className="output-meta">
           <span>Live from vault &#183; auto-updated</span>
         </div>
-        <MarkdownViewer path={TRENDS_FILE} />
+        <MarkdownViewer path={jobResult?.primary_path || TRENDS_FILE} />
       </section>
     );
   }

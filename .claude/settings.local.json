@@ -126,7 +126,11 @@
       "Bash(mkdir -p \"c:\\\\Users\\\\madhu\\\\Claude cowork\\\\Content Hub V2\\\\Design-doc\\\\web\\\\src\\\\.agent-context\\\\phase4\")",
       "Bash(mkdir -p \"c:\\\\Users\\\\madhu\\\\Claude cowork\\\\Content Hub V2\\\\Design-doc\\\\web\\\\src\\\\.agent-context\\\\phase5\")",
       "PowerShell(Get-ChildItem \"c:\\\\Users\\\\madhu\\\\Claude cowork\\\\Content Hub V2\" -Depth 1 | Select-Object Name, @{N='SizeMB';E={if\\($_.PSIsContainer\\){\\(Get-ChildItem $_.FullName -Recurse -File | Measure-Object Length -Sum\\).Sum/1MB}else{$_.Length/1MB}}} | Sort-Object SizeMB -Descending | Format-Table -AutoSize)",
-      "Bash(Select-String -Pattern \"\\\\.\\(md|json|txt|log\\)$\")"
+      "Bash(Select-String -Pattern \"\\\\.\\(md|json|txt|log\\)$\")",
+      "Bash(.venv/Scripts/python.exe -m uvicorn Design-doc.server.main:app --host 0.0.0.0 --port 8765)",
+      "Bash(.venv/Scripts/python.exe scripts/github_trending.py)",
+      "Bash(npx eslint *)",
+      "Bash(npx vite *)"
     ],
     "additionalDirectories": [
       "c:\\Users\\madhu\\Claude cowork\\Content Hub V2",

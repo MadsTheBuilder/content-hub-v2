@@ -2,11 +2,13 @@
 
 Usage:
     python -m skills.title "video concept string"
+    python -m skills.title --outline-file path/to/outline.md
 
 Output:
     Prints the path to the written vault file.
 """
 
+import argparse
 import asyncio
 import json
 import re
@@ -68,16 +70,36 @@ def write_vault(concept: str, output: str) -> Path:
     return path
 
 
-async def _main() -> None:
-    if len(sys.argv) < 2:
-        print("Usage: python -m skills.title \"video concept\"")
-        sys.exit(1)
+def _load_outline_context(outline_file: str) -> tuple[str, str]:
+    path = Path(outline_file)
+    content = path.read_text(encoding="utf-8", errors="replace")
+    label = path.stem.replace("_", " ").replace("-", " ").strip() or "outline"
+    return label, content
 
-    concept = sys.argv[1]
+
+async def _main() -> None:
+    parser = argparse.ArgumentParser(description="Generate YouTube titles for a video concept or outline file")
+    parser.add_argument("concept", nargs="?", default="", help="Video concept string")
+    parser.add_argument("--outline-file", default="", help="Existing outline markdown file to use as title context")
+    args = parser.parse_args()
+
+    if not args.concept and not args.outline_file:
+        parser.error("provide a concept or --outline-file")
+
+    concept_label = args.concept
+    concept_context = args.concept
+    if args.outline_file:
+        outline_label, outline_content = _load_outline_context(args.outline_file)
+        concept_label = args.concept or outline_label
+        concept_context = (
+            f"Video concept: {args.concept}\n\nOutline:\n{outline_content}"
+            if args.concept
+            else f"Outline:\n{outline_content}"
+        )
 
     try:
-        output = await generate_titles(concept)
-        path = write_vault(concept, output)
+        output = await generate_titles(concept_context)
+        path = write_vault(concept_label, output)
         print(str(path))
     except RuntimeError as e:
         print(f"Error: {e}", file=sys.stderr)

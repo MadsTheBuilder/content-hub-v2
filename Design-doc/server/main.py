@@ -50,8 +50,8 @@ async def health():
 # ---------------------------------------------------------------------------
 
 @app.get("/api/vault/recent")
-async def vault_recent(folder: str = "10-Research", limit: int = 10):
-    return vault.recent(folder, min(limit, 50))
+async def vault_recent(folder: str = "10-Research", limit: int = 10, subfolders_only: bool = False):
+    return vault.recent(folder, min(limit, 50), subfolders_only)
 
 
 @app.get("/api/vault/file")
@@ -142,10 +142,19 @@ def _check_conflict():
 # Request body models
 # ---------------------------------------------------------------------------
 
+class TrendsBody(BaseModel):
+    space: str = ""
+
+
 class ResearcherBody(BaseModel):
     niche: str
     repos: list[str] = []
     mode: str = "deep"
+    trend_repo: Optional[str] = ""
+    target_length: Optional[int] = None
+    tone: Optional[str] = ""
+    audience: Optional[str] = ""
+    banned_phrases: list[str] = []
 
 
 class IdeationBody(BaseModel):
@@ -172,7 +181,8 @@ class OutlineBody(BaseModel):
 
 
 class TitleBody(BaseModel):
-    concept: str
+    concept: str = ""
+    outline_file: Optional[str] = ""
 
 
 class CascadeBody(BaseModel):
@@ -205,7 +215,17 @@ class BrainBody(BaseModel):
 @app.post("/api/pipeline/researcher")
 async def run_researcher(body: ResearcherBody):
     _check_conflict()
-    job_id = await pipeline.run_researcher(body.niche, body.repos, body.mode)
+    job_id = await pipeline.run_researcher(
+        body.niche, body.repos, body.mode, body.trend_repo or "",
+        body.target_length, body.tone or "", body.audience or "", body.banned_phrases,
+    )
+    return {"job_id": job_id}
+
+
+@app.post("/api/pipeline/trends")
+async def run_trends(body: TrendsBody = None):
+    _check_conflict()
+    job_id = await pipeline.run_trends(body.space if body else "")
     return {"job_id": job_id}
 
 
@@ -238,8 +258,10 @@ async def run_outline(body: OutlineBody):
 
 @app.post("/api/pipeline/title")
 async def run_title(body: TitleBody):
+    if not body.concept.strip() and not (body.outline_file or "").strip():
+        raise HTTPException(status_code=422, detail="Provide a concept or outline_file")
     _check_conflict()
-    job_id = await pipeline.run_title(body.concept)
+    job_id = await pipeline.run_title(body.concept.strip(), body.outline_file or "")
     return {"job_id": job_id}
 
 

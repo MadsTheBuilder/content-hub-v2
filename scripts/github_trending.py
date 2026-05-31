@@ -4,90 +4,96 @@ github_trending.py — Daily AI repo pulse for Content Hub.
 
 Run manually or via Windows Task Scheduler (see run_github_trending.bat).
 Output: Content-Hub-Vault-V2/04-Trends/github_trending.md
+
+Ranking: scrapes github.com/trending for weekly + monthly windows.
+Winners = highest stars-this-period (total stars shown as context).
 """
 
 import json
-import os
+import re
 import subprocess
-import urllib.parse
 import urllib.request
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 from pathlib import Path
-
-from dotenv import load_dotenv
 
 # ── paths ─────────────────────────────────────────────────────────────────────
 ROOT = Path(__file__).resolve().parent.parent
-load_dotenv(ROOT / ".env")
 OUTPUT = ROOT / "Content-Hub-Vault-V2" / "04-Trends" / "github_trending.md"
 LOG_DIR = ROOT / "logs"
 
-# ── config ────────────────────────────────────────────────────────────────────
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "")
-# 3 searches (one per topic) against the 30-day window covers both windows.
-# GitHub Search API doesn't support OR across topic qualifiers with date filters.
-# Unauthenticated limit: 10 req/min. 3 calls is safe; add GITHUB_TOKEN for 5000/hr.
-AI_TOPICS = ["llm", "ai", "machine-learning"]
+
+# ── scraper ───────────────────────────────────────────────────────────────────
+
+def _parse_int(s: str) -> int:
+    return int(re.sub(r"[,\s]", "", s))
 
 
-# ── GitHub API ────────────────────────────────────────────────────────────────
-
-def _gh_headers() -> dict:
-    h = {
-        "Accept": "application/vnd.github+json",
-        "X-GitHub-Api-Version": "2022-11-28",
-        "User-Agent": "content-hub-trending/1.0",
-    }
-    if GITHUB_TOKEN:
-        h["Authorization"] = f"Bearer {GITHUB_TOKEN}"
-    return h
-
-
-def _search_one_topic(topic: str, since_date: str, per_page: int = 10) -> list[dict]:
-    q = f"topic:{topic} created:>{since_date}"
-    url = (
-        "https://api.github.com/search/repositories?"
-        + urllib.parse.urlencode({"q": q, "sort": "stars", "order": "desc", "per_page": per_page})
-    )
-    req = urllib.request.Request(url, headers=_gh_headers())
+def scrape_trending(since: str, limit: int = 25) -> list[dict]:
+    """
+    Scrape github.com/trending and return repos ranked by period stars.
+    since = 'weekly' | 'monthly'
+    Ranking criteria: stars this period (highest wins). Total stars shown as context.
+    """
+    url = f"https://github.com/trending?since={since}"
+    req = urllib.request.Request(url, headers={
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        "Accept": "text/html,application/xhtml+xml",
+    })
     with urllib.request.urlopen(req, timeout=15) as resp:
-        return json.loads(resp.read()).get("items", [])
+        raw = resp.read().decode("utf-8")
 
+    days = 7 if since == "weekly" else 30
+    repos = []
 
-def search_repos(since_date: str, fetch: int = 30) -> list[dict]:
-    """Return raw GitHub repo items created after since_date, merged across AI topics, sorted by stars."""
-    seen: set[int] = set()
-    merged: list[dict] = []
-    for topic in AI_TOPICS:
-        for item in _search_one_topic(topic, since_date, per_page=15):
-            if item["id"] not in seen:
-                seen.add(item["id"])
-                merged.append(item)
-    merged.sort(key=lambda r: r["stargazers_count"], reverse=True)
-    return merged[:fetch]
+    for block in re.split(r"<article\b[^>]*>", raw)[1:limit + 1]:
+        # Full name from the h2 anchor: href="/owner/repo"
+        m = re.search(r'<h2[^>]*>.*?<a\s+href="/([^/"]+/[^/"]+)"', block, re.DOTALL)
+        if not m:
+            continue
+        full_name = m.group(1).strip()
 
+        # Description
+        desc_m = re.search(r'<p\b[^>]*col-9[^>]*>\s*(.*?)\s*</p>', block, re.DOTALL)
+        description = re.sub(r"\s+", " ", desc_m.group(1)).strip() if desc_m else ""
 
-def enrich(raw: dict, now: datetime) -> dict:
-    created = datetime.fromisoformat(raw["created_at"].replace("Z", "+00:00"))
-    age = max(1, (now - created).days)
-    return {
-        "name": raw["full_name"],
-        "description": (raw.get("description") or "").strip(),
-        "language": raw.get("language") or "—",
-        "stars": raw["stargazers_count"],
-        "velocity": round(raw["stargazers_count"] / age, 1),
-        "url": raw["html_url"],
-    }
+        # Language
+        lang_m = re.search(r'itemprop="programmingLanguage"[^>]*>\s*([^<]+)', block)
+        language = lang_m.group(1).strip() if lang_m else "—"
+
+        # Total stars (link to /stargazers)
+        stars_m = re.search(
+            rf'href="/{re.escape(full_name)}/stargazers"[^>]*>.*?</svg>\s*([\d,]+)',
+            block, re.DOTALL,
+        )
+        total_stars = _parse_int(stars_m.group(1)) if stars_m else 0
+
+        # Stars this period: "1,234 stars this week" or "5,678 stars this month"
+        period_m = re.search(r"([\d,]+)\s+stars?\s+this\s+(?:week|month)", block, re.IGNORECASE)
+        period_stars = _parse_int(period_m.group(1)) if period_m else 0
+
+        repos.append({
+            "name": full_name,
+            "description": description,
+            "language": language,
+            "stars": total_stars,
+            "period_stars": period_stars,
+            "velocity": round(period_stars / days, 1),
+            "url": f"https://github.com/{full_name}",
+        })
+
+    # Rank by stars this period — highest wins
+    repos.sort(key=lambda r: r["period_stars"], reverse=True)
+    return repos
 
 
 # ── Claude pick ───────────────────────────────────────────────────────────────
 
-def claude_picks(repos_7d: list[dict], repos_30d: list[dict]) -> tuple[str, str, str, str]:
-    """Return (name_7d, reason_7d, name_30d, reason_30d). Uses claude CLI (Pro plan auth)."""
+def claude_picks(weekly: list[dict], monthly: list[dict]) -> tuple[str, str, str, str]:
+    """Return (name_weekly, reason_weekly, name_monthly, reason_monthly)."""
 
-    def fmt(repos: list[dict]) -> str:
+    def fmt(repos: list[dict], period: str) -> str:
         return "\n".join(
-            f"{i+1}. {r['name']} | {r['stars']:,} stars | {r['velocity']}/day | {r['language']}\n"
+            f"{i+1}. {r['name']} | {r['stars']:,} total stars | {r['period_stars']:,} stars this {period} | {r['language']}\n"
             f"   {r['description']}\n   {r['url']}"
             for i, r in enumerate(repos)
         )
@@ -96,11 +102,11 @@ def claude_picks(repos_7d: list[dict], repos_30d: list[dict]) -> tuple[str, str,
         "You are a tech content strategist for an AI-focused YouTube channel.\n\n"
         "Pick ONE repo from each list as the best candidate for a YouTube tutorial or explainer.\n"
         "Criteria: genuine novelty, teaching potential, audience interest, not already overexposed.\n\n"
-        f"LAST 7 DAYS — TOP {len(repos_7d)}:\n{fmt(repos_7d)}\n\n"
-        f"LAST 30 DAYS — TOP {len(repos_30d)}:\n{fmt(repos_30d)}\n\n"
+        f"THIS WEEK — TOP {len(weekly)} (ranked by stars this week):\n{fmt(weekly, 'week')}\n\n"
+        f"THIS MONTH — TOP {len(monthly)} (ranked by stars this month):\n{fmt(monthly, 'month')}\n\n"
         "Respond with ONLY valid JSON, no markdown fences:\n"
-        '{"pick_7d": {"name": "owner/repo", "reason": "1-2 sentences"}, '
-        '"pick_30d": {"name": "owner/repo", "reason": "1-2 sentences"}}'
+        '{"pick_weekly": {"name": "owner/repo", "reason": "1-2 sentences"}, '
+        '"pick_monthly": {"name": "owner/repo", "reason": "1-2 sentences"}}'
     )
 
     result = subprocess.run(
@@ -116,21 +122,20 @@ def claude_picks(repos_7d: list[dict], repos_30d: list[dict]) -> tuple[str, str,
         raise RuntimeError(f"claude CLI failed: {result.stderr.strip()}")
 
     raw = result.stdout.strip()
-    # Strip markdown fences if claude wraps the JSON anyway
     if raw.startswith("```"):
         raw = raw.split("```")[1]
         if raw.startswith("json"):
             raw = raw[4:]
     parsed = json.loads(raw.strip())
-    p7 = parsed["pick_7d"]
-    p30 = parsed["pick_30d"]
-    return p7["name"], p7["reason"], p30["name"], p30["reason"]
+    pw = parsed["pick_weekly"]
+    pm = parsed["pick_monthly"]
+    return pw["name"], pw["reason"], pm["name"], pm["reason"]
 
 
 # ── Claude deep dive ─────────────────────────────────────────────────────────
 
 def claude_deep_dive(repo: dict) -> dict:
-    """Return detailed breakdown for one repo: problem, how_it_works, use_cases, getting_started."""
+    """Return detailed breakdown for one repo."""
     prompt = (
         f"Repo: {repo['name']}\n"
         f"Description: {repo['description']}\n"
@@ -206,60 +211,58 @@ def write_repo_file(repo: dict, dive: dict, trends_dir: Path) -> None:
 
 # ── render ────────────────────────────────────────────────────────────────────
 
-def _table(repos: list[dict], highlight: str) -> list[str]:
+def _table(repos: list[dict], period_label: str, highlight: str) -> list[str]:
     rows = [
-        "| Repo | Stars | ⚡ Stars/day | Language | Description |",
-        "|------|------:|------------:|----------|-------------|",
+        f"| Repo | Total Stars | ⚡ Stars this {period_label} | Language | Description |",
+        f"|------|------------:|-------------------:|----------|-------------|",
     ]
     for r in repos:
         flag = " 🎯" if r["name"] == highlight else ""
-        desc = r["description"]
-        if len(desc) > 75:
-            desc = desc[:72] + "…"
+        desc = r["description"][:72] + "…" if len(r["description"]) > 75 else r["description"]
         rows.append(
             f"| [{r['name']}]({r['url']}){flag}"
-            f" | {r['stars']:,} | {r['velocity']} | {r['language']} | {desc} |"
+            f" | {r['stars']:,} | {r['period_stars']:,} | {r['language']} | {desc} |"
         )
     return rows
 
 
-def render(repos_7d, repos_30d, name_7d, reason_7d, name_30d, reason_30d) -> str:
+def render(weekly, monthly, name_w, reason_w, name_m, reason_m) -> str:
     today = datetime.now().strftime("%Y-%m-%d")
-    url_7d = next((r["url"] for r in repos_7d if r["name"] == name_7d), "")
-    url_30d = next((r["url"] for r in repos_30d if r["name"] == name_30d), "")
-    slug_7d = name_7d.replace("/", "_")
-    slug_30d = name_30d.replace("/", "_")
+    url_w = next((r["url"] for r in weekly if r["name"] == name_w), "")
+    url_m = next((r["url"] for r in monthly if r["name"] == name_m), "")
+    slug_w = name_w.replace("/", "_")
+    slug_m = name_m.replace("/", "_")
 
     lines = [
-        f"# GitHub Trending AI Repos — {today}",
+        f"# GitHub Trending Repos — {today}",
         "",
-        "> Auto-generated daily. 🎯 = Claude's pick for best video topic.",
+        "> Auto-generated daily. Ranked by stars this period. 🎯 = Claude's pick for best video topic.",
         "",
         "---",
         "",
-        "## Last 7 Days — Top 10",
+        "## This Week — Top 10",
         "",
-        *_table(repos_7d, name_7d),
+        *_table(weekly[:10], "week", name_w),
         "",
-        "## Last 30 Days — Top 5",
+        "## This Month — Top 10",
         "",
-        *_table(repos_30d, name_30d),
+        *_table(monthly[:10], "month", name_m),
         "",
         "---",
         "",
         "## Claude's Daily Picks",
         "",
-        f"### 7-day pick → [{name_7d}]({url_7d})",
+        f"### Weekly pick → [{name_w}]({url_w})",
         "",
-        reason_7d,
+        reason_w,
         "",
-        f"→ Deep dive: [[{slug_7d}/{slug_7d}]]",
+        f"→ Deep dive: [[{slug_w}/{slug_w}]]",
         "",
-        f"### 30-day pick → [{name_30d}]({url_30d})",
+        f"### Monthly pick → [{name_m}]({url_m})",
         "",
-        reason_30d,
+        reason_m,
         "",
-        f"→ Deep dive: [[{slug_30d}/{slug_30d}]]",
+        f"→ Deep dive: [[{slug_m}/{slug_m}]]",
         "",
         "---",
         f"*Generated {datetime.now().strftime('%Y-%m-%d %H:%M')}"
@@ -271,43 +274,42 @@ def render(repos_7d, repos_30d, name_7d, reason_7d, name_30d, reason_30d) -> str
 # ── main ──────────────────────────────────────────────────────────────────────
 
 def main() -> None:
-    now = datetime.now(timezone.utc)
-    cutoff_7d = now - timedelta(days=7)
-    date_30d = (now - timedelta(days=30)).strftime("%Y-%m-%d")
+    print("Scraping GitHub Trending (this week)...")
+    weekly = scrape_trending("weekly", limit=25)
+    print(f"  {len(weekly)} repos | top: {weekly[0]['name']} ({weekly[0]['period_stars']:,} stars this week)" if weekly else "  0 repos")
 
-    # One search against 30-day window; split client-side into both windows.
-    print("Fetching trending repos (30-day window)...")
-    raw = search_repos(date_30d, fetch=40)
-    all_repos = [enrich(r, now) for r in raw]
+    print("Scraping GitHub Trending (this month)...")
+    monthly = scrape_trending("monthly", limit=25)
+    print(f"  {len(monthly)} repos | top: {monthly[0]['name']} ({monthly[0]['period_stars']:,} stars this month)" if monthly else "  0 repos")
 
-    created_map = {r["full_name"]: r["created_at"] for r in raw}
-    repos_7d = [
-        r for r in all_repos
-        if datetime.fromisoformat(created_map[r["name"]].replace("Z", "+00:00")) >= cutoff_7d
-    ][:10]
+    if not weekly or not monthly:
+        raise SystemExit("Scraping returned no results — GitHub HTML structure may have changed.")
 
-    seen_7d = {r["name"] for r in repos_7d}
-    repos_30d = [r for r in all_repos if r["name"] not in seen_7d][:5]
-
-    print(f"  7-day: {len(repos_7d)} repos | 30-day extra: {len(repos_30d)} repos")
     print("Asking Claude for picks...")
-    name_7d, reason_7d, name_30d, reason_30d = claude_picks(repos_7d, repos_30d)
+    name_w, reason_w, name_m, reason_m = claude_picks(weekly[:10], monthly[:10])
 
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     LOG_DIR.mkdir(exist_ok=True)
-    OUTPUT.write_text(
-        render(repos_7d, repos_30d, name_7d, reason_7d, name_30d, reason_30d),
-        encoding="utf-8",
-    )
 
-    # Every shortlisted repo gets its own subfolder — not just the picks.
-    all_shortlisted = repos_7d + repos_30d
-    print(f"Generating deep dives for all {len(all_shortlisted)} shortlisted repos...")
-    for i, repo in enumerate(all_shortlisted, 1):
-        print(f"  [{i}/{len(all_shortlisted)}] {repo['name']}")
+    # Deep dives for all shortlisted repos, deduped
+    seen: set[str] = set()
+    shortlisted = []
+    for r in weekly[:10] + monthly[:10]:
+        if r["name"] not in seen:
+            seen.add(r["name"])
+            shortlisted.append(r)
+
+    print(f"Generating deep dives for {len(shortlisted)} repos...")
+    for i, repo in enumerate(shortlisted, 1):
+        print(f"  [{i}/{len(shortlisted)}] {repo['name']}")
         dive = claude_deep_dive(repo)
         write_repo_file(repo, dive, OUTPUT.parent)
-    print(f"Done. Written to {OUTPUT.parent}")
+
+    OUTPUT.write_text(
+        render(weekly, monthly, name_w, reason_w, name_m, reason_m),
+        encoding="utf-8",
+    )
+    print(f"Done. Written to {OUTPUT}")
 
 
 if __name__ == "__main__":

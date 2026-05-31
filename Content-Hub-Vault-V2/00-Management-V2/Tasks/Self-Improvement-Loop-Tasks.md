@@ -89,3 +89,24 @@ After each phase:
 ---
 
 **Related:** [[The-Self-Improvement-Loop]] · [[2026-05-28_Self-Improvement-Loop-Plan]] · [[Local_First_Skill_Engine_Plan]] · [[Current_Sprint]]
+
+---
+
+## 🅿 Parked — 2026-05-29
+
+**Status: Parked pending major decisions and real-run data.**
+
+Dry run completed successfully (structural pass). Three gaps remain in `prompt_lab/loop.py` that cannot be resolved without prior decisions:
+
+1. **`_mutate_prompt()` is a stub** — Multiple valid strategies exist (Claude rewrites a section, swap example order, tighten constraints). The right choice depends on what the scorer responds to in real runs. Cannot decide this in the abstract.
+
+2. **`_run_skill_over_fixtures()` is a stub** — Skills are CLI scripts, not importable modules. Two paths forward: (a) subprocess with a `--output-only` flag added to each of 8 skills, or (b) refactor skills to expose a callable `run(topic) -> str` function. Both touch the skill files and need a deliberate decision on architecture before touching 8 files.
+
+3. **`_score_output()` missing 6 scorer imports** — The 6 scorer files exist and are complete but were never wired into the dispatch table. This is the only gap that is purely unfinished work (not a design decision). Straightforward to fix once the above two decisions are made and a real run is scheduled.
+
+**Blocked on:**
+- Mutation strategy decision (needs first real scorer output to inform it)
+- Skill invocation architecture decision (subprocess vs. importable module)
+- A scheduled real `/prompt-lab` run to validate scorer trust before anything else moves
+
+**Resuming:** Pick this up after at least one real pipeline run produces scored output in `pipeline_results.tsv`.

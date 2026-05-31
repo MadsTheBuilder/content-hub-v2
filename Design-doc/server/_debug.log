@@ -1,0 +1,14 @@
+stage=trends exc_type='NotImplementedError' exc=NotImplementedError()
+Traceback (most recent call last):
+  File "C:\Users\madhu\Claude cowork\Content Hub V2\Design-doc\server\pipeline.py", line 143, in _run
+    proc = await asyncio.create_subprocess_exec(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\madhu\AppData\Roaming\uv\python\cpython-3.12.10-windows-x86_64-none\Lib\asyncio\subprocess.py", line 224, in create_subprocess_exec
+    transport, protocol = await loop.subprocess_exec(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\madhu\AppData\Roaming\uv\python\cpython-3.12.10-windows-x86_64-none\Lib\asyncio\base_events.py", line 1756, in subprocess_exec
+    transport = await self._make_subprocess_transport(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\madhu\AppData\Roaming\uv\python\cpython-3.12.10-windows-x86_64-none\Lib\asyncio\base_events.py", line 528, in _make_subprocess_transport
+    raise NotImplementedError
+NotImplementedError

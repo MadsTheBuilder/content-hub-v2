@@ -5,7 +5,7 @@ description: Generate a full distribution package (blog post, Twitter/X thread, 
 
 # /cascade
 
-Turn approved research + outline (or a YouTube URL) into a ready-to-review distribution package: a blog post, Twitter/X thread, and LinkedIn post, all written to the Obsidian vault.
+Turn approved research + outline (or a YouTube URL) into a ready-to-publish distribution package: a blog post, Instagram carousel, and LinkedIn post — all voice-cleaned before they land in the vault. No raw AI drafts are written to disk.
 
 **Default: use your own research + outline.** This is the mode to use after you've completed `/outline`. The YouTube URL fallback is for one-off cases where you want to repurpose someone else's video.
 
@@ -51,10 +51,11 @@ Next step: `/short-form` to generate 3 short-form scripts from the same outline.
 
 ## Things to know
 
+- **Built-in voice cleanup**: After generating all three pieces, the script runs each through `prompts/voice_cleanup.md` via Claude before writing to disk. What lands in the vault is already polished. If a cleanup call fails, the raw draft is written with a warning in the terminal.
 - **Content cap**: The helper uses up to 6,000 characters of combined research + outline. Long research files will be truncated — that's expected and fine.
 - **Title**: The helper auto-extracts the title from the outline's `topic:` frontmatter field. Use `--title` to override if it picks the wrong thing.
 - **If it fails**: Check that `ANTHROPIC_API_KEY` is set in `.env` and that the research/outline paths are correct. The script will print which step failed.
-- **Prompt source of truth**: `prompts/cascade.md` — edit that file to change tone, structure, or platform-specific rules globally.
+- **Prompt source of truth**: `prompts/cascade.md` — edit that file to change tone, structure, or platform-specific rules globally. Voice cleanup rules live in `prompts/voice_cleanup.md`.
 
 ## Examples
 

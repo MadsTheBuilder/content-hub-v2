@@ -4,7 +4,8 @@ import { getRecent } from './api.js';
 // Dropdown backed by getRecent(folder). Emits the selected vault path upward.
 // value: currently selected path (string | null)
 // onChange(path | null): called when selection changes
-export default function VaultPicker({ folder, value, onChange, placeholder = "Select a file…" }) {
+// subfoldersOnly: when true, only shows files from subdirectories (for trend repo pickers)
+export default function VaultPicker({ folder, value, onChange, placeholder = "Select a file…", subfoldersOnly = false }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -14,11 +15,11 @@ export default function VaultPicker({ folder, value, onChange, placeholder = "Se
     if (!folder) return;
     setLoading(true);
     setError(null);
-    getRecent(folder)
+    getRecent(folder, 50, subfoldersOnly)
       .then(setItems)
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
-  }, [folder]);
+  }, [folder, subfoldersOnly]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
   if (loading) {
@@ -43,11 +44,17 @@ export default function VaultPicker({ folder, value, onChange, placeholder = "Se
       onChange={(e) => onChange(e.target.value || null)}
     >
       <option value="">{placeholder}</option>
-      {items.map((item) => (
-        <option key={item.path} value={item.path}>
-          {item.name}
-        </option>
-      ))}
+      {items.map((item) => {
+        // For subfolder-only pickers (trend repos), format "owner_repo/..." → "owner/repo"
+        const displayName = subfoldersOnly
+          ? item.name.split('/')[0].replace('_', '/')
+          : item.name;
+        return (
+          <option key={item.path} value={item.path}>
+            {displayName}
+          </option>
+        );
+      })}
     </select>
   );
 }

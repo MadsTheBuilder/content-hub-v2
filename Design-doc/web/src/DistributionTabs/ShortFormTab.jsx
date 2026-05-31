@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Icon from '../Icons.jsx';
 import VaultPicker from '../VaultPicker.jsx';
 import OutputBrowser from '../OutputBrowser.jsx';
+import { SourcesPanel, StackedPanel } from '../SourcesPanel.jsx';
 import { runStage, ConflictError } from '../api.js';
 import { announceStart, announceDone, announceFail } from '../jobActivity.js';
 import useJobStream from '../hooks/useJobStream.js';
@@ -138,7 +139,9 @@ export default function ShortFormTab() {
         </button>
       </section>
 
-      <section className="output-zone">
+      <StackedPanel
+        back={<SourcesPanel stageId="short-form" />}
+        front={<section className="output-zone">
         {runState === 'idle' && !jobResult && (
           <div className="output-empty">
             <div className="output-empty-icon"><Icon.Rocket size={26} /></div>
@@ -176,7 +179,8 @@ export default function ShortFormTab() {
             <OutputBrowser result={jobResult} />
           </>
         )}
-      </section>
+      </section>}
+      />
     </div>
   );
 }

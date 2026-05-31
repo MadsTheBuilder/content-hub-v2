@@ -129,8 +129,6 @@ async def main():
     parser.add_argument("--platform", default="yt-long",
                         choices=["yt-long", "yt-shorts", "tiktok", "reels"],
                         help="Target platform (default: yt-long)")
-    parser.add_argument("--audience", default="AI builders and content creators",
-                        help="Target audience description")
     parser.add_argument("--format", dest="format_type", default="medium",
                         choices=["short", "medium", "long"],
                         help="Video format: short=30-60s, medium=5-8min, long=10-15min (default: medium)")
@@ -140,6 +138,8 @@ async def main():
                         help="Skip Claude polish pass (faster, cheaper — uses draft only)")
     add_brief_args(parser)
     args = parser.parse_args()
+    if not args.audience:
+        args.audience = "AI builders and content creators"
     brief = load_brief()
     brief = apply_cli_overrides(brief, args)
     if brief.get("audience"):

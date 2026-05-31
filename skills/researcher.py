@@ -564,31 +564,28 @@ async def research_one(client: "NotebookLMClient", url: str, mode: str) -> dict:
 async def run(niche: str, mode: str = "deep", repos: list[str] | None = None) -> Path:
     """Run isolated research per repo. Returns path to the compiled brief."""
 
-    if not TRENDS_FILE.exists():
-        raise FileNotFoundError(f"Trends file not found: {TRENDS_FILE}")
-
-    trends_text = TRENDS_FILE.read_text(encoding="utf-8")
-    urls = extract_urls(trends_text)
-
     if not repos:
         raise ValueError(
             "No repos specified. Run with --list to see available repos, "
             "then pass them explicitly with --repos owner/repo1 owner/repo2"
         )
 
-    # Normalise slugs: accept "owner/repo" or full URL
-    def to_slug(r: str) -> str:
+    # Accept "owner/repo" or a full URL; research exactly the repos passed in
+    # (do not require them to be present in the aggregate trends file).
+    def to_url(r: str) -> str:
         r = r.strip().rstrip("/")
-        if r.startswith("https://"):
-            parts = r.split("/")
-            return f"{parts[-2]}/{parts[-1]}"
-        return r
+        return r if r.startswith("http") else f"https://github.com/{r}"
 
-    wanted = {to_slug(r) for r in repos}
-    urls = [u for u in urls if f"{u.split('/')[-2]}/{u.split('/')[-1]}" in wanted]
+    urls: list[str] = []
+    seen: set[str] = set()
+    for r in repos:
+        u = to_url(r)
+        if u and u not in seen:
+            seen.add(u)
+            urls.append(u)
 
     if not urls:
-        raise ValueError(f"No matching GitHub repo URLs found in {TRENDS_FILE}")
+        raise ValueError(f"No valid repo URLs in --repos: {repos}")
 
     today = date.today().isoformat()
 
@@ -648,6 +645,9 @@ async def run(niche: str, mode: str = "deep", repos: list[str] | None = None) ->
         )
 
     niche_slug = niche.lower().replace(" ", "-")
+    if urls:
+        repo_names = "_".join(u.rstrip("/").split("/")[-1].lower() for u in urls[:2])
+        niche_slug = f"{niche_slug}_{repo_names}"
     notebook_ids = [f["notebook_id"] for f in findings if f["notebook_id"]]
     total_primaries = sum(f.get("primary_sources_found", 0) for f in findings)
 

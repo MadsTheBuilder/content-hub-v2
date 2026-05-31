@@ -54,6 +54,19 @@ function Sidebar({ active, onNavigate, collapsed, onToggleCollapse }) {
 
       <nav className="sidebar-nav">
         <button
+          className={"nav-item" + (active === "full-pipeline" ? " active" : "")}
+          style={{ "--stage-color": "#06B6D4" }}
+          onClick={() => onNavigate("full-pipeline")}>
+          <span className="nav-icon"><Icon.Rocket size={18} /></span>
+          <span className="nav-label">Full Pipeline</span>
+          <span className="nav-tooltip">Full Pipeline</span>
+        </button>
+      </nav>
+
+      <div className="sidebar-divider" />
+
+      <nav className="sidebar-nav">
+        <button
           className={"nav-item" + (active === "brain" ? " active" : "")}
           style={{ "--stage-color": "var(--brain)" }}
           onClick={() => onNavigate("brain")}>

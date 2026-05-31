@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "00-Management-V2/Tasks/Current_Sprint.md",
+                "file": "08-Distribution/2026-05-21_your-coding-agent-already-has-a-ui-desig/linkedin_post.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Current_Sprint"
+              "title": "linkedin_post"
             }
           },
           {
@@ -27,15 +27,30 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "00-Management-V2/Sessions/2026-05-24_phase4-wire-stages.md",
+                "file": "10-Research/2026-06-01_ai_aris-in-ai-offer_brief.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026-05-24_phase4-wire-stages"
+              "title": "2026-06-01_ai_aris-in-ai-offer_brief"
+            }
+          },
+          {
+            "id": "01b01b3e011b7884",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "00-Management-V2/Tasks/Current_Sprint.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Current_Sprint"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -92,7 +107,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 337.5
+    "width": 473.5
   },
   "right": {
     "id": "e04bd61a44cce5d0",
@@ -199,44 +214,44 @@
       "obsidian-excalidraw-plugin:New drawing": false
     }
   },
-  "active": "669c8b72dbde43d7",
+  "active": "991c5860d9f98d4b",
   "lastOpenFiles": [
-    "00-Management-V2/Sessions/2026-05-28_Command-Center-Dashboard.md",
-    "00-Management-V2/Sessions/2026-05-28_Self-Improvement-Loop-Execution.md",
-    "00-Management-V2/brief.md",
-    "00-Management-V2/Sessions/2026-05-28_Agent-A1-Pipeline-Results-Foundation.md",
-    "00-Management-V2/pipeline_results.tsv",
-    "00-Management-V2/Tasks/Self-Improvement-Loop-Tasks.md",
-    "01-Knowledge/marketing_brain.md",
-    "00-Management-V2/Sessions/2026-05-28_Self-Improvement-Loop-Plan.md",
-    "00-Management-V2/Plans/The-Self-Improvement-Loop.md",
-    "06-Outlines/2026-05-21_your-coding-agent-already-has-a.md",
-    "00-Management-V2/Sessions/2026-05-15_Hook-Skill-Creator-Improvement-Loop.md",
-    "00-Management-V2/Sessions/2026-05-15_Outline-Skill-Creator-Improvement-Loop.md",
-    "00-Management-V2/Tasks/Architecture_Building.md",
-    "00-Management-V2/Plans/Local_First_Skill_Engine_Plan.md",
-    "00-Management-V2/Program-Architecture/README.md",
-    "00-Management-V2/Plans/Content_Hub_Web_Design_Spec.md",
-    "00-Management-V2/Tasks/TODO_vault_output_folder_structure.md",
-    "00-Management-V2/Program-Architecture/systems-deck.html",
-    "00-Management-V2/Sessions/2026-05-28_Vault_Graph_Audit.md",
-    "00-Management-V2/Sessions/2026-05-28_Space_Audit.md",
-    "00-Management-V2/Tasks/Current_Sprint.md.tmp.28676.000b2608c1a7",
-    "00-Management-V2/Sessions/2026-05-28_Graph_Embedded_In_Deck.md",
-    "00-Management-V2/Sessions/2026-05-28_Graph_Embedded_In_Deck.md.tmp.28676.002d288788b9",
-    "00-Management-V2/Sessions/2026-05-27_Design_Doc_Theme_And_Graph.md",
-    "08-Distribution/2026-05-21_your-coding-agent-already-has-a-ui-desig/twitter_thread.md",
-    "08-Distribution/2026-05-21_your-coding-agent-already-has-a-ui-desig/instagram_post.md",
-    "08-Distribution/2026-05-07_is-openmythos-legit-i-checked-every-clai/blog_post_cleaned.md",
-    "08-Distribution/2026-05-07_is-openmythos-legit-i-checked-every-clai/blog_post.md",
-    "08-Distribution/2026-05-07_is-openmythos-legit-i-checked-every-clai/twitter_thread_cleaned.md",
-    "08-Distribution/2026-05-07_is-openmythos-legit-i-checked-every-clai/twitter_thread.md",
-    "00-Management-V2/Sessions/2026-05-26_8GB_Shed_Cleanup.md.tmp.13876.b8489ed42a42",
-    "Untitled.base",
-    "00-Management-V2/Sessions/2026-05-26_8GB_Shed_Cleanup.md.tmp.13876.73f0927c306d",
-    "04-Trends/Open-Less_openless",
-    "04-Trends/opensquilla_opensquilla",
-    "04-Trends/raiyanyahya_how-to-train-your-gpt",
+    "04-Trends/github_trending.md",
+    "10-Research/2026-06-01_ai_aris-in-ai-offer_brief.md",
+    "10-Research/2026-06-01_ARIS-in-AI-Offer-interview-cheatsheets_brief.md",
+    "source-verification/observation/2026-06-01_wanshuiyin-ARIS-in-AI-Offer_observation.md",
+    "00-Management-V2/Sessions/2026-05-31_Full_Pipeline_State_Loss_Ideation_Name_Fix.md.tmp.36436.5c70d285bf1c",
+    "10-Research/2026-05-31_design_brief.md",
+    "00-Management-V2/Sessions/2026-05-31_Full_Pipeline_State_Loss_Ideation_Name_Fix.md",
+    "00-Management-V2/Sessions/2026-05-31_Full_Pipeline_State_Loss_Ideation_Name_Fix.md.tmp.36436.6add35ba47b9",
+    "02-Ideas/2026-05-31_.md",
+    "04-Trends/Manavarya09_design-extract/Manavarya09_design-extract.md",
+    "05-Hooks/2026-05-31_extract-a-design-once-ship-it.md",
+    "source-verification/observation/2026-05-31_Manavarya09-design-extract_observation.md",
+    "00-Management-V2/Sessions/2026-05-31_Research_Options_Config_Gate.md.tmp.37912.5c7848a63d21",
+    "02-Ideas/2026-05-29_.md",
+    "00-Management-V2/Sessions/2026-05-31_Research_Options_Config_Gate.md",
+    "00-Management-V2/Sessions/2026-05-31_Research_Options_Config_Gate.md.tmp.37912.35f1007156d7",
+    "00-Management-V2/Sessions/2026-05-31_Full_Pipeline_Page.md",
+    "00-Management-V2/Sessions/2026-05-31_Full_Pipeline_Page.md.tmp.44552.b60738156af2",
+    "10-Research/2026-05-31_why-engineers-struggle-to-build-ai-agents_brief.md",
+    "10-Research/2026-05-31_do-a-research-on-the-working-of-this-repo-and-what-are-the-uses-and-capabilities-_brief.md",
+    "source-verification/observation/2026-05-31_YouTube-3_gYbhABcAE_observation.md",
+    "00-Management-V2/Sessions/2026-05-31_Researcher_URL_Fix.md",
+    "00-Management-V2/Sessions/2026-05-31_Researcher_URL_Fix.md.tmp.2604.fb14bf941ee8",
+    "00-Management-V2/Sessions/2026-05-29_Minor_Fixes_Left_Over.md",
+    "source-verification/observation/2026-05-31_UditAkhourii-adhd_observation.md",
+    "04-Trends/2026-05-25_github_trending.md",
+    "08-Distribution/2026-05-29_why-open-source-design-tools-are-suddenl/linkedin_post.md",
+    "00-Management-V2/Tasks/Current_Sprint.md",
+    "00-Management-V2/Sessions/2026-05-31_Trends_Job_Fixed_Subprocess.md",
+    "00-Management-V2/Sessions/2026-05-31_Trends_Job_Failed_Debug_Handoff.md",
+    "04-Trends/Helvesec_rmux/Helvesec_rmux.md",
+    "04-Trends/Helvesec_rmux",
+    "04-Trends/Mohana05245_CopBot-AI-/Mohana05245_CopBot-AI-.md",
+    "04-Trends/Mohana05245_CopBot-AI-",
+    "04-Trends/Tejas-TA_predikit",
+    "04-Trends/Liu-Ming-Yu_alpha-forge",
     "10-Research/2026-05-07_openmythos/infographic.png",
     "10-Research/2026-05-06_ruflo/infographic.png",
     "10-Research/2026-05-06_ruflo/slides_images/slide_10.png",

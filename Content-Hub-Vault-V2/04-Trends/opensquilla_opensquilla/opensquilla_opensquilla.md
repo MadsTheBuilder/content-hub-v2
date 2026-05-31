@@ -2,26 +2,26 @@
 
 > OpenSquilla — Token-Efficient AI Agent with same budget, higher intelligence density
 
-**Language:** Python · **Stars:** 1,759 · **Velocity:** 97.7/day · [GitHub](https://github.com/opensquilla/opensquilla)
+**Language:** Python · **Stars:** 2,143 · **Velocity:** 89.3/day · [GitHub](https://github.com/opensquilla/opensquilla)
 
-*Captured 2026-05-25*
+*Captured 2026-05-31*
 
 ---
 
 ## What problem does it solve?
 
-AI agents consume tokens rapidly, making them expensive to run at scale — especially for developers on tight API budgets. OpenSquilla addresses the core inefficiency: most agent frameworks spend tokens on verbose reasoning, redundant context, and low-density outputs without maximizing what each token actually contributes to the result.
+AI agents burn through tokens quickly, making them expensive to run at scale. Developers are forced to choose between capability and cost — smarter agents cost more, cheaper agents underperform. OpenSquilla targets this tradeoff directly: same token budget, higher output quality.
 
 ## How it works
 
-OpenSquilla is a Python-based AI agent framework engineered around token efficiency — delivering higher 'intelligence density' per token spent rather than simply throwing more tokens at a problem. It likely achieves this through compressed context management, smarter prompt construction, or pruning unnecessary agent overhead so the same API budget yields meaningfully better outputs.
+OpenSquilla implements token-efficient agent architectures in Python, compressing the intelligence density of each token spent rather than simply reducing output length. It likely restructures prompts, context windows, and reasoning chains to extract more useful work per API call, keeping costs flat while improving result quality.
 
 ## Best use cases
 
-- Building production AI agents where API costs are a hard constraint
-- Replacing bloated agent frameworks (LangChain, AutoGen) with a leaner alternative that does more with less
-- Researchers and indie developers who want GPT-4-class agent behavior on a GPT-3.5-tier budget
+- Running production AI agents at lower API cost without sacrificing answer quality
+- Scaling multi-step agentic workflows where token costs compound across many LLM calls
+- Replacing verbose agent frameworks with a leaner alternative in cost-sensitive applications
 
 ## Getting started
 
-Since it's a Python project on GitHub, a developer would clone the repo and install dependencies via pip, then follow the README to instantiate an agent — the core value proposition is a drop-in efficiency layer, so setup is likely straightforward for anyone already building with LLM APIs.
+Since it's a Python project on GitHub, a developer would clone the repo or install via pip, then swap in OpenSquilla's agent primitives wherever they currently call an LLM — likely a drop-in replacement for existing agent loop code.

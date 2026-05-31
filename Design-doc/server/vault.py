@@ -31,19 +31,31 @@ def _safe_resolve(path_str: str) -> Optional[Path]:
         return None
 
 
-def recent(folder: str, limit: int = 10) -> list[dict]:
-    """List the most-recently-modified .md files in a vault subfolder."""
+def recent(folder: str, limit: int = 10, subfolders_only: bool = False) -> list[dict]:
+    """List the most-recently-modified .md files in a vault subfolder.
+
+    Searches both direct children and one level of subdirectories so that
+    researcher outputs written to dated subfolders (e.g. 10-Research/2026-05-06_ruflo/)
+    appear alongside flat _brief.md files.
+
+    subfolders_only: when True, skip top-level .md files and only include files
+    from one-level-deep subdirectories (used for 04-Trends repo pickers).
+    """
     target = VAULT_ROOT / folder
     if not target.exists() or not target.is_dir():
         return []
-    files = sorted(
-        [f for f in target.iterdir() if f.is_file() and f.suffix == ".md"],
-        key=lambda p: p.stat().st_mtime,
-        reverse=True,
-    )[:limit]
+    all_md: list[Path] = []
+    for item in target.iterdir():
+        if not subfolders_only and item.is_file() and item.suffix == ".md":
+            all_md.append(item)
+        elif item.is_dir():
+            for sub in item.iterdir():
+                if sub.is_file() and sub.suffix == ".md":
+                    all_md.append(sub)
+    files = sorted(all_md, key=lambda p: p.stat().st_mtime, reverse=True)[:limit]
     return [
         {
-            "name": f.name,
+            "name": f.relative_to(target).as_posix() if f.parent != target else f.name,
             "path": str(f),
             "modified": datetime.fromtimestamp(f.stat().st_mtime).isoformat(),
         }

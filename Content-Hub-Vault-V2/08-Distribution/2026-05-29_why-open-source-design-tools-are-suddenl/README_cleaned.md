@@ -1,0 +1,1 @@
+All three files rewritten and vault-compliant. Each has frontmatter with `description`, and wikilinks back to the source outline. Replace `[VIDEO_LINK]` when you're ready to publish.

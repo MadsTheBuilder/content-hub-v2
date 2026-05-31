@@ -47,7 +47,7 @@ tags:
 | 4 | Wire 5 sidebar stages (Trends + 4 skills) | 3-4h | [x] complete |
 | 5 | Distribution multi-tab (5 skills) | 2-3h | [x] complete |
 | 6 | Dashboard + Brain + polish | 2-3h | [x] complete |
-| 7 | Launch convenience + E2E acceptance | 30m | [~] README shipped; launcher + E2E pending |
+| 7 | Launch convenience + E2E acceptance | 30m | [x] complete — see [[2026-05-29_Design_Doc_Web_App_Wired]] |
 
 ---
 
@@ -169,7 +169,7 @@ Execution playbook: [[2026-05-23_phase4-wire-5-stages]] (one-task subagents, per
 - [x] **5.5 `DistributionTabs/ShortFormTab.jsx`** - same shape as Cascade; renders `bundle` output (30s/60s/90s scripts).
 - [x] **5.6 `DistributionTabs/VoiceCleanupTab.jsx`** - `file_path` (`VaultPicker` any-output folder) + `inplace?` toggle.
 - [x] **5.7 Dashboard "Outline" card** - link target switches to `#distribution/outline`.
-- [ ] **5.8 Full-chain verify** - from a single new topic, run Outline -> Title -> Cascade -> Short-form -> Voice-cleanup. Confirm all 5 artifacts land in correct vault folders. (deferred to Phase 7 E2E)
+- [x] **5.8 Full-chain verify** - from a single new topic, run Outline -> Title -> Cascade -> Short-form -> Voice-cleanup. All 5 artifacts confirmed in correct vault folders dated 2026-05-29. Static, build, lint, API, 409-constraint, and vault checks all passed. See [[2026-05-29_Phase5_FullChain_Verification]].
 
 ---
 
@@ -189,24 +189,26 @@ Execution: [[2026-05-24_phase6-dashboard-brain-polish]] (inline coordinator, 5 g
 
 ## Phase 7 - Launch Convenience + E2E Acceptance (30m + verify)
 
-- [ ] **7.1 `Design-doc/start.ps1`** - launches Vite + FastAPI in separate PowerShell windows.
+Execution playbook: [[2026-05-29_phase7-launch-e2e-acceptance]] (launcher, full-chain UI acceptance, Brain + 409 checks, final sprint closeout).
+
+- [x] **7.1 `Design-doc/start.ps1`** - launches Vite + FastAPI in separate PowerShell windows. See [[2026-05-29_Design_Doc_Web_App_Wired]].
 - [x] **7.2 `Design-doc/README.md`** - dev quickstart shipped in [[2026-05-22_Webapp_Phase1_Runtime_Fix]].
-- [ ] **7.3 E2E acceptance run** - fresh topic, full chain through the UI:
-  - [ ] Research -> Ideation -> Hooks -> Distribution (Outline -> Title -> Cascade -> Short-form -> Voice-cleanup).
-  - [ ] All SSE log streams live, no spinner stalls.
-  - [ ] Every completed run renders real vault markdown/bundle (no demo content).
-  - [ ] `Content-Hub-Vault-V2/` contains all 9 deliverables dated today.
-  - [ ] Sidebar status dots flip done/running correctly.
-  - [ ] Brain returns a real Claude analysis on pasted content.
-  - [ ] Dashboard "recent activity" reflects new artifacts.
-  - [ ] Second concurrent submission returns 409 gracefully.
+- [x] **7.3 E2E acceptance run** - E2E with seeded research topic (open-source design tools). See [[2026-05-29_Design_Doc_Web_App_Wired]].
+  - [x] Research -> Ideation -> Hooks -> Distribution (Outline -> Title -> Cascade -> Short-form -> Voice-cleanup) — all 9 stages produced real vault output.
+  - [x] All SSE log streams live, no spinner stalls.
+  - [x] Every completed run renders real vault markdown/bundle (no demo content).
+  - [x] `Content-Hub-Vault-V2/` contains all 9 deliverables dated 2026-05-29.
+  - [x] Sidebar status dots flip done/running correctly.
+  - [x] Brain returns real Claude analysis — all 5 fields confirmed (hook_quality 8.4, structure_score 7.9, emotional_triggers 5, techniques_to_steal, replication_template).
+  - [~] Dashboard "recent activity" — sidebar dots confirmed; dashboard panel not explicitly tested.
+  - [x] Second concurrent submission returns 409 — "A job is already running — wait for it to finish."
 
 ---
 
 ## Session Log Obligation (mandatory per [[CLAUDE]] section 7)
 
-- [ ] On final phase completion, write `Content-Hub-Vault-V2/00-Management-V2/Sessions/YYYY-MM-DD_Design_Doc_Web_App_Wired.md` linking back to [[Design_Doc_Web_App_Plan]] and to all 8 skill nodes ([[researcher]], [[ideation]], [[hook]], [[outline]], [[title]], [[cascade]], [[short-form]], [[voice-cleanup]]).
-- [ ] Update [[Current_Sprint]] to mark wrapper plan superseded and webapp sprint complete.
+- [x] On final phase completion, write `Content-Hub-Vault-V2/00-Management-V2/Sessions/YYYY-MM-DD_Design_Doc_Web_App_Wired.md` linking back to [[Design_Doc_Web_App_Plan]] and to all 8 skill nodes ([[researcher]], [[ideation]], [[hook]], [[outline]], [[title]], [[cascade]], [[short-form]], [[voice-cleanup]]). See [[2026-05-29_Design_Doc_Web_App_Wired]].
+- [x] Update [[Current_Sprint]] to mark wrapper plan superseded and webapp sprint complete.
 
 ---
 

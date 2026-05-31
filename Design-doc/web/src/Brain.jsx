@@ -128,7 +128,17 @@ function Brain() {
 }
 
 function BrainResults({ result }) {
-  const { hook_quality, structure_score, emotional_triggers, techniques_to_steal, replication_template } = result;
+  const data = result.result_type === "brain_result" ? (result.data || {}) : result;
+  const { hook_quality, structure_score, emotional_triggers, techniques_to_steal, replication_template } = data;
+
+  if (!hook_quality && !structure_score && !emotional_triggers?.length && !techniques_to_steal?.length && !replication_template) {
+    return (
+      <div style={{ marginTop: 24, padding: 24, background: "var(--bg-surface)", border: "1px solid var(--border)", borderRadius: "var(--r-card)", color: "var(--text-muted)", fontSize: 13 }}>
+        Analysis completed but no result data was returned.
+      </div>
+    );
+  }
+
   return (
     <div className="brain-stack" style={{ marginTop: 24, display: "flex", flexDirection: "column", gap: 12 }}>
       <ResultSection title="Hook Quality">
