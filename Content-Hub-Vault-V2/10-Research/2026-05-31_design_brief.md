@@ -3,7 +3,8 @@ date: 2026-05-31
 niche: Design
 repos_researched: 1
 primary_sources_found: 4
-notebook_ids: [c0b15c4b-8f06-4996-ba31-3519224f6b9f]
+notebook_ids:
+  - c0b15c4b-8f06-4996-ba31-3519224f6b9f
 ---
 
 # Research Brief — Design

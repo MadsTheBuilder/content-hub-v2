@@ -128,6 +128,8 @@ async def main():
     parser.add_argument("topic", help="Video topic or idea")
     parser.add_argument("--hook-path", default=None,
                         help="Path to a hook .md file from a /hook run (optional but recommended)")
+    parser.add_argument("--hook-text", default="",
+                        help="Selected hook spoken line text — overrides hook-path when provided")
     parser.add_argument("--length", type=int, default=8,
                         help="Target video length in minutes (default: 8)")
     parser.add_argument("--platform", default="yt-long",
@@ -144,7 +146,7 @@ async def main():
 
     print(f"Outline writer: \"{args.topic}\" | {args.platform} | {args.length} min")
 
-    hook = load_hook(args.hook_path)
+    hook = args.hook_text if args.hook_text else load_hook(args.hook_path)
     outline_text = await run(args.topic, hook, args.length, args.platform, args.no_polish)
     output_path = save_output(args.topic, args.platform, args.length, args.hook_path, outline_text)
 

@@ -47,7 +47,8 @@ def scrape_trending(since: str, limit: int = 25) -> list[dict]:
 
     for block in re.split(r"<article\b[^>]*>", raw)[1:limit + 1]:
         # Full name from the h2 anchor: href="/owner/repo"
-        m = re.search(r'<h2[^>]*>.*?<a\s+href="/([^/"]+/[^/"]+)"', block, re.DOTALL)
+        # href is not the first attribute — data-hydro-click comes first
+        m = re.search(r'<h2[^>]*>.*?<a\s[^>]*href="/([^/"]+/[^/"]+)"', block, re.DOTALL)
         if not m:
             continue
         full_name = m.group(1).strip()

@@ -258,6 +258,35 @@ description: "Active sprint tasks for Content Hub V2 — tracks completed, in-pr
   - Verified: job ran 3m 13s, status `completed`, vault file written.
   - **Open**: Phase 7 E2E acceptance re-run (all 9 stages).
 
+## Completed — Pipeline Post-Mortems (2026-06-01)
+
+- [x] **Obsidian WikiLinks plan verification** — See [[2026-06-01_Obsidian-Wiki-Plan-Verification]]
+  - Verified the YouTube transcript via `yt-dlp` captions and checked the live open-notebook OpenAPI schema.
+  - Confirmed the plan's core idea is sound: master wiki index -> topic index -> relevant markdown articles is exactly the pattern described in the video.
+  - Correction: open-notebook can accept raw text sources through `/api/sources/json` (`type: text`, `content`, `title`); the local `open_notebook_client.py` simply has not wrapped that API yet.
+  - Recommended next slice: build `/wiki-gen`, generate `01-Knowledge/wiki/`, add index-based retrieval, then inject selected wiki article text into [[researcher.py]].
+
+- [x] **CloakBrowser research run deep audit** — See [[2026-06-01_CloakBrowser-Research-Notebook-Audit]]
+  - Full execution trace: notebook `6828efa7-f920-4ae3-ac4d-d85d5e770779` | 2 sources (GitHub page + raw README)
+  - **RC-1**: QUERY_URL quota (`GenerateFreeFormStreamed`) pre-exhausted by ARIS run — first `chat.ask` immediately returned `UserDisplayableError` (HTTP 200, error in body, not HTTP 429); traced to `_chat.py:591–613`
+  - **RC-2**: `extract_repo_context` subprocess failed silently (`researcher.py:209` exception handler); empty `RepoContext` fed into chat config + synthesis prompt
+  - **RC-3**: `synthesize_brief` data-contract breakage — `claude -p` spawns a full agent that writes `research.md` to disk and returns a status message, not brief text; meta file body is always the confirmation string, not the brief
+  - **RC-4**: Deep research returned 0 web sources (brand-new viral repo, no indexed content); empty observation file is correct behavior, not a failure
+  - 5 structural problems logged: silent exception swallowing in context extraction, `synthesize_brief` agent vs synthesis contract, no retry on QUERY_URL rate limit, `nlm_seed.py` redundant client, stale `_DEFAULT_BL` (March 1, 2026)
+  - **Actions needed**: add retry/backoff on `ChatError` in Q&A loop; restructure `synthesize_brief` to return text or make two-file pattern explicit; fix `nlm_seed.py` to use existing client; update `_DEFAULT_BL` from live session capture
+
+- [x] **ARIS research run audit** — See [[2026-06-01_ARIS-Research-Notebook-Audit]]
+  - Same QUERY_URL rate-limit pattern; Claude subprocess recovered via pre-captured trend card in [[04-Trends/wanshuiyin_ARIS-in-AI-Offer]]
+  - Established that QUERY_URL and batchexecute are separate quota surfaces
+
+## Completed — Research Runs (2026-06-01)
+
+- [x] **academic-research-skills research run** — See [[2026-06-01_Academic-Research-Skills-Research-Run]]
+  - Repo: `Imbad0202/academic-research-skills` | 25K stars, 685/day velocity
+  - Brief: [[10-Research/2026-06-01_research_academic-research-skills_brief]]
+  - Known issues: `extract_repo_context` timeout + `seed_questions_from_context` JSON parse failure (same RCs as [[2026-06-01_CloakBrowser-Research-Notebook-Audit]])
+  - **Next**: `/ideation research`
+
 ## Next Up
 
 - [x] **End-to-end verification** — TypeScript/nexu-io run scored 5/5 guardrails post-fix. See [[2026-05-08_Researcher_Fix_Verified]]. OpenMythos dogfood run was the trigger; verification confirmed on a clean topic.

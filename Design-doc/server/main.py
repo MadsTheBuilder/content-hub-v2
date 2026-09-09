@@ -175,6 +175,7 @@ class HookBody(BaseModel):
 class OutlineBody(BaseModel):
     topic: str
     hook_path: Optional[str] = ""
+    hook_text: Optional[str] = ""
     length: int = 8
     platform: str = "yt-long"
     no_polish: bool = False
@@ -250,7 +251,7 @@ async def run_hook(body: HookBody):
 async def run_outline(body: OutlineBody):
     _check_conflict()
     job_id = await pipeline.run_outline(
-        body.topic, body.hook_path or "", body.length,
+        body.topic, body.hook_path or "", body.hook_text or "", body.length,
         body.platform, body.no_polish,
     )
     return {"job_id": job_id}

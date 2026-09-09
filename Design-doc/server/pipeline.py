@@ -181,8 +181,6 @@ async def launch_job(stage: str, args: list[str], resolver: Callable[[str], JobR
 
 async def run_trends(space: str = "") -> str:
     args = [sys.executable, "scripts/github_trending.py"]
-    if space:
-        args += ["--space", space]
     return await launch_job("trends", args, resolve_trends)
 
 
@@ -256,12 +254,15 @@ async def run_hook(
 async def run_outline(
     topic: str,
     hook_path: str = "",
+    hook_text: str = "",
     length: int = 8,
     platform: str = "yt-long",
     no_polish: bool = False,
 ) -> str:
     args = [sys.executable, "-m", "skills.outline", topic, "--length", str(length), "--platform", platform]
-    if hook_path:
+    if hook_text:
+        args += ["--hook-text", hook_text]
+    elif hook_path:
         args += ["--hook-path", hook_path]
     if no_polish:
         args.append("--no-polish")

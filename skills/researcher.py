@@ -29,9 +29,12 @@ NOTEBOOKLM_SRC = PROJECT_ROOT / "notebooklm-py" / "src"
 if str(NOTEBOOKLM_SRC) not in sys.path:
     sys.path.insert(0, str(NOTEBOOKLM_SRC))
 
+import httpx
 from notebooklm import ChatGoal, NotebookLMClient
 from skills.researcher_crawler import discover_primary_docs
 from skills.helpers.nlm_seed import seed_questions_from_nlm
+from skills.helpers.open_notebook_seed import seed_questions_from_readme
+from skills.open_notebook_client import OpenNotebookClient
 from skills.research_plan import QuestionPlan, generate_followups
 from skills.brief_loader import load_brief, apply_cli_overrides
 from skills.brief_args import add_brief_args
@@ -172,44 +175,6 @@ async def synthesize_brief(
     return claude_cli(prompt, timeout=120)
 
 
-async def extract_repo_context(primary_source_summaries: list[str], owner_repo: str) -> RepoContext:
-    """Extract structured repo context from primary source summaries via Haiku.
-
-    Args:
-        primary_source_summaries: List of text summaries from primary docs
-        owner_repo: "owner/repo" for context in the prompt
-
-    Returns:
-        RepoContext with structured fields
-    """
-    combined_text = "\n\n".join(primary_source_summaries)
-    prompt = (
-        f"Extract structured context from the documentation of the GitHub project '{owner_repo}'.\n\n"
-        f"Primary source summaries:\n\n{combined_text}\n\n"
-        f"Return ONLY a JSON object (no markdown, no code fences, no explanation):\n"
-        f'{{"core_use_cases": ["..."], "key_concepts": ["..."], "common_patterns": ["..."], '
-        f'"anti_patterns": ["..."], "audience": "..."}}\n\n'
-        f"Fields:\n"
-        f"- core_use_cases: 2-4 primary use cases this repo solves for\n"
-        f"- key_concepts: 3-6 core concepts or APIs to understand\n"
-        f"- common_patterns: 2-4 patterns used in this codebase\n"
-        f"- anti_patterns: 1-3 common pitfalls or things to avoid\n"
-        f"- audience: who is this tool meant for (one sentence)"
-    )
-    try:
-        raw = claude_cli(prompt, timeout=60)
-        inp = _parse_json_output(raw)
-        return RepoContext(
-            core_use_cases=inp.get("core_use_cases", []),
-            key_concepts=inp.get("key_concepts", []),
-            common_patterns=inp.get("common_patterns", []),
-            anti_patterns=inp.get("anti_patterns", []),
-            audience=inp.get("audience", "Developers"),
-        )
-    except Exception as e:
-        logger.warning("extract_repo_context: failed (%s), returning defaults", e)
-        return RepoContext([], [], [], [], "Developers")
-
 
 def list_available_repos() -> list[str]:
     """Print repos from the trending file and return their slugs."""
@@ -272,8 +237,9 @@ async def research_one(client: "NotebookLMClient", url: str, mode: str) -> dict:
     print(f"[{slug}] Sources indexed. Starting web research ({mode} mode)...")
 
     repo_name = url.rstrip("/").split("/")[-1].replace("-", " ")
-    research = await client.research.start(nb.id, repo_name, source="web", mode=mode)
-    task_id = research.get("task_id") if research else None
+    research_query = f"{repo_name} GitHub {owner_repo} software project"
+    research = await client.research.start(nb.id, research_query, source="web", mode=mode)
+    task_id = research.task_id if research else None
 
     max_polls = 24 if mode == "deep" else 12
     poll_interval = 15 if mode == "deep" else 10
@@ -282,19 +248,40 @@ async def research_one(client: "NotebookLMClient", url: str, mode: str) -> dict:
     for i in range(max_polls):
         await asyncio.sleep(poll_interval)
         status = await client.research.poll(nb.id)
-        state = status.get("status", "unknown")
+        state = status.status
         print(f"[{slug}] Research [{i + 1}/{max_polls}]: {state}")
         if state == "completed":
-            sources_found = status.get("sources", [])
+            sources_found = list(status.sources)
+            if sources_found and sources_found[0].research_task_id:
+                task_id = sources_found[0].research_task_id
+            else:
+                task_id = status.task_id or task_id
             print(f"[{slug}] Discovered {len(sources_found)} related sources")
             break
 
     imported_source_ids: list[str] = []
     if mode == "deep" and sources_found and task_id:
-        import_count = min(len(sources_found), 10)
-        imported = await client.research.import_sources(nb.id, task_id, sources_found[:import_count])
-        imported_source_ids = [s["id"] for s in imported if s.get("id")]
-        print(f"[{slug}] Imported {import_count} sources")
+        repo_short = url.rstrip("/").split("/")[-1].lower()
+        owner_lower = owner_repo.split("/")[0].lower()
+        name_tokens = [t for t in re.split(r"[-_]", repo_short) if len(t) > 2]
+        def _plausibly_relevant(src) -> bool:
+            haystack = f"{src.title} {src.url}".lower()
+            return (
+                repo_short in haystack
+                or owner_lower in haystack
+                or sum(1 for t in name_tokens if t in haystack) >= max(1, len(name_tokens) - 1)
+            )
+        relevant_sources = [s for s in sources_found if _plausibly_relevant(s)]
+        dropped_count = len(sources_found) - len(relevant_sources)
+        if dropped_count:
+            print(f"[{slug}] Pre-filter dropped {dropped_count} off-topic discovered source(s) before import")
+        import_count = min(len(relevant_sources), 10)
+        if import_count:
+            imported = await client.research.import_sources(nb.id, task_id, relevant_sources[:import_count])
+            imported_source_ids = [s["id"] for s in imported if s.get("id")]
+            print(f"[{slug}] Imported {import_count} sources")
+        else:
+            print(f"[{slug}] No discovered sources passed relevance pre-filter — skipping import")
     elif sources_found:
         print(f"[{slug}] Fast mode — skipping import of {len(sources_found)} discovered sources")
 
@@ -321,14 +308,14 @@ async def research_one(client: "NotebookLMClient", url: str, mode: str) -> dict:
         for src in discovered_sources:
             try:
                 guide = await client.sources.get_guide(nb.id, src.id)
-                summary = guide.get("summary", "").strip()
+                summary = guide.summary.strip()
                 if not summary:
                     logger.warning("[%s] Source %s has no/empty guide summary — treating as unknown, keeping", slug, src.id)
                 guides.append({
                     "id": src.id,
                     "title": src.title or "Untitled",
                     "summary": summary,
-                    "keywords": guide.get("keywords", [])[:5],
+                    "keywords": list(guide.keywords)[:5],
                 })
             except Exception as e:
                 logger.warning("[%s] Failed to fetch guide for source %s: %s — keeping (benefit of the doubt)", slug, src.id, e)
@@ -389,29 +376,7 @@ async def research_one(client: "NotebookLMClient", url: str, mode: str) -> dict:
         if len(verified_source_ids) == len(primary_ids) and discovered_sources:
             print(f"[{slug}] Verification: all discovered sources dropped — using primary sources only")
 
-    # Extract repo context from primary sources
     repo_context = RepoContext([], [], [], [], "")
-    try:
-        print(f"[{slug}] Extracting repo context from primary docs...")
-        # Fetch summaries of primary sources for context extraction
-        primary_source_summaries: list[str] = []
-        for src in all_sources:
-            if src.id in primary_ids:
-                try:
-                    guide = await client.sources.get_guide(nb.id, src.id)
-                    summary = guide.get("summary", "")
-                    if summary:
-                        primary_source_summaries.append(f"### {src.title or 'Untitled'}\n{summary}")
-                except Exception:
-                    pass
-
-        if primary_source_summaries:
-            repo_context = await extract_repo_context(primary_source_summaries, owner_repo)
-            print(f"[{slug}] Context extracted: {len(repo_context.core_use_cases)} use cases, {len(repo_context.key_concepts)} concepts")
-        else:
-            logger.warning("[%s] No primary source summaries for context extraction", slug)
-    except Exception as e:
-        logger.warning("[%s] Repo context extraction failed: %s", slug, e)
 
     # Save observation to vault
     try:
@@ -478,12 +443,20 @@ async def research_one(client: "NotebookLMClient", url: str, mode: str) -> dict:
     angle_raw: list[dict] = []  # Pass empty for Phase 4 synthesis since questions now come from NLM
 
     # Phase 4 — Synthesize brief
+    answered_qa = [qa for qa in raw_qa if not qa["answer"].startswith("[failed:")]
     synthesized_brief = "[Synthesis failed]"
-    try:
-        synthesized_brief = await synthesize_brief(owner_repo, repo_context, raw_qa, angle_raw)
-        print(f"[{slug}] Brief synthesized")
-    except Exception as e:
-        logger.warning("[%s] Brief synthesis failed: %s", slug, e)
+    if not answered_qa:
+        logger.warning("[%s] No answered research questions — skipping synthesis", slug)
+    else:
+        try:
+            synthesized_brief = await synthesize_brief(owner_repo, repo_context, raw_qa, angle_raw)
+            if len(synthesized_brief) < 200 or "## What it does" not in synthesized_brief:
+                logger.warning("[%s] Synthesized brief failed shape check (len=%d) — discarding", slug, len(synthesized_brief))
+                synthesized_brief = "[Synthesis failed]"
+            else:
+                print(f"[{slug}] Brief synthesized")
+        except Exception as e:
+            logger.warning("[%s] Brief synthesis failed: %s", slug, e)
 
     # Phase 5 — Generate slides and infographics
     slide_deck_id = None
@@ -561,7 +534,134 @@ async def research_one(client: "NotebookLMClient", url: str, mode: str) -> dict:
     }
 
 
-async def run(niche: str, mode: str = "deep", repos: list[str] | None = None) -> Path:
+async def research_one_open_notebook(on_client: OpenNotebookClient, url: str, mode: str) -> dict:
+    """Research pipeline for a single repo using open-notebook backend.
+
+    Mirrors research_one() but uses open-notebook's REST API instead of notebooklm-py.
+    No web research phase (open-notebook has no equivalent); sources are GitHub primary docs only.
+    """
+    slug = repo_slug(url)
+    title = f"Research: {slug} — {date.today().isoformat()}"
+    owner_repo = "/".join(url.rstrip("/").split("/")[-2:])
+
+    print(f"\n[{slug}] Creating notebook (open-notebook)...")
+    nb = await on_client.create_notebook(title)
+    nb_id = nb.get("id") or nb.get("notebook_id", "")
+    logger.info("[%s] Notebook: %s", slug, nb_id)
+
+    # Add repo URL as primary source
+    try:
+        await on_client.add_source(nb_id, url, wait=True)
+    except Exception as e:
+        logger.warning("[%s] Failed to add repo URL: %s", slug, e)
+
+    # Add raw README and fetch its text for context extraction
+    primary_count = 0
+    readme_text = ""
+    for branch in ("main", "master"):
+        readme_url = f"https://raw.githubusercontent.com/{owner_repo}/{branch}/README.md"
+        try:
+            async with httpx.AsyncClient(timeout=15) as http:
+                resp = await http.get(readme_url)
+                if resp.status_code == 200:
+                    readme_text = resp.text
+            await on_client.add_source(nb_id, readme_url, wait=False)
+            primary_count += 1
+            print(f"[{slug}] Added primary source: README ({branch})")
+            break
+        except Exception:
+            continue
+
+    # Discover and add additional primary docs (wait=True so sources are indexed before chatting)
+    try:
+        doc_candidates = await discover_primary_docs(owner_repo, max_docs=6)
+        for doc in doc_candidates:
+            try:
+                await on_client.add_source(nb_id, doc.raw_url, wait=True)
+                primary_count += 1
+                print(f"[{slug}] Added primary source: {doc.path}")
+            except Exception as e:
+                logger.warning("[%s] Failed to add primary doc %s: %s", slug, doc.path, e)
+        if doc_candidates:
+            print(f"[{slug}] Discovered {len(doc_candidates)} additional primary docs")
+    except Exception as e:
+        logger.warning("[%s] Doc crawler failed: %s", slug, e)
+
+    repo_context = RepoContext([], [], [], [], "")
+
+    # Build notebook context for chat
+    context = await on_client.get_notebook_context(nb_id)
+
+    # Create chat session
+    try:
+        session_id = await on_client.create_chat_session(nb_id)
+        print(f"[{slug}] Chat session: {session_id}")
+    except Exception as e:
+        logger.error("[%s] Failed to create chat session: %s", slug, e)
+        session_id = ""
+
+    # Seed questions from README via Gemma
+    print(f"[{slug}] Seeding questions via Gemma...")
+    seed_qs = await seed_questions_from_readme(readme_text[:4000], owner_repo)
+    plan = QuestionPlan(seed_qs, budget=15)
+    print(f"[{slug}] Querying ({len(seed_qs)} seed questions, budget 15)...")
+
+    finding_parts: list[str] = []
+    raw_qa: list[dict] = []
+
+    while True:
+        item = plan.next_question()
+        if item is None:
+            break
+        heading, question = item
+        try:
+            answer = await on_client.ask(session_id, question, context=context)
+            finding_parts.append(f"### {heading}\n\n{answer}\n")
+            raw_qa.append({"heading": heading, "answer": answer})
+            plan.record(question)
+
+            followups = await generate_followups(heading, question, answer)
+            for fh, fq in followups:
+                if plan.add_followup(fh, fq):
+                    print(f"  Queued follow-up: {fh}")
+        except Exception as e:
+            logger.warning("[%s] Question failed for %s: %s", slug, heading, e)
+            finding_parts.append(f"### {heading}\n\n[failed: {e}]\n")
+            raw_qa.append({"heading": heading, "answer": f"[failed: {e}]"})
+            plan.record(question)
+
+    synthesized_brief = "[Synthesis failed]"
+    try:
+        synthesized_brief = await synthesize_brief(owner_repo, repo_context, raw_qa, [])
+        print(f"[{slug}] Brief synthesized")
+    except Exception as e:
+        logger.warning("[%s] Brief synthesis failed: %s", slug, e)
+
+    return {
+        "url": url,
+        "notebook_id": nb_id,
+        "finding": "\n".join(finding_parts),
+        "sources_found": [],
+        "angle_battery": [],
+        "primary_sources_found": primary_count,
+        "repo_context": repo_context,
+        "verified_sources": [],
+        "raw_qa": raw_qa,
+        "angle_raw": [],
+        "synthesized_brief": synthesized_brief,
+        "slide_deck_id": None,
+        "slide_deck_path": None,
+        "infographic_id": None,
+        "infographic_path": None,
+    }
+
+
+async def run(
+    niche: str,
+    mode: str = "deep",
+    repos: list[str] | None = None,
+    backend: str = "notebooklm",
+) -> Path:
     """Run isolated research per repo. Returns path to the compiled brief."""
 
     if not repos:
@@ -589,17 +689,34 @@ async def run(niche: str, mode: str = "deep", repos: list[str] | None = None) ->
 
     today = date.today().isoformat()
 
-    print(f"Found {len(urls)} repos. Running isolated research on each...\n")
+    # Resolve backend
+    effective_backend = backend
+    if backend == "auto":
+        async with OpenNotebookClient() as on_client:
+            effective_backend = "open-notebook" if await on_client.health_check() else "notebooklm"
+        print(f"[auto] Backend: {effective_backend}")
+
+    print(f"Found {len(urls)} repos. Running isolated research on each ({effective_backend})...\n")
 
     findings = []
-    async with await NotebookLMClient.from_storage(timeout=300) as client:
-        for url in urls:
-            try:
-                result = await research_one(client, url, mode)
-                findings.append(result)
-            except Exception as e:
-                logger.error("Failed for %s: %s", url, e)
-                findings.append({"url": url, "notebook_id": None, "finding": f"ERROR: {e}", "sources_found": []})
+    if effective_backend == "open-notebook":
+        async with OpenNotebookClient() as on_client:
+            for url in urls:
+                try:
+                    result = await research_one_open_notebook(on_client, url, mode)
+                    findings.append(result)
+                except Exception as e:
+                    logger.error("Failed for %s: %s", url, e)
+                    findings.append({"url": url, "notebook_id": None, "finding": f"ERROR: {e}", "sources_found": []})
+    else:
+        async with await NotebookLMClient.from_storage(timeout=300) as client:
+            for url in urls:
+                try:
+                    result = await research_one(client, url, mode)
+                    findings.append(result)
+                except Exception as e:
+                    logger.error("Failed for %s: %s", url, e)
+                    findings.append({"url": url, "notebook_id": None, "finding": f"ERROR: {e}", "sources_found": []})
 
     # Compile all findings into one brief
     sections = []
@@ -701,6 +818,12 @@ async def main() -> None:
                         help="List available repos from the trending file and exit")
     parser.add_argument("--dry-run", action="store_true",
                         help="Print planned questions without calling NLM/NIM then exit")
+    parser.add_argument(
+        "--backend",
+        choices=["auto", "open-notebook", "notebooklm"],
+        default="notebooklm",
+        help="Research backend. Default: notebooklm. Use 'open-notebook' when Docker backend is ready.",
+    )
     add_brief_args(parser)
     args = parser.parse_args()
     brief = load_brief()
@@ -719,8 +842,9 @@ async def main() -> None:
             parser.error("--niche is required for --dry-run")
         print(f"\n[dry-run] Topic: {args.niche}")
         print(f"[dry-run] Repos: {args.repos}")
-        print("[dry-run] Would seed questions from NotebookLM and run up to 15 chat queries")
-        print("[dry-run] (exiting without calling NLM/NIM)\n")
+        print(f"[dry-run] Backend: {args.backend}")
+        print("[dry-run] Would seed questions and run up to 15 chat queries")
+        print("[dry-run] (exiting without calling backend)\n")
         return
 
     if not args.repos:
@@ -731,7 +855,7 @@ async def main() -> None:
     if not args.niche:
         parser.error("--niche is required when running research")
 
-    output_path = await run(args.niche, mode=args.mode, repos=args.repos)
+    output_path = await run(args.niche, mode=args.mode, repos=args.repos, backend=args.backend)
 
     print("\n" + "=" * 60)
     brief = output_path.read_text(encoding="utf-8")

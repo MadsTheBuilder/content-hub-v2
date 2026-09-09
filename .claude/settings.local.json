@@ -130,7 +130,17 @@
       "Bash(.venv/Scripts/python.exe -m uvicorn Design-doc.server.main:app --host 0.0.0.0 --port 8765)",
       "Bash(.venv/Scripts/python.exe scripts/github_trending.py)",
       "Bash(npx eslint *)",
-      "Bash(npx vite *)"
+      "Bash(npx vite *)",
+      "Bash(git commit -m ' *)",
+      "WebFetch(domain:openrouter.ai)",
+      "WebSearch",
+      "Bash(.venv\\\\Scripts\\\\python.exe -c \"import asyncio; from skills.utils.ai import generate; r = asyncio.run\\(generate\\('Say hello in 5 words'\\)\\); print\\(r\\)\")",
+      "Bash(curl -s http://localhost:5055/models)",
+      "Bash(curl -s http://localhost:5055/)",
+      "Bash(curl -s http://localhost:5055/api/models)",
+      "Bash(curl -s http://localhost:5055/notebooks)",
+      "Bash(curl -s http://localhost:5055/settings)",
+      "Bash(curl -s http://localhost:5055/api/settings)"
     ],
     "additionalDirectories": [
       "c:\\Users\\madhu\\Claude cowork\\Content Hub V2",

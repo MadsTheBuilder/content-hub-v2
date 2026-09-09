@@ -77,6 +77,36 @@ async def _gemini_generate(prompt: str, model: str = "gemini-2.5-flash") -> dict
         return {"text": "", "success": False, "provider": f"gemini/{model}", "error": str(e)}
 
 
+async def _openrouter_generate(prompt: str, model: str | None = None) -> dict:
+    """Call OpenRouter API (OpenAI-compatible, free model tier)."""
+    api_key = os.getenv("OPENROUTER_API_KEY", "")
+    if not api_key:
+        return {"text": "", "success": False, "provider": "openrouter", "error": "OPENROUTER_API_KEY not set"}
+    _model = model or os.getenv("OPENROUTER_DEFAULT_MODEL", "deepseek/deepseek-v4-flash:free")
+    try:
+        import httpx
+        async with httpx.AsyncClient(timeout=60) as client:
+            response = await client.post(
+                "https://openrouter.ai/api/v1/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {api_key}",
+                    "HTTP-Referer": "https://github.com/content-hub-v2",
+                    "X-Title": "Content Hub V2",
+                },
+                json={"model": _model, "messages": [{"role": "user", "content": prompt}]},
+            )
+            if response.status_code == 200:
+                text = response.json()["choices"][0]["message"]["content"]
+                return {"text": text, "success": True, "provider": f"openrouter/{_model}"}
+            return {
+                "text": "", "success": False, "provider": f"openrouter/{_model}",
+                "error": f"HTTP {response.status_code}: {response.text[:300]}",
+            }
+    except Exception as e:
+        logger.warning("OpenRouter %s failed: %s", _model, e)
+        return {"text": "", "success": False, "provider": f"openrouter/{_model}", "error": str(e)}
+
+
 async def _nim_generate(prompt: str, model: str = "meta/llama-3.1-70b-instruct") -> dict:
     """Call NVIDIA NIM API (OpenAI-compatible)."""
     api_key = os.getenv("NVIDIA_NIM_API_KEY", "")
@@ -195,15 +225,16 @@ async def _ollama_available() -> bool:
 
 
 PROVIDER_MAP = {
+    "openrouter": _openrouter_generate,
     "nim": _nim_generate,
     "gemini": _gemini_generate,
     "ollama": _ollama_generate,
     "claude": _claude_generate,
 }
 
-# Default cascade: try each in order until one succeeds
-# Gemini dropped 2026-05-19 — hitting 503 UNAVAILABLE consistently. Claude takes its slot.
-DEFAULT_CASCADE = ["claude", "nim", "ollama"]
+# Default cascade: OpenRouter free tier first, Claude CLI as fallback, then NIM/Ollama.
+# Gemini dropped 2026-05-19 — hitting 503 UNAVAILABLE consistently.
+DEFAULT_CASCADE = ["openrouter", "claude", "nim", "ollama"]
 
 
 async def generate(
@@ -262,10 +293,10 @@ async def generate(
 # ---------------------------------------------------------------------------
 
 async def draft(prompt: str) -> dict:
-    """Quick draft (Claude → NIM → Ollama)."""
-    return await generate(prompt, cascade=["claude", "nim", "ollama"])
+    """Quick draft — OpenRouter free tier first, Claude CLI fallback."""
+    return await generate(prompt, cascade=["openrouter", "claude", "nim", "ollama"])
 
 
 async def polish(prompt: str) -> dict:
-    """Premium polish (Claude → NIM → Ollama)."""
-    return await generate(prompt, cascade=["claude", "nim", "ollama"])
+    """Premium polish — OpenRouter free tier first, Claude CLI fallback."""
+    return await generate(prompt, cascade=["openrouter", "claude", "nim", "ollama"])

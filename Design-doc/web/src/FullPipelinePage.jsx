@@ -62,6 +62,13 @@ function parseTitles(md) {
   }
   return [...new Set(out)];
 }
+function parseHooks(md) {
+  const out = [];
+  const re = /\*\*Spoken Line\*\*[^\n]*\n>\s*"([^"]+)"/g;
+  let m;
+  while ((m = re.exec(md))) out.push(m[1].trim());
+  return out;
+}
 
 export default function FullPipelinePage({ onBack }) {
   const [seed, setSeed] = useState(() => readSaved().seed ?? "");
@@ -72,7 +79,7 @@ export default function FullPipelinePage({ onBack }) {
   const [refreshKey, setRefreshKey] = useState(0);
   const [picks, setPicks] = useState(() => readSaved().picks ?? {
     trendPath: null, briefPath: null, ideaTitle: null,
-    hooksPath: null, outlinePath: null, titleString: null,
+    hooksPath: null, pickedHook: null, outlinePath: null, titleString: null,
   });
   const [results, setResults] = useState(() => readSaved().results ?? { ideaSrc: null, titleSrc: null, cascade: null, short: null });
   const [research, setResearch] = useState(() => readSaved().research ?? {
@@ -98,7 +105,7 @@ export default function FullPipelinePage({ onBack }) {
     setRunningStage(null);
     setStageError(null);
     setRefreshKey(0);
-    setPicks({ trendPath: null, briefPath: null, ideaTitle: null, hooksPath: null, outlinePath: null, titleString: null });
+    setPicks({ trendPath: null, briefPath: null, ideaTitle: null, hooksPath: null, pickedHook: null, outlinePath: null, titleString: null });
     setResults({ ideaSrc: null, titleSrc: null, cascade: null, short: null });
     setResearch({ niche: "", mode: "deep", targetLength: "", tone: "", audience: "", banned: "" });
   };
@@ -223,11 +230,13 @@ export default function FullPipelinePage({ onBack }) {
       research_file: picks.briefPath, no_polish: false,
     });
   };
-  const approveHooks = () =>
+  const pickHook = (text) => {
+    setPicks((p) => ({ ...p, pickedHook: text }));
     launch(STEPS[idx("outline")], {
       topic: picks.ideaTitle, hook_path: picks.hooksPath,
-      length: 8, platform: "yt-long", no_polish: false,
+      hook_text: text, length: 8, platform: "yt-long", no_polish: false,
     });
+  };
   const approveOutline = () =>
     launch(STEPS[idx("title")], { concept: picks.ideaTitle, outline_file: picks.outlinePath });
   const pickTitle = (str) => {
@@ -248,7 +257,10 @@ export default function FullPipelinePage({ onBack }) {
       research: runResearch,
       ideation: approveResearch,
       hook: () => pickIdea(picks.ideaTitle),
-      outline: approveHooks,
+      outline: () => launch(STEPS[idx("outline")], {
+        topic: picks.ideaTitle, hook_path: picks.hooksPath,
+        hook_text: picks.pickedHook || "", length: 8, platform: "yt-long", no_polish: false,
+      }),
       title: approveOutline,
       cascade: () => pickTitle(picks.titleString),
       shortform: approveCascade,
@@ -336,7 +348,7 @@ export default function FullPipelinePage({ onBack }) {
                           onRunResearch={runResearch}
                           onApproveResearch={approveResearch}
                           onPickIdea={pickIdea}
-                          onApproveHooks={approveHooks}
+                          onPickHook={pickHook}
                           onApproveOutline={approveOutline}
                           onPickTitle={pickTitle}
                           onApproveCascade={approveCascade}
@@ -373,7 +385,7 @@ function summaryFor(id, picks) {
     case "trends": return `Trend: ${shortPath(picks.trendPath)}`;
     case "research": return `Brief: ${shortPath(picks.briefPath)}`;
     case "ideation": return `Idea: ${picks.ideaTitle || "—"}`;
-    case "hook": return `Hooks: ${shortPath(picks.hooksPath)}`;
+    case "hook": return picks.pickedHook ? `Hook: "${picks.pickedHook.substring(0, 70)}…"` : `Hooks: ${shortPath(picks.hooksPath)}`;
     case "outline": return `Outline: ${shortPath(picks.outlinePath)}`;
     case "title": return `Title: ${picks.titleString || "—"}`;
     case "cascade": return "Distribution bundle generated";
@@ -387,7 +399,7 @@ function StepGate(props) {
   const {
     step, seedReady, refreshKey, picks, results, research, setResearch,
     onPickTrend, onRefresh, onRunResearch, onApproveResearch, onPickIdea,
-    onApproveHooks, onApproveOutline, onPickTitle, onApproveCascade,
+    onPickHook, onApproveOutline, onPickTitle, onApproveCascade,
   } = props;
 
   if (step.id === "trends") {
@@ -424,7 +436,7 @@ function StepGate(props) {
     return <ListPicker path={results.ideaSrc} parse={parseIdeas} onPick={onPickIdea} kind="idea" color={step.color} />;
   }
   if (step.id === "hook") {
-    return <ApproveGate path={picks.hooksPath} label="Use these hooks → run Outline" color={step.color} onApprove={onApproveHooks} />;
+    return <ListPicker path={picks.hooksPath} parse={parseHooks} onPick={onPickHook} kind="hook" color={step.color} />;
   }
   if (step.id === "outline") {
     return <ApproveGate path={picks.outlinePath} label="Use this outline → run Title" color={step.color} onApprove={onApproveOutline} />;

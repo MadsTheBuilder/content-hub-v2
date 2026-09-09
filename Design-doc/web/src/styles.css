@@ -1089,6 +1089,45 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   overflow-y: auto;
   flex: 1;
 }
+.output-browser {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.output-browser-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 12px 16px 0;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.output-browser-tab {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: color 150ms ease, border-color 150ms ease, background 150ms ease;
+  white-space: nowrap;
+}
+.output-browser-tab:hover {
+  color: var(--text-primary);
+  border-color: color-mix(in oklab, var(--stage-color) 50%, var(--border));
+  background: color-mix(in oklab, var(--stage-color) 8%, var(--bg-elevated));
+}
+.output-browser-tab.is-active {
+  color: var(--stage-color);
+  border-color: var(--stage-color);
+  background: color-mix(in oklab, var(--stage-color) 12%, var(--bg-elevated));
+  font-weight: 600;
+}
+
 .output-empty {
   flex: 1;
   display: flex;

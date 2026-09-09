@@ -49,6 +49,7 @@ Step 1 of the production pipeline. Produces a research brief with a recommended 
 | `--niche` | Yes | Topic label for the output file, e.g. `"AI agents"` |
 | `--repos` | Yes | One or more `owner/repo` slugs (space-separated) |
 | `--mode fast\|deep` | No | Default `deep` (~8 min/repo). `fast` for quick checks only |
+| `--backend notebooklm\|open-notebook\|auto` | No | Default `notebooklm`. Use `open-notebook` when Docker backend is ready. |
 | `--list` | — | List repos from trending file and exit (no research run) |
 
 Never omit `--repos`. Never auto-select repos without the user's explicit choice.
@@ -71,14 +72,22 @@ Each repo section contains:
 
 ## Prerequisites
 
+**notebooklm (default):**
 - `notebooklm login` must have run (auth at `~/.notebooklm/storage_state.json`)
 - `Content-Hub-Vault-V2/04-Trends/github_trending.md` must exist with GitHub repo URLs
 
+**open-notebook (not yet in use — pending full implementation):**
+- Docker running + `docker compose up -d` from the open-notebook directory
+- API reachable at `http://localhost:5055` (or set `OPEN_NOTEBOOK_BASE_URL`)
+- AI provider configured in open-notebook (Claude via `ANTHROPIC_API_KEY`, or Ollama for free local)
+- Model override via `OPEN_NOTEBOOK_MODEL` env var (default: `claude-haiku-4-5-20251001`)
+
 ## Timing
 
-- Deep mode: ~8 min per repo (web research + 75s indexing + 11 questions + synthesis)
-- Fast mode: ~3–4 min per repo (lighter research, fewer sources)
-- Each repo gets its own isolated NotebookLM notebook — no cross-contamination
+- **open-notebook**: ~5–6 min per repo (primary docs only, no web research phase)
+- **notebooklm deep**: ~8 min per repo (web research + 75s indexing + 15 questions + synthesis)
+- **notebooklm fast**: ~3–4 min per repo
+- Each repo gets its own isolated notebook — no cross-contamination
 
 ## After Completion → Next Step
 
